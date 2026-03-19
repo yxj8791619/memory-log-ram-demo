@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://bywcco0in2o01"]
+
+[ext_resource type="Script" uid="uid://b65ocof2fhe3i" path="res://enemy_dummy.gd" id="1_33gkd"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_jnamf"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ob5i"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_33gkd"]
+size = Vector2(40, 40)
+
+[node name="Enemy_Dummy" type="CharacterBody2D" unique_id=50193690]
+collision_layer = 8
+collision_mask = 6
+script = ExtResource("1_33gkd")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1086831382]
+texture = SubResource("PlaceholderTexture2D_jnamf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1628788626]
+shape = SubResource("RectangleShape2D_1ob5i")
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1265096399]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=936036803]
+shape = SubResource("RectangleShape2D_33gkd")
