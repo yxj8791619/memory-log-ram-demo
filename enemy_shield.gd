@@ -7,24 +7,29 @@ enum AIState {
 
 var gravity: float = 980.0
 var health: int = 100
-var speed: float = 100.0
-var chase_speed: float = 150.0
-var acceleration: float = 900.0
+var speed: float = 90.0
+var chase_speed: float = 180.0
+var acceleration: float = 750.0
 var facing_direction: int = 1
 var attack_damage: int = 20
+var patrol_range: float = 100.0
 var vision_distance: float = 400.0
 var vision_height_tolerance: float = 40.0
 @export var chase_memory_duration: float = 0.75
 @export var chase_memory_horizontal_mult: float = 1.35
 @export var chase_memory_max_y_delta: float = 220.0
 var chase_memory_left: float = 0.0
-var patrol_range: float = 90.0
 var ledge_probe_forward: float = 15.0
 var ledge_probe_depth: float = 20.0
 var is_active: bool = false
 var state: int = AIState.PATROL
 var patrol_center_x: float = 0.0
 var player_ref: Node = null
+
+var is_turning: bool = false
+var turn_delay: float = 1.0
+var pending_facing_direction: int = 1
+var turn_timer: Timer
 var alert_timer: Timer
 
 @onready var attack_box: Area2D = $AttackBox
@@ -41,6 +46,13 @@ func _ready() -> void:
         screen_notifier.screen_entered.connect(_on_screen_entered)
     if not screen_notifier.screen_exited.is_connected(_on_screen_exited):
         screen_notifier.screen_exited.connect(_on_screen_exited)
+
+    turn_timer = Timer.new()
+    turn_timer.one_shot = true
+    turn_timer.wait_time = turn_delay
+    add_child(turn_timer)
+    if not turn_timer.timeout.is_connected(_on_turn_timer_timeout):
+        turn_timer.timeout.connect(_on_turn_timer_timeout)
 
     alert_timer = Timer.new()
     alert_timer.one_shot = true
@@ -87,15 +99,17 @@ func _physics_process(delta: float) -> void:
         _set_patrol_state()
 
     var target_speed: float = 0.0
-    if state == AIState.PATROL:
+    if is_turning:
+        target_speed = 0.0
+    elif state == AIState.PATROL:
         var left_limit: float = patrol_center_x - patrol_range
         var right_limit: float = patrol_center_x + patrol_range
         var reach_patrol_edge: bool = (global_position.x <= left_limit and facing_direction < 0) or (global_position.x >= right_limit and facing_direction > 0)
-        var blocked_patrol: bool = _is_blocked_ahead() or reach_patrol_edge
-        if blocked_patrol:
-            facing_direction *= -1
-            _update_facing_setup()
-        target_speed = speed * facing_direction
+        if _is_blocked_ahead() or reach_patrol_edge:
+            _begin_turn(-facing_direction)
+            target_speed = 0.0
+        else:
+            target_speed = speed * facing_direction
     else:
         _face_player_horizontally()
         if _is_blocked_ahead():
@@ -229,16 +243,43 @@ func _on_screen_exited() -> void:
     alert_mark.visible = false
 
 
+func _begin_turn(target_direction: int) -> void:
+    if is_turning:
+        return
+    if target_direction == 0 or target_direction == facing_direction:
+        return
+    pending_facing_direction = target_direction
+    is_turning = true
+    turn_timer.wait_time = turn_delay
+    turn_timer.start()
+
+
+func _on_turn_timer_timeout() -> void:
+    facing_direction = pending_facing_direction
+    is_turning = false
+    _update_facing_setup()
+
+
 func take_damage(amount: int, knockback_dir: float, force: float) -> void:
+    var knockback_sign: int = signi(knockback_dir)
+    if knockback_sign == 0:
+        knockback_sign = facing_direction
+
+    var front_hit: bool = knockback_sign != facing_direction
+    if front_hit:
+        print("打在护盾上，刮痧！")
+        return
+
     health -= amount
-    print("沙包挨揍了！受到伤害: ", amount, " 剩余血量: ", health)
+    print("护盾怪受击！受到伤害: ", amount, " 剩余血量: ", health)
     velocity.x = knockback_dir * force
     velocity.y = -200
     modulate = Color(10, 10, 10, 1)
     await get_tree().create_timer(0.1).timeout
     modulate = Color(1, 1, 1, 1)
+    _begin_turn(-knockback_sign)
     if health <= 0:
-        print("沙包被锤爆了！")
+        print("护盾怪被击败！")
         queue_free()
 
 

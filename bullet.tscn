@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://dlul05ro65462"]
+
+[ext_resource type="Script" uid="uid://cc5g1q3atk62y" path="res://bullet.gd" id="1_v7oki"]
+
+[sub_resource type="Gradient" id="Gradient_rtl8c"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.517599, 0.2853037, 0.017354023, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_v7oki"]
+gradient = SubResource("Gradient_rtl8c")
+width = 8
+height = 8
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_v8qja"]
+radius = 5.0
+
+[node name="Bullet" type="Area2D" unique_id=915002912]
+collision_layer = 0
+collision_mask = 10
+script = ExtResource("1_v7oki")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1048289340]
+texture = SubResource("GradientTexture2D_v7oki")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=780371844]
+shape = SubResource("CircleShape2D_v8qja")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]

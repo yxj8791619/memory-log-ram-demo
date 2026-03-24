@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bsn8sde8vximc"]
 
 [ext_resource type="Script" uid="uid://3o7etetfhyin" path="res://player_g.gd" id="1_enawn"]
+[ext_resource type="PackedScene" uid="uid://dlul05ro65462" path="res://bullet.tscn" id="2_8bwmx"]
 [ext_resource type="Texture2D" uid="uid://bt51yk1dyjfsl" path="res://Idle.png" id="2_xx4h5"]
 [ext_resource type="Texture2D" uid="uid://bhi6tvb2rm1ox" path="res://A_Shoot.png" id="3_rpywt"]
 [ext_resource type="Texture2D" uid="uid://1f6xj4lamr5t" path="res://B_Hammer.png" id="4_8bwmx"]
@@ -8,7 +9,7 @@
 [ext_resource type="Script" uid="uid://d0a77lr5nvbqi" path="res://hammer_hitbox.gd" id="6_rpywt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w3f5a"]
-size = Vector2(32, 32)
+size = Vector2(30, 30)
 
 [sub_resource type="Animation" id="Animation_t5u8m"]
 length = 0.001
@@ -356,6 +357,11 @@ size = Vector2(39.5, 18)
 
 [node name="Player_G" type="CharacterBody2D" unique_id=69848013]
 script = ExtResource("1_enawn")
+bullet_scene = ExtResource("2_8bwmx")
+debug_drop_probe = true
+a_run_speed = 180.0
+a_jump_height = 100.0
+b_run_speed = 120.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1038422412]
 shape = SubResource("RectangleShape2D_w3f5a")
@@ -389,8 +395,14 @@ collision_mask = 8
 script = ExtResource("6_rpywt")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DirectionPivot/HammerHitbox" unique_id=795158893]
-position = Vector2(39.25, 6)
+position = Vector2(35, 6)
 shape = SubResource("RectangleShape2D_xx4h5")
 disabled = true
+
+[node name="Muzzle" type="Marker2D" parent="DirectionPivot" unique_id=1870969259]
+position = Vector2(17, 0)
+
+[node name="InvincibilityTimer" type="Timer" parent="." unique_id=598133548]
+one_shot = true
 
 [connection signal="area_entered" from="DirectionPivot/HammerHitbox" to="DirectionPivot/HammerHitbox" method="_on_area_entered"]

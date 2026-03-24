@@ -11,6 +11,9 @@ size = Vector2(32, 32)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_33gkd"]
 size = Vector2(40, 40)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jnamf"]
+size = Vector2(41, 41)
+
 [node name="Enemy_Dummy" type="CharacterBody2D" unique_id=50193690]
 collision_layer = 8
 collision_mask = 6
@@ -28,3 +31,34 @@ collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=936036803]
 shape = SubResource("RectangleShape2D_33gkd")
+
+[node name="FloorDetector" type="RayCast2D" parent="." unique_id=1154714684]
+target_position = Vector2(24, 23)
+collision_mask = 6
+
+[node name="AttackBox" type="Area2D" parent="." unique_id=1355749963]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackBox" unique_id=893683593]
+position = Vector2(-0.5, -0.5)
+shape = SubResource("RectangleShape2D_jnamf")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=1517723469]
+
+[node name="VisionRay" type="RayCast2D" parent="." unique_id=789252130]
+target_position = Vector2(400, 0)
+collision_mask = 7
+
+[node name="LedgeCheck" type="RayCast2D" parent="." unique_id=1445179385]
+position = Vector2(14, 0)
+target_position = Vector2(15, 20)
+collision_mask = 2
+
+[node name="AlertMark" type="Label" parent="." unique_id=325630905]
+visible = false
+offset_left = -8.0
+offset_top = -46.0
+offset_right = 8.0
+offset_bottom = -14.0
+text = "!"
+horizontal_alignment = 1

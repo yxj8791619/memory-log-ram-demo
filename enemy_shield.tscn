@@ -1,0 +1,66 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://enemy_shield.gd" id="1_qkjjv"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_shield"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurtbox"]
+size = Vector2(40, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
+size = Vector2(41, 41)
+
+[node name="Enemy_Shield" type="CharacterBody2D"]
+scale = Vector2(1.5, 1.5)
+collision_layer = 8
+collision_mask = 6
+script = ExtResource("1_qkjjv")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.2, 0.2, 0.8, 1)
+texture = SubResource("PlaceholderTexture2D_shield")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("RectangleShape2D_hurtbox")
+
+[node name="FloorDetector" type="RayCast2D" parent="."]
+target_position = Vector2(24, 23)
+collision_mask = 6
+
+[node name="AttackBox" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackBox"]
+position = Vector2(-0.5, -0.5)
+shape = SubResource("RectangleShape2D_attack")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[node name="VisionRay" type="RayCast2D" parent="."]
+target_position = Vector2(400, 0)
+collision_mask = 7
+
+[node name="LedgeCheck" type="RayCast2D" parent="."]
+position = Vector2(14, 0)
+target_position = Vector2(15, 20)
+collision_mask = 2
+
+[node name="AlertMark" type="Label" parent="."]
+visible = false
+offset_left = -8.0
+offset_top = -46.0
+offset_right = 8.0
+offset_bottom = -14.0
+text = "!"
+horizontal_alignment = 1
