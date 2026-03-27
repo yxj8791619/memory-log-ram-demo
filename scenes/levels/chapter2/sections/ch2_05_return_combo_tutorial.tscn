@@ -85,16 +85,16 @@ position = Vector2(912, 262)
 [node name="Hint_ReturnCombo" type="Label" parent="Hints"]
 offset_left = 82.0
 offset_top = 74.0
-offset_right = 474.0
-offset_bottom = 152.0
-text = "阶段 05: B -> A 单体切回 + 分流\n本段先固定敌人站位和回收路线，等待正式带怪机制接入。"
+offset_right = 542.0
+offset_bottom = 170.0
+text = "阶段 05: B -> A 单体切回 + 分流\n普通锤击留在 B 层；TAB / 右键只切自己。\n只有“锤攻击 + 切层键”命中后，才把敌人带回 A 层。"
 
 [node name="Hint_SplitDecision" type="Label" parent="Hints"]
 offset_left = 740.0
 offset_top = 106.0
-offset_right = 1160.0
-offset_bottom = 184.0
-text = "后续这里要验证“留在 B 层稳杀”与“切回 A 层收尾”\n能否同时成立。"
+offset_right = 1188.0
+offset_bottom = 202.0
+text = "这里要练的是分流判断：\n能稳杀就留在 B 层；想改场或收尾时，再用“锤攻击 + 切层键”把目标带回 A 层。"
 
 [node name="DebugMarkers" type="Node2D" parent="."]
 

@@ -498,6 +498,17 @@ offset_right = 960.0
 offset_bottom = 72.0
 color = Color(0.33, 0.72, 1, 0)
 
+[node name="ComboRuleHint" type="Label" parent="Camera2D"]
+visible = false
+offset_left = -150.0
+offset_top = -154.0
+offset_right = 240.0
+offset_bottom = -102.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.95)
+theme_override_font_sizes/font_size = 24
+text = "组合切技规则提示"
+horizontal_alignment = 1
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1979121855]
 libraries/ = SubResource("AnimationLibrary_adtux")
 

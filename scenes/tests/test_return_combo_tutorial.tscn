@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://bdk0wft7tdrvs"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_return_combo_tutorial.gd" id="1_3n5gj"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_05_return_combo_tutorial.tscn" id="2_emxcy"]
+
+[node name="TestReturnComboTutorial" type="Node2D"]
+script = ExtResource("1_3n5gj")
+
+[node name="ReturnComboSection" parent="." instance=ExtResource("2_emxcy")]

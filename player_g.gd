@@ -53,8 +53,10 @@ var debug_drop_box_size: Vector2 = Vector2.ZERO
 @onready var screen_switch_flash: ColorRect = $Camera2D/ScreenSwitchFlash
 @onready var screen_switch_band: ColorRect = $Camera2D/ScreenSwitchBand
 @onready var screen_switch_edge: ColorRect = $Camera2D/ScreenSwitchEdge
+@onready var combo_rule_hint: Label = $Camera2D/ComboRuleHint
 var screen_flash_tween: Tween
 var screen_band_tween: Tween
+var combo_rule_hint_tween: Tween
 
 # ================= 1. A层 (活跃内存) 物理参数 =================
 @export_category("Layer A (活跃内存)")
@@ -94,6 +96,8 @@ func _ready():
         screen_switch_band.visible = false
     if screen_switch_edge:
         screen_switch_edge.visible = false
+    if combo_rule_hint:
+        combo_rule_hint.visible = false
 
 func _physics_process(delta: float) -> void:
     _update_wind_buff_state()
@@ -249,6 +253,7 @@ func perform_basic_hammer_attack() -> void:
     if not is_in_layer_b or not can_use_hammer:
         return
     state_machine.travel("b_hammer")
+    _show_combo_rule_hint("普通锤击：留在 B 层稳杀", Color(0.72, 0.95, 1.0, 0.95))
     if hammer_hitbox and hammer_hitbox.has_method("perform_basic_swing"):
         hammer_hitbox.perform_basic_swing()
 
@@ -257,6 +262,7 @@ func perform_return_cut() -> void:
     if not is_in_layer_b or not can_use_hammer:
         return
     state_machine.travel("b_hammer_return")
+    _show_combo_rule_hint("锤攻击 + 切层键：命中后带怪回 A 层", Color(1.0, 0.9, 0.58, 0.98))
     if hammer_hitbox and hammer_hitbox.has_method("perform_return_cut"):
         hammer_hitbox.perform_return_cut()
 
@@ -274,6 +280,8 @@ func _handle_combat_input(
     if wants_attack and _should_trigger_return_cut(switch_layer_pressed):
         perform_return_cut()
     elif wants_switch_layer and can_switch_layer:
+        if is_in_layer_b:
+            _show_combo_rule_hint("TAB / 右键：只切自己，不带怪", Color(0.8, 0.98, 1.0, 0.95))
         toggle_dimension()
     elif wants_kick_to_b and can_kick_to_b and not is_in_layer_b:
         perform_kick_to_b()
@@ -475,6 +483,27 @@ func _play_layer_switch_screen_fx(effect_kind: String) -> void:
             screen_switch_band.visible = false
         if is_instance_valid(screen_switch_edge):
             screen_switch_edge.visible = false
+    )
+
+
+func _show_combo_rule_hint(text: String, color: Color) -> void:
+    if combo_rule_hint == null:
+        return
+    if combo_rule_hint_tween:
+        combo_rule_hint_tween.kill()
+    combo_rule_hint.visible = true
+    combo_rule_hint.text = text
+    combo_rule_hint.modulate = color
+    combo_rule_hint.position = Vector2(-150.0, -138.0)
+
+    combo_rule_hint_tween = create_tween()
+    combo_rule_hint_tween.set_parallel(true)
+    combo_rule_hint_tween.tween_property(combo_rule_hint, "modulate:a", color.a, 0.01)
+    combo_rule_hint_tween.tween_property(combo_rule_hint, "position:y", -154.0, 0.22)
+    combo_rule_hint_tween.tween_property(combo_rule_hint, "modulate:a", 0.0, 0.3).set_delay(0.75)
+    combo_rule_hint_tween.finished.connect(func() -> void:
+        if is_instance_valid(combo_rule_hint):
+            combo_rule_hint.visible = false
     )
 
 

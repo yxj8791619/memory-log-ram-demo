@@ -2,6 +2,63 @@
 
 [2026-03-28]
 本次主目标：
+收束 B 层单体组合切技的教学辨识度，让“留在 B 层 / 只切自己 / 带怪回 A 层”更难误读。
+
+完成内容：
+1. 在 `player_g.gd` 中为 B 层普通锤击、单独切层和组合切技补轻量屏幕规则提示
+2. 在 `ch2_05_return_combo_tutorial.tscn` 中把“普通锤击留层、TAB / 右键只切自己、锤攻击 + 切层键带怪回 A 层”写成明确教学文案
+3. 扩展 `test_hammer_return_single.gd`，显式校验三种输入的提示文案和切层结果
+4. 新建 `test_return_combo_tutorial.tscn`，把 chapter2 教学提示中的关键规则钉成自动测试
+
+修改文件：
+1. player_g.gd
+2. player_g.tscn
+3. scenes/levels/chapter2/sections/ch2_05_return_combo_tutorial.tscn
+4. scripts/tests/test_hammer_return_single.gd
+5. scripts/tests/test_return_combo_tutorial.gd
+6. scenes/tests/test_return_combo_tutorial.tscn
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_single.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_layer_switch.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_return_combo_tutorial.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前补的是单体组合切技辨识度，群体切层反馈和原型仍未开始
+2. 玩家是否会在真实战斗压力下自然做出“稳杀 vs 切回”判断，仍需要后续人工试玩
+
+下一步建议：
+1. 继续处理 [P1-FEEDBACK-02] 的剩余部分，把同样的辨识逻辑延伸到群体切层反馈
+2. 然后直接落地 [P1-MECH-01]，实现 B 层重击切层群体带回原型
+
+[本轮测试]
+必须测试：
+1. TC-03 B 层组合切技带回单体敌人
+2. 纯切层规则回归
+3. chapter2 第五段教学文案规则检查
+4. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_single.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_layer_switch.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_return_combo_tutorial.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `hammer_return_single`
+2. PASS: `layer_switch_basic`
+3. PASS: `return_combo_tutorial`
+4. PASS: `chapter2_first10_smoke`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 真实战斗中的输入读感和决策分流仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 补充 AI 持续开发流程中的 git 提交规则，要求每完成一个小节点就做一次本地提交。
 
 完成内容：
