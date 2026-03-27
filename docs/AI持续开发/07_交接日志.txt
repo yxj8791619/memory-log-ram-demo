@@ -2,6 +2,54 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-04]，把控制技护盾原型接进 chapter2 白盒段落。
+
+完成内容：
+1. 在 `ch2_04_wind_tutorial.tscn` 中补充“控制技 + 切层键带着护盾切入 B 层”的白盒提示
+2. 新建 `test_control_shield_route_hint.tscn`，把这条章节内容提示钉成回归
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+2. scripts/tests/test_control_shield_route_hint.gd
+3. scenes/tests/test_control_shield_route_hint.tscn
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+
+未完成 / 遗留：
+1. 当前只是把护盾原型接进了章节提示，还没做独立的护盾教学段
+2. 炸弹异化原型仍未接进章节内容层
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-05]，把炸弹异化原型接进 chapter2 白盒段落
+2. 然后继续收束风道教学段的空间与追击感
+
+[本轮测试]
+必须测试：
+1. 控制技护盾章节提示回归
+2. chapter2 前 10 分钟主线路冒烟
+3. 解锁导流回归
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+
+结果：
+1. PASS: `control_shield_route_hint`
+2. PASS: `chapter2_first10_smoke`
+3. PASS: `unlock_route_flow`
+4. FAIL: 无
+5. BLOCKED: 无
+6. MANUAL: 玩家是否会在高差追击压力下自然想到“先带护盾切进 B 层”，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-TEST-09]，为第一次综合战补更完整的组合回归。
 
 完成内容：

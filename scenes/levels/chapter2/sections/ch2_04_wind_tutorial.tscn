@@ -102,6 +102,13 @@ offset_right = 724.0
 offset_bottom = 286.0
 text = "入口导流：\n看到高差先别急着切人，先用枪制造 B 层风道路线。"
 
+[node name="Hint_ControlShield" type="Label" parent="Hints"]
+offset_left = 760.0
+offset_top = 210.0
+offset_right = 1248.0
+offset_bottom = 304.0
+text = "补充白盒提示：\n若前面压力太大，可用“控制技 + 切层键”带着护盾切入 B 层，先保命再追路线。"
+
 [node name="DebugMarkers" type="Node2D" parent="."]
 
 [node name="EntryMarker" type="Marker2D" parent="DebugMarkers"]

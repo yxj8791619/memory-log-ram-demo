@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://blh15jgu6elw7"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_control_shield_route_hint.gd" id="1_4u7o8"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn" id="2_24r4f"]
+
+[node name="TestControlShieldRouteHint" type="Node2D"]
+script = ExtResource("1_4u7o8")
+
+[node name="WindSection" parent="." instance=ExtResource("2_24r4f")]
