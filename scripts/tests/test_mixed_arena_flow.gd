@@ -58,6 +58,8 @@ func _run_test() -> void:
     var front_hound_templates: int = waves_root.find_children("Spawn_*FrontHound*", "", true, false).size()
     var page_lock_templates: int = waves_root.find_children("Spawn_*PageLockGuard*", "", true, false).size()
     var tempo_templates: int = waves_root.find_children("Spawn_*TempoDummy*", "", true, false).size()
+    var mixed_hint = arena_section.find_child("Hint_MixedArena", true, false)
+    var composition_hint = arena_section.find_child("Hint_Composition", true, false)
 
     if not TestAssert.expect_true(front_hound_templates >= 1, CASE_NAME, "mixed arena should include an A-layer advantage enemy"):
         await _finish(false)
@@ -66,6 +68,18 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true(tempo_templates >= 1, CASE_NAME, "mixed arena should include a tempo enemy"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(mixed_hint != null, CASE_NAME, "mixed arena should include Hint_MixedArena"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(composition_hint != null, CASE_NAME, "mixed arena should include Hint_Composition"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((mixed_hint as Label).text.contains("重击 + 切层键"), CASE_NAME, "mixed arena hint should point players toward group return usage"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((composition_hint as Label).text.contains("重击单按留在 B 层"), CASE_NAME, "composition hint should explain that heavy attack alone does not switch layers"):
         await _finish(false)
         return
 

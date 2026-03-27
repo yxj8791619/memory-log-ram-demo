@@ -113,14 +113,14 @@ offset_left = 88.0
 offset_top = 70.0
 offset_right = 558.0
 offset_bottom = 170.0
-text = "阶段 06: 第一次完整综合战\nWave 1: Front Hound + Page-Lock Guard\nWave 2: Front Hound + 节奏怪，要求玩家先判断谁该在哪层处理。"
+text = "阶段 06: 第一次完整综合战\nWave 1: Front Hound + Page-Lock Guard\nWave 2: Front Hound + 节奏怪，要求玩家先判断谁该在哪层处理；怪堆起来时，再考虑用重击 + 切层键群体带回。"
 
 [node name="Hint_Composition" type="Label" parent="Hints"]
 offset_left = 760.0
 offset_top = 96.0
 offset_right = 1380.0
 offset_bottom = 220.0
-text = "白盒目标：\n1. 先读 Front Hound 的追击压力\n2. 再决定何时去 B 层处理高台上的 Page-Lock Guard\n3. 第二波用额外节奏怪打乱回层时机。"
+text = "白盒目标：\n1. 先读 Front Hound 的追击压力\n2. 再决定何时去 B 层处理高台上的 Page-Lock Guard\n3. 记住重击单按留在 B 层，只有“重击 + 切层键”才群体带回\n4. 第二波用额外节奏怪打乱回层时机。"
 
 [node name="DebugMarkers" type="Node2D" parent="."]
 

@@ -2,6 +2,49 @@
 
 [2026-03-28]
 本次主目标：
+把新的 B 层群体切层原型接进 chapter2 第一场综合战白盒提示，避免它只存在于机制测试里。
+
+完成内容：
+1. 更新 `ch2_06_first_mixed_arena.tscn` 的提示文案，明确写出“重击单按留在 B 层，重击 + 切层键才群体带回”
+2. 扩展 `test_mixed_arena_flow.gd`，让综合战回归同时检查这条提示文本
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn
+2. scripts/tests/test_mixed_arena_flow.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_mixed_arena_flow.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是把群体切层提示接进了综合战白盒，还没有做单独的群体切层教学段
+2. A 层控制技切层护盾、炸弹切层异化仍未开始
+
+下一步建议：
+1. 继续推进 [P1-MECH-02]，实现 A 层控制技切层护盾原型
+2. 之后再处理 [P1-MECH-03] 或功能怪样板
+
+[本轮测试]
+必须测试：
+1. 综合战流程回归
+2. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_mixed_arena_flow.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `mixed_arena_flow`
+2. PASS: `chapter2_first10_smoke`
+3. FAIL: 无
+4. BLOCKED: 无
+5. MANUAL: 群体切层提示虽然已接入，但玩家是否会在实战中自然把它当成“改场技”而不是“更强攻击”，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-MECH-01]，落地 B 层重击切层群体带回原型，并保持“攻击单按不切层，攻击 + 切层键才触发切技”的统一规则。
 
 完成内容：
