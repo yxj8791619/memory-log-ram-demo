@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://cache_fragment.tscn" id="1_a5w8o"]
 [ext_resource type="PackedScene" uid="uid://bywcco0in2o01" path="res://enemy_dummy.tscn" id="2_g2suo"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/background_turret.tscn" id="3_23utp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(1056, 80)
@@ -61,10 +62,10 @@ shape = SubResource("RectangleShape2D_platform")
 [node name="Encounters" type="Node2D" parent="."]
 
 [node name="Spawn_A_BackgroundThreat_01" parent="Encounters" instance=ExtResource("2_g2suo")]
-position = Vector2(872, 366)
+position = Vector2(804, 366)
 
-[node name="Spawn_A_BackgroundThreat_02" parent="Encounters" instance=ExtResource("2_g2suo")]
-position = Vector2(1152, 294)
+[node name="Spawn_B_BackgroundTurret_01" parent="Encounters" instance=ExtResource("3_23utp")]
+position = Vector2(1116, 294)
 
 [node name="Pickups" type="Node2D" parent="."]
 
@@ -93,14 +94,14 @@ offset_left = 760.0
 offset_top = 116.0
 offset_right = 1210.0
 offset_bottom = 194.0
-text = "这一段承接上一段刚解锁的能力，但只要求玩家先学会：\n用枪把子弹送进 B 层风道，借高差继续向前追。"
+text = "这一段承接上一段刚解锁的能力：\n先用枪把子弹送进 B 层风道，借高差继续向前追；如果后台炮台压得太狠，再考虑带着护盾切进 B 层。"
 
 [node name="Hint_WindInput" type="Label" parent="Hints"]
 offset_left = 352.0
 offset_top = 210.0
 offset_right = 724.0
 offset_bottom = 286.0
-text = "入口导流：\n看到高差先别急着切人，先用枪制造 B 层风道路线。"
+text = "入口导流：\n看到高差先别急着切人，先用枪制造 B 层风道路线，再处理高台压力。"
 
 [node name="Hint_ControlShield" type="Label" parent="Hints"]
 offset_left = 760.0

@@ -2,6 +2,59 @@
 
 [2026-03-28]
 本次主目标：
+推进 [P1-CONTENT-02] 的第一步，先收束 `ch2_04_wind_tutorial` 的压迫布局与读法。
+
+完成内容：
+1. 在 `ch2_04_wind_tutorial.tscn` 中把一只旧白盒压力怪替换为 `Background Turret`
+2. 补充“先用风道路线过高差，压力太大再带护盾切入 B 层”的白盒提示
+3. 新建 `test_wind_tutorial_pressure_layout.tscn`，回归这一段的压迫源和提示文案
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+2. scripts/tests/test_wind_tutorial_pressure_layout.gd
+3. scenes/tests/test_wind_tutorial_pressure_layout.tscn
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_reachability.tscn`
+
+未完成 / 遗留：
+1. 当前只是先把压迫源和提示补到位，风道教学段的正式节奏和演出还没完全收束
+2. 这一段仍主要依赖文字和白盒摆放，不是最终版体验
+
+下一步建议：
+1. 继续把其它新原型从测试层迁入章节内容层
+2. 然后再回头整理风道教学段的正式节奏与演出
+
+[本轮测试]
+必须测试：
+1. 风道教学段压迫布局回归
+2. 解锁导流回归
+3. chapter2 前 10 分钟主线路冒烟
+4. chapter2 可达性回归
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_reachability.tscn`
+
+结果：
+1. PASS: `wind_tutorial_pressure_layout`
+2. PASS: `unlock_route_flow`
+3. PASS: `chapter2_first10_smoke`
+4. PASS: `chapter2_reachability`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 炮台压迫是否真的让玩家自然读到“先风道、再护盾兜底”的顺序，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-05]，把炸弹异化原型接进 chapter2 白盒段落。
 
 完成内容：
