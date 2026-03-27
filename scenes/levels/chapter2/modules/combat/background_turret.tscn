@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://bouu75g1gpdrl"]
+
+[ext_resource type="Script" path="res://scripts/chapter2/background_turret.gd" id="1_jd53o"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(34, 34)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hurtbox"]
+radius = 20.0
+
+[node name="BackgroundTurret" type="Node2D"]
+script = ExtResource("1_jd53o")
+
+[node name="VisualRoot" type="Node2D" parent="."]
+
+[node name="Shell" type="ColorRect" parent="VisualRoot"]
+offset_left = -18.0
+offset_top = -18.0
+offset_right = 18.0
+offset_bottom = 18.0
+color = Color(0.5, 0.82, 1, 0.88)
+
+[node name="Core" type="ColorRect" parent="VisualRoot"]
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+color = Color(1, 0.58, 0.28, 0.98)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("CircleShape2D_hurtbox")
+
+[node name="AlertMark" type="Label" parent="."]
+offset_left = -10.0
+offset_top = -42.0
+offset_right = 12.0
+offset_bottom = -18.0
+text = "!"
+
+[node name="FireTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AlertTimer" type="Timer" parent="."]
+one_shot = true
+wait_time = 0.4
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]

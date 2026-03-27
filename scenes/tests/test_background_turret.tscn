@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bc8xq0dn6d6xg"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_background_turret.gd" id="1_w4j2q"]
+[ext_resource type="PackedScene" uid="uid://bsn8sde8vximc" path="res://player_g.tscn" id="2_k2mk8"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/background_turret.tscn" id="3_cwy58"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(640, 80)
+
+[node name="TestBackgroundTurret" type="Node2D"]
+script = ExtResource("1_w4j2q")
+
+[node name="Ground_A" type="StaticBody2D" parent="."]
+position = Vector2(320, 520)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_A"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="Ground_B" type="StaticBody2D" parent="."]
+position = Vector2(320, 520)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_B"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="Player_G" parent="." instance=ExtResource("2_k2mk8")]
+position = Vector2(220, 480)
+can_switch_layer = true
+can_use_hammer = true
+can_kick_to_b = true
+
+[node name="BackgroundTurret" parent="." instance=ExtResource("3_cwy58")]
+position = Vector2(340, 460)

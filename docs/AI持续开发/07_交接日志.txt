@@ -2,6 +2,61 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-ENEMY-01]，落地功能怪样板 `Background Turret`，替换综合战里旧 `Enemy_Dummy` 的功能位占位。
+
+完成内容：
+1. 新建 `scripts/chapter2/background_turret.gd` 与 `background_turret.tscn`
+2. 让 `Background Turret` 在 B 层保持本体脆弱，但能跨层向 A 层发出可见数据束施压
+3. 更新 `ch2_06_first_mixed_arena.tscn`，把第二波旧 `Enemy_Dummy` 替换为 `Background Turret`
+4. 新建 `test_background_turret.tscn`，验证其 A 层施压和 B 层可处理性
+5. 更新 `test_mixed_arena_flow.gd`，让综合战回归识别新的功能怪模板
+
+修改文件：
+1. scripts/chapter2/background_turret.gd
+2. scenes/levels/chapter2/modules/combat/background_turret.tscn
+3. scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn
+4. scripts/tests/test_background_turret.gd
+5. scenes/tests/test_background_turret.tscn
+6. scripts/tests/test_mixed_arena_flow.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_background_turret.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_mixed_arena_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前 `Background Turret` 仍是最小白盒版本，暂未接入更复杂的弹幕或多段压制
+2. 控制技护盾和炸弹异化原型仍未接进 chapter2 教学段
+3. 第一次综合战虽然已替换功能位，但更完整的组合回归还没补
+
+下一步建议：
+1. 继续推进 [P1-TEST-09]，为第一次综合战补更完整的组合回归
+2. 然后再把控制技护盾和炸弹异化接进 chapter2 白盒段落
+
+[本轮测试]
+必须测试：
+1. 新功能怪样板测试
+2. 综合战流程回归
+3. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_background_turret.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_mixed_arena_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `background_turret_profile`
+2. PASS: `mixed_arena_flow`
+3. PASS: `chapter2_first10_smoke`
+4. FAIL: 无
+5. BLOCKED: 无
+6. MANUAL: 炮台的压迫感、烦躁度和“是否会促使玩家主动切入 B 层”仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-MECH-03]，落地 A 层炸弹切层异化原型，并按“双重可测”规则补自动测试和可见反馈。
 
 完成内容：

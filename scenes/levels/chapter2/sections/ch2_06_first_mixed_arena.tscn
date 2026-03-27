@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dr7ngyj1uqrbq"]
 
 [ext_resource type="PackedScene" path="res://arena_trigger.tscn" id="1_w1s1r"]
-[ext_resource type="PackedScene" uid="uid://bywcco0in2o01" path="res://enemy_dummy.tscn" id="2_9wu80"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/background_turret.tscn" id="2_9wu80"]
 [ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/page_lock_guard.tscn" id="3_vwlfn"]
 [ext_resource type="PackedScene" path="res://cache_fragment.tscn" id="4_vfqqv"]
 [ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/front_hound.tscn" id="5_j4l3k"]
@@ -88,7 +88,7 @@ position = Vector2(-236, -16)
 script = ExtResource("6_xyxrm")
 enemy_scene = ExtResource("5_j4l3k")
 
-[node name="Spawn_A_TempoDummy_Ground" type="Marker2D" parent="Encounters/Arena_Wave_01/Waves/Wave_02"]
+[node name="Spawn_B_BackgroundTurret_Ground" type="Marker2D" parent="Encounters/Arena_Wave_01/Waves/Wave_02"]
 position = Vector2(96, 0)
 script = ExtResource("6_xyxrm")
 enemy_scene = ExtResource("2_9wu80")
@@ -113,14 +113,14 @@ offset_left = 88.0
 offset_top = 70.0
 offset_right = 558.0
 offset_bottom = 170.0
-text = "阶段 06: 第一次完整综合战\nWave 1: Front Hound + Page-Lock Guard\nWave 2: Front Hound + 节奏怪，要求玩家先判断谁该在哪层处理；怪堆起来时，再考虑用重击 + 切层键群体带回。"
+text = "阶段 06: 第一次完整综合战\nWave 1: Front Hound + Page-Lock Guard\nWave 2: Front Hound + 后台炮台，要求玩家先判断谁该在哪层处理；怪堆起来时，再考虑用重击 + 切层键群体带回。"
 
 [node name="Hint_Composition" type="Label" parent="Hints"]
 offset_left = 760.0
 offset_top = 96.0
 offset_right = 1380.0
 offset_bottom = 220.0
-text = "白盒目标：\n1. 先读 Front Hound 的追击压力\n2. 再决定何时去 B 层处理高台上的 Page-Lock Guard\n3. 记住重击单按留在 B 层，只有“重击 + 切层键”才群体带回\n4. 第二波用额外节奏怪打乱回层时机。"
+text = "白盒目标：\n1. 先读 Front Hound 的追击压力\n2. 再决定何时去 B 层处理高台上的 Page-Lock Guard\n3. 记住重击单按留在 B 层，只有“重击 + 切层键”才群体带回\n4. 第二波用后台炮台持续向 A 层施压，逼玩家考虑切入 B 层点杀。"
 
 [node name="DebugMarkers" type="Node2D" parent="."]
 

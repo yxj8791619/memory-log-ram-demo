@@ -57,7 +57,7 @@ func _run_test() -> void:
 
     var front_hound_templates: int = waves_root.find_children("Spawn_*FrontHound*", "", true, false).size()
     var page_lock_templates: int = waves_root.find_children("Spawn_*PageLockGuard*", "", true, false).size()
-    var tempo_templates: int = waves_root.find_children("Spawn_*TempoDummy*", "", true, false).size()
+    var support_templates: int = waves_root.find_children("Spawn_*BackgroundTurret*", "", true, false).size()
     var mixed_hint = arena_section.find_child("Hint_MixedArena", true, false)
     var composition_hint = arena_section.find_child("Hint_Composition", true, false)
 
@@ -67,7 +67,7 @@ func _run_test() -> void:
     if not TestAssert.expect_true(page_lock_templates >= 1, CASE_NAME, "mixed arena should include a B-layer advantage enemy"):
         await _finish(false)
         return
-    if not TestAssert.expect_true(tempo_templates >= 1, CASE_NAME, "mixed arena should include a tempo enemy"):
+    if not TestAssert.expect_true(support_templates >= 1, CASE_NAME, "mixed arena should include a support enemy"):
         await _finish(false)
         return
     if not TestAssert.expect_true(mixed_hint != null, CASE_NAME, "mixed arena should include Hint_MixedArena"):
