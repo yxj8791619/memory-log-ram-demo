@@ -9,6 +9,8 @@ var is_in_layer_b: bool = false
 @export var can_kick_to_b: bool = false
 @export var max_health: int = 100
 @export var is_invincible: bool = false
+@export var group_return_aoe_damage: int = 20
+@export var group_return_aoe_force: float = 360.0
 var current_health: int = 100
 var is_wind_buffed: bool = false
 var wind_buff_active: bool = false
@@ -112,6 +114,7 @@ func _physics_process(delta: float) -> void:
 
     var wants_switch_layer: bool = Input.is_action_just_pressed("switch_layer")
     var wants_attack: bool = Input.is_action_just_pressed("attack")
+    var wants_heavy_attack: bool = Input.is_action_just_pressed("heavy_attack")
     var switch_layer_held: bool = Input.is_action_pressed("switch_layer")
 
     # 2. 动态获取当前的物理参数
@@ -192,7 +195,8 @@ func _physics_process(delta: float) -> void:
         wants_attack,
         wants_switch_layer,
         switch_layer_held,
-        Input.is_action_just_pressed("kick_to_b")
+        Input.is_action_just_pressed("kick_to_b"),
+        wants_heavy_attack
     )
             
     # 9. 状态恢复 (不在攻击时，才切换跑和待机)
@@ -267,7 +271,50 @@ func perform_return_cut() -> void:
         hammer_hitbox.perform_return_cut()
 
 
+func perform_heavy_hammer_attack() -> void:
+    if not is_in_layer_b or not can_use_hammer:
+        return
+    state_machine.travel("b_hammer")
+    _show_combo_rule_hint("重击：留在 B 层压群怪", Color(0.96, 0.82, 0.62, 0.95))
+    if hammer_hitbox and hammer_hitbox.has_method("perform_heavy_swing"):
+        hammer_hitbox.perform_heavy_swing()
+
+
+func perform_group_return() -> void:
+    if not is_in_layer_b or not can_use_hammer or not can_switch_layer:
+        return
+    state_machine.travel("b_hammer_return")
+    _show_combo_rule_hint("重击 + 切层键：群体带回并触发 AOE", Color(1.0, 0.78, 0.38, 0.98))
+    if hammer_hitbox and hammer_hitbox.has_method("perform_group_return"):
+        hammer_hitbox.perform_group_return()
+
+
+func complete_group_return(shifted_targets: Array) -> void:
+    if shifted_targets.is_empty():
+        return
+
+    if is_in_layer_b:
+        toggle_dimension("group_return")
+
+    for enemy in shifted_targets:
+        if enemy == null or not is_instance_valid(enemy):
+            continue
+        if bool(enemy.get("is_in_layer_b")):
+            continue
+        if not enemy.has_method("take_damage"):
+            continue
+
+        var dir: int = signi(enemy.global_position.x - global_position.x)
+        if dir == 0:
+            dir = facing_direction
+        enemy.take_damage(group_return_aoe_damage, dir, group_return_aoe_force)
+
+
 func _should_trigger_return_cut(switch_layer_pressed: bool) -> bool:
+    return is_in_layer_b and can_use_hammer and can_switch_layer and switch_layer_pressed
+
+
+func _should_trigger_group_return(switch_layer_pressed: bool) -> bool:
     return is_in_layer_b and can_use_hammer and can_switch_layer and switch_layer_pressed
 
 
@@ -275,10 +322,16 @@ func _handle_combat_input(
     wants_attack: bool,
     wants_switch_layer: bool,
     switch_layer_pressed: bool,
-    wants_kick_to_b: bool
+    wants_kick_to_b: bool,
+    wants_heavy_attack: bool = false
 ) -> void:
-    if wants_attack and _should_trigger_return_cut(switch_layer_pressed):
+    if wants_heavy_attack and _should_trigger_group_return(switch_layer_pressed):
+        perform_group_return()
+    elif wants_attack and _should_trigger_return_cut(switch_layer_pressed):
         perform_return_cut()
+    elif wants_heavy_attack:
+        if is_in_layer_b and can_use_hammer:
+            perform_heavy_hammer_attack()
     elif wants_switch_layer and can_switch_layer:
         if is_in_layer_b:
             _show_combo_rule_hint("TAB / 右键：只切自己，不带怪", Color(0.8, 0.98, 1.0, 0.95))
@@ -452,6 +505,12 @@ func _play_layer_switch_screen_fx(effect_kind: String) -> void:
         band_color = Color(1.0, 0.9, 0.56, 0.0)
         edge_color = Color(0.98, 0.7, 0.22, 0.0)
         band_scale = Vector2(0.24, 1.0)
+    elif effect_kind == "group_return":
+        flash_color = Color(1.0, 0.66, 0.28, 0.0)
+        peak_alpha = 0.3
+        band_color = Color(1.0, 0.78, 0.34, 0.0)
+        edge_color = Color(1.0, 0.5, 0.18, 0.0)
+        band_scale = Vector2(0.34, 1.0)
 
     screen_switch_flash.visible = true
     screen_switch_flash.color = flash_color

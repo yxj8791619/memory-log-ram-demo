@@ -2,6 +2,63 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-MECH-01]，落地 B 层重击切层群体带回原型，并保持“攻击单按不切层，攻击 + 切层键才触发切技”的统一规则。
+
+完成内容：
+1. 在 `project.godot` 中新增 `heavy_attack` 白盒输入，供 B 层重击原型使用
+2. 在 `player_g.gd` 中补齐 B 层重击与“重击 + 切层键”群体带回分流，保持重击单按时只留在 B 层
+3. 在 `hammer_hitbox.gd` 中实现群体带回判定、多人回层与最小 AOE 追击
+4. 新建 `test_hammer_return_group.tscn`，把 TC-05“群体带回 + 第二段 AOE”落成自动测试
+
+修改文件：
+1. project.godot
+2. player_g.gd
+3. hammer_hitbox.gd
+4. scripts/tests/test_hammer_return_group.gd
+5. scenes/tests/test_hammer_return_group.tscn
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_group.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_single.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_layer_switch.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前群体切层原型还没有接进 chapter2 正式白盒段落，暂时主要停留在机制与测试层
+2. 当前第二段 AOE 只是最小追击版本，还不是正式演出或正式数值
+3. A 层控制技切层护盾、炸弹切层异化仍未开始
+
+下一步建议：
+1. 优先把群体切层原型接进 chapter2 白盒段落和提示，避免它只存在于测试场景
+2. 然后继续推进 [P1-MECH-02]，实现 A 层控制技切层护盾原型
+
+[本轮测试]
+必须测试：
+1. TC-05 B 层重击切层群体带回
+2. TC-03 B 层组合切技带回单体敌人
+3. 纯切层回归
+4. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_group.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_single.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_layer_switch.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `hammer_return_group`
+2. PASS: `hammer_return_single`
+3. PASS: `layer_switch_basic`
+4. PASS: `chapter2_first10_smoke`
+5. FAIL: 初版群体切层因过早回层只带回了第一个目标，调整为整次扫描结束后再统一回层后通过
+6. BLOCKED: 无
+7. MANUAL: 群体切层的爽感、成本感和是否会压掉普通锤击 / 单体切回，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 收束 B 层单体组合切技的教学辨识度，让“留在 B 层 / 只切自己 / 带怪回 A 层”更难误读。
 
 完成内容：
