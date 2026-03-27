@@ -2,6 +2,67 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-MECH-02]，落地 A 层控制技切层护盾原型，并按“双重可测”规则补自动测试和可见反馈。
+
+完成内容：
+1. 在 `project.godot` 中新增 `control_skill` 白盒输入
+2. 在 `player_g.gd` 中实现 A 层控制技单按留层、`control_skill + 切层键` 切入 B 层并开启短时护盾
+3. 在 `player_g.tscn` 中新增 `ControlShieldRing`，让护盾状态具备明显可见反馈
+4. 新建 `test_control_shield.tscn`，验证护盾生成、持续、结束和免伤逻辑
+
+修改文件：
+1. project.godot
+2. player_g.gd
+3. player_g.tscn
+4. scripts/tests/test_control_shield.gd
+5. scenes/tests/test_control_shield.tscn
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_control_shield.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_layer_switch.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_single.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_group.tscn`
+5. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前控制技护盾还是最小白盒版本，没有独立教学段或正式表现
+2. 护盾目前采用短时免伤原型，不是最终数值或最终美术表现
+3. A 层炸弹切层异化与功能怪样板仍未开始
+
+下一步建议：
+1. 继续推进 [P1-MECH-03]，实现 A 层炸弹切层异化原型
+2. 然后把控制技护盾原型接进 chapter2 白盒段落
+
+[本轮测试]
+必须测试：
+1. TC-06 A 层控制技切层护盾
+2. TC-01 玩家层切换基础验证
+3. TC-03 B 层组合切技带回单体敌人
+4. TC-05 B 层重击切层群体带回
+5. TC-08 第二章前 10 分钟章节冒烟测试
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_control_shield.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_layer_switch.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_single.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_group.tscn`
+5. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `control_shield_basic`
+2. PASS: `layer_switch_basic`
+3. PASS: `hammer_return_single`
+4. PASS: `hammer_return_group`
+5. PASS: `chapter2_first10_smoke`
+6. FAIL: 无
+7. BLOCKED: 无
+8. MANUAL: 护盾持续时间、进入 B 层后的安全感是否足够成立，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 补充“开发必须双重可测”的规则，要求所有新功能既便于 AI 自动测试，也便于人类上手测试。
 
 完成内容：

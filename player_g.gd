@@ -11,13 +11,16 @@ var is_in_layer_b: bool = false
 @export var is_invincible: bool = false
 @export var group_return_aoe_damage: int = 20
 @export var group_return_aoe_force: float = 360.0
+@export var control_shield_duration: float = 1.4
 var current_health: int = 100
 var is_wind_buffed: bool = false
 var wind_buff_active: bool = false
 var wind_buff_timer: Timer
+var control_shield_timer: Timer
 var wind_speed_multiplier: float = 1.0
 var wind_foot_fx: GPUParticles2D
 var facing_direction: int = 1
+var control_shield_active: bool = false
 var is_dropping_through: bool = false
 var drop_through_time_left: float = 0.0
 var drop_start_y: float = 0.0
@@ -56,6 +59,7 @@ var debug_drop_box_size: Vector2 = Vector2.ZERO
 @onready var screen_switch_band: ColorRect = $Camera2D/ScreenSwitchBand
 @onready var screen_switch_edge: ColorRect = $Camera2D/ScreenSwitchEdge
 @onready var combo_rule_hint: Label = $Camera2D/ComboRuleHint
+@onready var control_shield_ring: ColorRect = $ControlShieldRing
 var screen_flash_tween: Tween
 var screen_band_tween: Tween
 var combo_rule_hint_tween: Tween
@@ -90,6 +94,13 @@ func _ready():
     add_child(wind_buff_timer)
     if not wind_buff_timer.timeout.is_connected(_on_wind_buff_timeout):
         wind_buff_timer.timeout.connect(_on_wind_buff_timeout)
+    control_shield_timer = Timer.new()
+    control_shield_timer.name = "ControlShieldTimer"
+    control_shield_timer.one_shot = true
+    control_shield_timer.wait_time = control_shield_duration
+    add_child(control_shield_timer)
+    if not control_shield_timer.timeout.is_connected(_on_control_shield_timeout):
+        control_shield_timer.timeout.connect(_on_control_shield_timeout)
     _setup_wind_foot_fx()
     _update_collision_masks()
     if screen_switch_flash:
@@ -100,6 +111,8 @@ func _ready():
         screen_switch_edge.visible = false
     if combo_rule_hint:
         combo_rule_hint.visible = false
+    if control_shield_ring:
+        control_shield_ring.visible = false
 
 func _physics_process(delta: float) -> void:
     _update_wind_buff_state()
@@ -115,6 +128,7 @@ func _physics_process(delta: float) -> void:
     var wants_switch_layer: bool = Input.is_action_just_pressed("switch_layer")
     var wants_attack: bool = Input.is_action_just_pressed("attack")
     var wants_heavy_attack: bool = Input.is_action_just_pressed("heavy_attack")
+    var wants_control_skill: bool = Input.is_action_just_pressed("control_skill")
     var switch_layer_held: bool = Input.is_action_pressed("switch_layer")
 
     # 2. 动态获取当前的物理参数
@@ -196,7 +210,8 @@ func _physics_process(delta: float) -> void:
         wants_switch_layer,
         switch_layer_held,
         Input.is_action_just_pressed("kick_to_b"),
-        wants_heavy_attack
+        wants_heavy_attack,
+        wants_control_skill
     )
             
     # 9. 状态恢复 (不在攻击时，才切换跑和待机)
@@ -280,6 +295,23 @@ func perform_heavy_hammer_attack() -> void:
         hammer_hitbox.perform_heavy_swing()
 
 
+func perform_control_skill() -> void:
+    if is_in_layer_b:
+        _show_combo_rule_hint("控制技：当前原型只在 A 层定义护盾派生", Color(0.82, 0.94, 1.0, 0.95))
+        return
+    state_machine.travel("a_shoot")
+    _show_combo_rule_hint("控制技单按：留在 A 层，不切层", Color(0.68, 0.92, 1.0, 0.95))
+
+
+func perform_control_shield_shift() -> void:
+    if is_in_layer_b or not can_switch_layer:
+        return
+    state_machine.travel("a_shoot")
+    _show_combo_rule_hint("控制技 + 切层键：切入 B 层并生成护盾", Color(0.48, 1.0, 0.86, 0.98))
+    toggle_dimension("control_shield")
+    _activate_control_shield()
+
+
 func perform_group_return() -> void:
     if not is_in_layer_b or not can_use_hammer or not can_switch_layer:
         return
@@ -310,6 +342,23 @@ func complete_group_return(shifted_targets: Array) -> void:
         enemy.take_damage(group_return_aoe_damage, dir, group_return_aoe_force)
 
 
+func _activate_control_shield() -> void:
+    control_shield_active = true
+    if control_shield_ring:
+        control_shield_ring.visible = true
+        control_shield_ring.modulate = Color(0.48, 1.0, 0.86, 0.82)
+    if control_shield_timer:
+        control_shield_timer.stop()
+        control_shield_timer.wait_time = control_shield_duration
+        control_shield_timer.start()
+
+
+func _on_control_shield_timeout() -> void:
+    control_shield_active = false
+    if control_shield_ring:
+        control_shield_ring.visible = false
+
+
 func _should_trigger_return_cut(switch_layer_pressed: bool) -> bool:
     return is_in_layer_b and can_use_hammer and can_switch_layer and switch_layer_pressed
 
@@ -318,17 +367,26 @@ func _should_trigger_group_return(switch_layer_pressed: bool) -> bool:
     return is_in_layer_b and can_use_hammer and can_switch_layer and switch_layer_pressed
 
 
+func _should_trigger_control_shield(switch_layer_pressed: bool) -> bool:
+    return not is_in_layer_b and can_switch_layer and switch_layer_pressed
+
+
 func _handle_combat_input(
     wants_attack: bool,
     wants_switch_layer: bool,
     switch_layer_pressed: bool,
     wants_kick_to_b: bool,
-    wants_heavy_attack: bool = false
+    wants_heavy_attack: bool = false,
+    wants_control_skill: bool = false
 ) -> void:
-    if wants_heavy_attack and _should_trigger_group_return(switch_layer_pressed):
+    if wants_control_skill and _should_trigger_control_shield(switch_layer_pressed):
+        perform_control_shield_shift()
+    elif wants_heavy_attack and _should_trigger_group_return(switch_layer_pressed):
         perform_group_return()
     elif wants_attack and _should_trigger_return_cut(switch_layer_pressed):
         perform_return_cut()
+    elif wants_control_skill:
+        perform_control_skill()
     elif wants_heavy_attack:
         if is_in_layer_b and can_use_hammer:
             perform_heavy_hammer_attack()
@@ -362,6 +420,12 @@ func _is_enemy_in_kick_range(enemy: Node2D) -> bool:
 
 func take_damage(amount: int) -> void:
     if is_invincible:
+        return
+    if control_shield_active:
+        _show_combo_rule_hint("护盾生效：本次伤害已抵消", Color(0.52, 1.0, 0.88, 0.98))
+        if control_shield_ring:
+            control_shield_ring.visible = true
+            control_shield_ring.modulate = Color(0.68, 1.0, 0.92, 0.98)
         return
 
     current_health -= amount
@@ -511,6 +575,12 @@ func _play_layer_switch_screen_fx(effect_kind: String) -> void:
         band_color = Color(1.0, 0.78, 0.34, 0.0)
         edge_color = Color(1.0, 0.5, 0.18, 0.0)
         band_scale = Vector2(0.34, 1.0)
+    elif effect_kind == "control_shield":
+        flash_color = Color(0.5, 1.0, 0.84, 0.0)
+        peak_alpha = 0.26
+        band_color = Color(0.58, 1.0, 0.88, 0.0)
+        edge_color = Color(0.28, 0.98, 0.78, 0.0)
+        band_scale = Vector2(0.28, 1.0)
 
     screen_switch_flash.visible = true
     screen_switch_flash.color = flash_color

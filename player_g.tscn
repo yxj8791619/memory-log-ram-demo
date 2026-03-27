@@ -459,6 +459,14 @@ b_run_speed = 120.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1038422412]
 shape = SubResource("RectangleShape2D_w3f5a")
 
+[node name="ControlShieldRing" type="ColorRect" parent="."]
+visible = false
+offset_left = -26.0
+offset_top = -42.0
+offset_right = 26.0
+offset_bottom = 18.0
+color = Color(0.48, 1, 0.86, 0.5)
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2120625387]
 position = Vector2(180, -88)
 limit_left = -10000000

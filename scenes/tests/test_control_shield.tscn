@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://dgk2wj6y3t7v2"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_control_shield.gd" id="1_n5aoe"]
+[ext_resource type="PackedScene" uid="uid://bsn8sde8vximc" path="res://player_g.tscn" id="2_rne7s"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(640, 80)
+
+[node name="TestControlShield" type="Node2D"]
+script = ExtResource("1_n5aoe")
+
+[node name="Ground_A" type="StaticBody2D" parent="."]
+position = Vector2(320, 520)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_A"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="Player_G" parent="." instance=ExtResource("2_rne7s")]
+position = Vector2(220, 480)
+can_switch_layer = false
+can_use_hammer = true
+can_kick_to_b = true
