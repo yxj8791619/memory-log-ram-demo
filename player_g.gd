@@ -12,15 +12,24 @@ var is_in_layer_b: bool = false
 @export var group_return_aoe_damage: int = 20
 @export var group_return_aoe_force: float = 360.0
 @export var control_shield_duration: float = 1.4
+@export var bomb_damage: int = 35
+@export var bomb_force: float = 260.0
+@export var bomb_radius: float = 88.0
+@export var bomb_mutation_damage: int = 55
+@export var bomb_mutation_force: float = 420.0
+@export var bomb_mutation_radius: float = 144.0
+@export var bomb_mutation_field_duration: float = 1.0
 var current_health: int = 100
 var is_wind_buffed: bool = false
 var wind_buff_active: bool = false
 var wind_buff_timer: Timer
 var control_shield_timer: Timer
+var bomb_mutation_field_timer: Timer
 var wind_speed_multiplier: float = 1.0
 var wind_foot_fx: GPUParticles2D
 var facing_direction: int = 1
 var control_shield_active: bool = false
+var bomb_mutation_field_active: bool = false
 var is_dropping_through: bool = false
 var drop_through_time_left: float = 0.0
 var drop_start_y: float = 0.0
@@ -60,6 +69,7 @@ var debug_drop_box_size: Vector2 = Vector2.ZERO
 @onready var screen_switch_edge: ColorRect = $Camera2D/ScreenSwitchEdge
 @onready var combo_rule_hint: Label = $Camera2D/ComboRuleHint
 @onready var control_shield_ring: ColorRect = $ControlShieldRing
+@onready var bomb_field_visual: ColorRect = $BombMutationField
 var screen_flash_tween: Tween
 var screen_band_tween: Tween
 var combo_rule_hint_tween: Tween
@@ -101,6 +111,13 @@ func _ready():
     add_child(control_shield_timer)
     if not control_shield_timer.timeout.is_connected(_on_control_shield_timeout):
         control_shield_timer.timeout.connect(_on_control_shield_timeout)
+    bomb_mutation_field_timer = Timer.new()
+    bomb_mutation_field_timer.name = "BombMutationFieldTimer"
+    bomb_mutation_field_timer.one_shot = true
+    bomb_mutation_field_timer.wait_time = bomb_mutation_field_duration
+    add_child(bomb_mutation_field_timer)
+    if not bomb_mutation_field_timer.timeout.is_connected(_on_bomb_mutation_field_timeout):
+        bomb_mutation_field_timer.timeout.connect(_on_bomb_mutation_field_timeout)
     _setup_wind_foot_fx()
     _update_collision_masks()
     if screen_switch_flash:
@@ -113,6 +130,8 @@ func _ready():
         combo_rule_hint.visible = false
     if control_shield_ring:
         control_shield_ring.visible = false
+    if bomb_field_visual:
+        bomb_field_visual.visible = false
 
 func _physics_process(delta: float) -> void:
     _update_wind_buff_state()
@@ -129,6 +148,7 @@ func _physics_process(delta: float) -> void:
     var wants_attack: bool = Input.is_action_just_pressed("attack")
     var wants_heavy_attack: bool = Input.is_action_just_pressed("heavy_attack")
     var wants_control_skill: bool = Input.is_action_just_pressed("control_skill")
+    var wants_bomb_skill: bool = Input.is_action_just_pressed("bomb_skill")
     var switch_layer_held: bool = Input.is_action_pressed("switch_layer")
 
     # 2. 动态获取当前的物理参数
@@ -211,7 +231,8 @@ func _physics_process(delta: float) -> void:
         switch_layer_held,
         Input.is_action_just_pressed("kick_to_b"),
         wants_heavy_attack,
-        wants_control_skill
+        wants_control_skill,
+        wants_bomb_skill
     )
             
     # 9. 状态恢复 (不在攻击时，才切换跑和待机)
@@ -312,6 +333,24 @@ func perform_control_shield_shift() -> void:
     _activate_control_shield()
 
 
+func perform_bomb_skill() -> void:
+    if is_in_layer_b:
+        _show_combo_rule_hint("炸弹原型当前只在 A 层定义异化派生", Color(1.0, 0.88, 0.7, 0.96))
+        return
+    state_machine.travel("a_shoot")
+    _show_combo_rule_hint("炸弹单按：留在 A 层，不切层", Color(1.0, 0.84, 0.58, 0.96))
+    _explode_bomb(false)
+
+
+func perform_bomb_mutation_shift() -> void:
+    if is_in_layer_b or not can_switch_layer:
+        return
+    state_machine.travel("a_shoot")
+    _show_combo_rule_hint("炸弹 + 切层键：切入 B 层并触发异化爆发", Color(1.0, 0.66, 0.42, 0.98))
+    toggle_dimension("bomb_mutation")
+    _explode_bomb(true)
+
+
 func perform_group_return() -> void:
     if not is_in_layer_b or not can_use_hammer or not can_switch_layer:
         return
@@ -353,6 +392,54 @@ func _activate_control_shield() -> void:
         control_shield_timer.start()
 
 
+func _explode_bomb(is_mutated: bool) -> void:
+    var target_layer_b: bool = is_mutated
+    var radius: float = bomb_mutation_radius if is_mutated else bomb_radius
+    var damage_amount: int = bomb_mutation_damage if is_mutated else bomb_damage
+    var force_amount: float = bomb_mutation_force if is_mutated else bomb_force
+
+    if is_mutated:
+        bomb_mutation_field_active = true
+        if bomb_field_visual:
+            bomb_field_visual.visible = true
+            bomb_field_visual.modulate = Color(1.0, 0.58, 0.22, 0.62)
+            bomb_field_visual.scale = Vector2(1.0, 1.0)
+        if bomb_mutation_field_timer:
+            bomb_mutation_field_timer.stop()
+            bomb_mutation_field_timer.wait_time = bomb_mutation_field_duration
+            bomb_mutation_field_timer.start()
+    elif bomb_field_visual:
+        bomb_field_visual.visible = true
+        bomb_field_visual.modulate = Color(1.0, 0.84, 0.42, 0.45)
+        var quick_tween: Tween = create_tween()
+        quick_tween.tween_property(bomb_field_visual, "modulate:a", 0.0, 0.22)
+        quick_tween.finished.connect(func() -> void:
+            if is_instance_valid(bomb_field_visual) and not bomb_mutation_field_active:
+                bomb_field_visual.visible = false
+        )
+
+    for enemy in get_tree().get_nodes_in_group("kick_targets"):
+        if enemy == null or not is_instance_valid(enemy):
+            continue
+        if bool(enemy.get("is_in_layer_b")) != target_layer_b:
+            continue
+        if not enemy.has_method("take_damage"):
+            continue
+        if enemy.global_position.distance_to(global_position) > radius:
+            continue
+
+        var dir: int = signi(enemy.global_position.x - global_position.x)
+        if dir == 0:
+            dir = facing_direction
+        enemy.take_damage(damage_amount, dir, force_amount)
+
+
+func _on_bomb_mutation_field_timeout() -> void:
+    bomb_mutation_field_active = false
+    if bomb_field_visual:
+        bomb_field_visual.visible = false
+
+
 func _on_control_shield_timeout() -> void:
     control_shield_active = false
     if control_shield_ring:
@@ -371,20 +458,29 @@ func _should_trigger_control_shield(switch_layer_pressed: bool) -> bool:
     return not is_in_layer_b and can_switch_layer and switch_layer_pressed
 
 
+func _should_trigger_bomb_mutation(switch_layer_pressed: bool) -> bool:
+    return not is_in_layer_b and can_switch_layer and switch_layer_pressed
+
+
 func _handle_combat_input(
     wants_attack: bool,
     wants_switch_layer: bool,
     switch_layer_pressed: bool,
     wants_kick_to_b: bool,
     wants_heavy_attack: bool = false,
-    wants_control_skill: bool = false
+    wants_control_skill: bool = false,
+    wants_bomb_skill: bool = false
 ) -> void:
-    if wants_control_skill and _should_trigger_control_shield(switch_layer_pressed):
+    if wants_bomb_skill and _should_trigger_bomb_mutation(switch_layer_pressed):
+        perform_bomb_mutation_shift()
+    elif wants_control_skill and _should_trigger_control_shield(switch_layer_pressed):
         perform_control_shield_shift()
     elif wants_heavy_attack and _should_trigger_group_return(switch_layer_pressed):
         perform_group_return()
     elif wants_attack and _should_trigger_return_cut(switch_layer_pressed):
         perform_return_cut()
+    elif wants_bomb_skill:
+        perform_bomb_skill()
     elif wants_control_skill:
         perform_control_skill()
     elif wants_heavy_attack:
@@ -581,6 +677,12 @@ func _play_layer_switch_screen_fx(effect_kind: String) -> void:
         band_color = Color(0.58, 1.0, 0.88, 0.0)
         edge_color = Color(0.28, 0.98, 0.78, 0.0)
         band_scale = Vector2(0.28, 1.0)
+    elif effect_kind == "bomb_mutation":
+        flash_color = Color(1.0, 0.68, 0.32, 0.0)
+        peak_alpha = 0.28
+        band_color = Color(1.0, 0.76, 0.38, 0.0)
+        edge_color = Color(1.0, 0.52, 0.18, 0.0)
+        band_scale = Vector2(0.32, 1.0)
 
     screen_switch_flash.visible = true
     screen_switch_flash.color = flash_color

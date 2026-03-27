@@ -2,6 +2,63 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-MECH-03]，落地 A 层炸弹切层异化原型，并按“双重可测”规则补自动测试和可见反馈。
+
+完成内容：
+1. 在 `project.godot` 中新增 `bomb_skill` 白盒输入
+2. 在 `player_g.gd` 中实现 A 层炸弹单按留层、`bomb_skill + 切层键` 切入 B 层并触发异化爆发
+3. 在 `player_g.tscn` 中新增 `BombMutationField`，让异化危险区具备明显可见反馈
+4. 新建 `test_bomb_mutation.tscn`，验证炸弹留层与炸弹异化切层的分流
+
+修改文件：
+1. project.godot
+2. player_g.gd
+3. player_g.tscn
+4. scripts/tests/test_bomb_mutation.gd
+5. scenes/tests/test_bomb_mutation.tscn
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_bomb_mutation.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_control_shield.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_group.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前炸弹异化仍是最小白盒版本，没有独立教学段或正式投掷流程
+2. `control_shield_basic` 在 PASS 后仍有 `ObjectDB instances leaked at exit` 警告，后续应整理测试退出时的临时对象释放
+3. 功能怪样板仍未开始
+
+下一步建议：
+1. 继续推进 [P1-ENEMY-01]，新建功能怪样板，替换综合战里旧 `Enemy_Dummy`
+2. 然后再把控制技护盾和炸弹异化原型接进 chapter2 白盒段落
+
+[本轮测试]
+必须测试：
+1. A 层炸弹切层异化原型测试
+2. TC-06 A 层控制技切层护盾
+3. TC-05 B 层重击切层群体带回
+4. TC-08 第二章前 10 分钟章节冒烟测试
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_bomb_mutation.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_control_shield.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_group.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `bomb_mutation_basic`
+2. PASS: `control_shield_basic`
+3. PASS: `hammer_return_group`
+4. PASS: `chapter2_first10_smoke`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 炸弹异化的威慑感、控场价值和阅读速度仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-MECH-02]，落地 A 层控制技切层护盾原型，并按“双重可测”规则补自动测试和可见反馈。
 
 完成内容：

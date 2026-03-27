@@ -467,6 +467,14 @@ offset_right = 26.0
 offset_bottom = 18.0
 color = Color(0.48, 1, 0.86, 0.5)
 
+[node name="BombMutationField" type="ColorRect" parent="."]
+visible = false
+offset_left = -72.0
+offset_top = -88.0
+offset_right = 72.0
+offset_bottom = 56.0
+color = Color(1, 0.58, 0.22, 0.42)
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2120625387]
 position = Vector2(180, -88)
 limit_left = -10000000

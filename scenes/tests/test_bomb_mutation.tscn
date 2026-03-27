@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://bx5w3c1q7iand"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_bomb_mutation.gd" id="1_5sgg4"]
+[ext_resource type="PackedScene" uid="uid://bsn8sde8vximc" path="res://player_g.tscn" id="2_qh84j"]
+[ext_resource type="PackedScene" uid="uid://bywcco0in2o01" path="res://enemy_dummy.tscn" id="3_9pl55"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(640, 80)
+
+[node name="TestBombMutation" type="Node2D"]
+script = ExtResource("1_5sgg4")
+
+[node name="Ground_A" type="StaticBody2D" parent="."]
+position = Vector2(320, 520)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_A"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="Player_G" parent="." instance=ExtResource("2_qh84j")]
+position = Vector2(220, 480)
+can_switch_layer = false
+can_use_hammer = true
+can_kick_to_b = true
+
+[node name="Enemy_A" parent="." instance=ExtResource("3_9pl55")]
+position = Vector2(272, 480)
+
+[node name="Enemy_B" parent="." instance=ExtResource("3_9pl55")]
+position = Vector2(274, 480)
