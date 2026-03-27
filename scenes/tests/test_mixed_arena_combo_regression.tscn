@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://bocxq14r7q7es"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_mixed_arena_combo_regression.gd" id="1_fv1k2"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/ch2_main.tscn" id="2_eur6e"]
+
+[node name="TestMixedArenaComboRegression" type="Node2D"]
+script = ExtResource("1_fv1k2")
+
+[node name="Chapter2Main" parent="." instance=ExtResource("2_eur6e")]

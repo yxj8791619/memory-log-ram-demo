@@ -2,6 +2,53 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-TEST-09]，为第一次综合战补更完整的组合回归。
+
+完成内容：
+1. 新建 `test_mixed_arena_combo_regression.tscn`
+2. 让该测试回归检查 chapter2 综合战是否同时保留了：`Background Turret`、群体切层提示、控制技护盾入口、炸弹异化入口和对应可见节点
+
+修改文件：
+1. scripts/tests/test_mixed_arena_combo_regression.gd
+2. scenes/tests/test_mixed_arena_combo_regression.tscn
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_mixed_arena_combo_regression.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_mixed_arena_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前组合回归主要覆盖“装配兼容性”，还不是整场实战脚本驱动的全流程回归
+2. 控制技护盾和炸弹异化原型仍未接进 chapter2 正式白盒段落
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-04]，把控制技护盾原型接进 chapter2 白盒段落
+2. 然后推进 [P1-CONTENT-05]，把炸弹异化原型接进 chapter2 白盒段落
+
+[本轮测试]
+必须测试：
+1. 综合战组合回归
+2. 综合战流程回归
+3. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_mixed_arena_combo_regression.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_mixed_arena_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `mixed_arena_combo_regression`
+2. PASS: `mixed_arena_flow`
+3. PASS: `chapter2_first10_smoke`
+4. FAIL: 无
+5. BLOCKED: 无
+6. MANUAL: 当前组合回归证明装配兼容，但真实战斗中的阅读压力与教学节奏仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-ENEMY-01]，落地功能怪样板 `Background Turret`，替换综合战里旧 `Enemy_Dummy` 的功能位占位。
 
 完成内容：
