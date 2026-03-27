@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://vr7pl8mhnmpr"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_hammer_hits_chapter2_enemy.gd" id="1_3ljw7"]
+[ext_resource type="PackedScene" path="res://player_g.tscn" id="2_i5n8a"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/front_hound.tscn" id="3_dx0ku"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(640, 80)
+
+[node name="TestHammerHitsChapter2Enemy" type="Node2D"]
+script = ExtResource("1_3ljw7")
+
+[node name="Ground_AB" type="StaticBody2D" parent="."]
+position = Vector2(320, 520)
+collision_layer = 6
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_AB"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="Player_G" parent="." instance=ExtResource("2_i5n8a")]
+position = Vector2(220, 480)
+
+[node name="FrontHound" parent="." instance=ExtResource("3_dx0ku")]
+position = Vector2(280, 480)

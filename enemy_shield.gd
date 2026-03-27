@@ -7,6 +7,9 @@ enum AIState {
 
 var gravity: float = 980.0
 var health: int = 100
+@export var is_in_layer_b: bool = false
+@export var layer_shift_upward_force: float = 220.0
+@export var layer_shift_horizontal_force: float = 180.0
 var speed: float = 90.0
 var chase_speed: float = 180.0
 var acceleration: float = 750.0
@@ -33,13 +36,16 @@ var turn_timer: Timer
 var alert_timer: Timer
 
 @onready var attack_box: Area2D = $AttackBox
+@onready var hurtbox: Area2D = $Hurtbox
 @onready var screen_notifier: VisibleOnScreenNotifier2D = $VisibleOnScreenNotifier2D
 @onready var vision_ray: RayCast2D = $VisionRay
 @onready var ledge_check: RayCast2D = $LedgeCheck
 @onready var alert_mark: Label = $AlertMark
 @onready var body_shape: CollisionShape2D = $CollisionShape2D
+@onready var sprite: Sprite2D = $Sprite2D
 
 func _ready() -> void:
+    add_to_group("kick_targets")
     if not attack_box.body_entered.is_connected(_on_attack_box_body_entered):
         attack_box.body_entered.connect(_on_attack_box_body_entered)
     if not screen_notifier.screen_entered.is_connected(_on_screen_entered):
@@ -66,11 +72,15 @@ func _ready() -> void:
     _configure_rays()
     _update_facing_setup()
     _refresh_player_ref()
+    _apply_layer_visual_state()
 
 
 func _physics_process(delta: float) -> void:
     if not is_on_floor():
         velocity.y += gravity * delta
+
+    _refresh_player_ref()
+    _refresh_layer_interaction_state()
 
     if not is_active:
         chase_memory_left = 0.0
@@ -79,9 +89,10 @@ func _physics_process(delta: float) -> void:
         move_and_slide()
         return
 
-    _refresh_player_ref()
-
-    if _is_player_in_layer_b():
+    if not _is_on_same_layer_as_player():
+        chase_memory_left = 0.0
+        _set_patrol_state()
+    elif _is_player_in_layer_b():
         chase_memory_left = 0.0
         _set_patrol_state()
     elif _can_see_player():
@@ -162,6 +173,7 @@ func _set_patrol_state() -> void:
 
 func _set_chase_state() -> void:
     if state != AIState.CHASE:
+        alert_mark.text = "!"
         alert_mark.visible = true
         alert_timer.start()
     state = AIState.CHASE
@@ -187,6 +199,12 @@ func _is_player_in_layer_b() -> bool:
     if not player_ref or not is_instance_valid(player_ref):
         return false
     return bool(player_ref.get("is_in_layer_b"))
+
+
+func _is_on_same_layer_as_player() -> bool:
+    if not player_ref or not is_instance_valid(player_ref):
+        return true
+    return bool(player_ref.get("is_in_layer_b")) == is_in_layer_b
 
 
 func _can_see_player() -> bool:
@@ -241,6 +259,55 @@ func _on_screen_exited() -> void:
     state = AIState.PATROL
     chase_memory_left = 0.0
     alert_mark.visible = false
+
+
+func _refresh_layer_interaction_state() -> void:
+    var same_layer: bool = _is_on_same_layer_as_player()
+    attack_box.monitoring = same_layer
+    hurtbox.monitorable = same_layer
+
+
+func _apply_layer_visual_state() -> void:
+    if is_in_layer_b:
+        sprite.modulate = Color(0.45, 0.78, 1.0, 0.82)
+    else:
+        sprite.modulate = Color(0.2, 0.2, 0.8, 1)
+
+
+func set_enemy_layer_state(in_b_layer: bool) -> void:
+    is_in_layer_b = in_b_layer
+    _apply_layer_visual_state()
+    _refresh_layer_interaction_state()
+
+
+func force_shift_to_layer_a(direction: int = 1) -> void:
+    if not is_in_layer_b:
+        return
+
+    var resolved_dir: int = direction if direction != 0 else facing_direction
+    set_enemy_layer_state(false)
+    chase_memory_left = 0.0
+    state = AIState.PATROL
+    velocity.x = resolved_dir * layer_shift_horizontal_force
+    velocity.y = -layer_shift_upward_force
+    alert_mark.text = "A"
+    alert_mark.visible = true
+    alert_timer.start()
+
+
+func force_shift_to_layer_b(direction: int = 1) -> void:
+    if is_in_layer_b:
+        return
+
+    var resolved_dir: int = direction if direction != 0 else facing_direction
+    set_enemy_layer_state(true)
+    chase_memory_left = 0.0
+    state = AIState.PATROL
+    velocity.x = resolved_dir * layer_shift_horizontal_force
+    velocity.y = -layer_shift_upward_force
+    alert_mark.text = "B"
+    alert_mark.visible = true
+    alert_timer.start()
 
 
 func _begin_turn(target_direction: int) -> void:

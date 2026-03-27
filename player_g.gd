@@ -6,6 +6,7 @@ var is_in_layer_b: bool = false
 @export var bullet_scene: PackedScene
 @export var can_switch_layer: bool = false
 @export var can_use_hammer: bool = false
+@export var can_kick_to_b: bool = false
 @export var max_health: int = 100
 @export var is_invincible: bool = false
 var current_health: int = 100
@@ -44,8 +45,16 @@ var debug_drop_box_size: Vector2 = Vector2.ZERO
 @onready var state_machine = anim_tree.get("parameters/playback")
 @onready var sprite: Sprite2D = $DirectionPivot/Sprite2D
 @onready var muzzle: Marker2D = $DirectionPivot/Muzzle
+@onready var hammer_hitbox: Area2D = $DirectionPivot/HammerHitbox
+@onready var kick_hitbox: Area2D = $DirectionPivot/KickHitbox
+@onready var kick_collision: CollisionShape2D = $DirectionPivot/KickHitbox/CollisionShape2D
 @onready var invincibility_timer: Timer = $InvincibilityTimer
 @onready var body_collision: CollisionShape2D = $CollisionShape2D
+@onready var screen_switch_flash: ColorRect = $Camera2D/ScreenSwitchFlash
+@onready var screen_switch_band: ColorRect = $Camera2D/ScreenSwitchBand
+@onready var screen_switch_edge: ColorRect = $Camera2D/ScreenSwitchEdge
+var screen_flash_tween: Tween
+var screen_band_tween: Tween
 
 # ================= 1. A层 (活跃内存) 物理参数 =================
 @export_category("Layer A (活跃内存)")
@@ -79,6 +88,12 @@ func _ready():
         wind_buff_timer.timeout.connect(_on_wind_buff_timeout)
     _setup_wind_foot_fx()
     _update_collision_masks()
+    if screen_switch_flash:
+        screen_switch_flash.visible = false
+    if screen_switch_band:
+        screen_switch_band.visible = false
+    if screen_switch_edge:
+        screen_switch_edge.visible = false
 
 func _physics_process(delta: float) -> void:
     _update_wind_buff_state()
@@ -91,9 +106,9 @@ func _physics_process(delta: float) -> void:
     # 0. 提前获取当前动画状态
     var current_anim = state_machine.get_current_node()
 
-    # 1. 检测 TAB 键切换
-    if Input.is_action_just_pressed("switch_layer") and can_switch_layer:
-        toggle_dimension()
+    var wants_switch_layer: bool = Input.is_action_just_pressed("switch_layer")
+    var wants_attack: bool = Input.is_action_just_pressed("attack")
+    var switch_layer_held: bool = Input.is_action_pressed("switch_layer")
 
     # 2. 动态获取当前的物理参数
     var current_speed = b_run_speed if is_in_layer_b else a_run_speed
@@ -154,7 +169,13 @@ func _physics_process(delta: float) -> void:
     
 
     # 7. 朝向由鼠标位置决定（支持边退边打）
-    if current_anim != "b_hammer":
+    if is_in_layer_b:
+        if direction > 0.01:
+            facing_direction = 1
+        elif direction < -0.01:
+            facing_direction = -1
+        direction_pivot.scale.x = facing_direction
+    elif current_anim != "b_hammer":
         var mouse_x: float = get_global_mouse_position().x
         if mouse_x > global_position.x:
             facing_direction = 1
@@ -162,16 +183,16 @@ func _physics_process(delta: float) -> void:
             facing_direction = -1
         direction_pivot.scale.x = facing_direction
             
-    # 8. 触发攻击
-    if Input.is_action_just_pressed("attack"):
-        if is_in_layer_b and can_use_hammer:
-            state_machine.travel("b_hammer")
-        else:
-            state_machine.travel("a_shoot")
-            shoot()
+    # 8. 触发攻击 / 组合输入
+    _handle_combat_input(
+        wants_attack,
+        wants_switch_layer,
+        switch_layer_held,
+        Input.is_action_just_pressed("kick_to_b")
+    )
             
     # 9. 状态恢复 (不在攻击时，才切换跑和待机)
-    elif current_anim != "a_shoot" and current_anim != "b_hammer":
+    if current_anim != "a_shoot" and current_anim != "b_hammer":
         if is_on_floor():
             if direction != 0:
                 state_machine.travel("run")
@@ -179,11 +200,12 @@ func _physics_process(delta: float) -> void:
                 state_machine.travel("idle")
 
 # --- 切换维度的具体逻辑 ---
-func toggle_dimension():
+func toggle_dimension(effect_kind: String = "switch"):
     is_in_layer_b = !is_in_layer_b
     _update_collision_masks()
     layer_switched.emit(is_in_layer_b)
     get_tree().call_group("cross_layer_objects", "on_dimension_switched", is_in_layer_b)
+    _play_layer_switch_screen_fx(effect_kind)
 
 
 func shoot() -> void:
@@ -194,6 +216,87 @@ func shoot() -> void:
     get_tree().current_scene.add_child(bullet)
     bullet.global_position = muzzle.global_position
     bullet.direction = facing_direction
+
+
+func perform_kick_to_b() -> bool:
+    if is_in_layer_b or not can_kick_to_b:
+        return false
+
+    var kicked_any: bool = false
+    for enemy in get_tree().get_nodes_in_group("kick_targets"):
+        if enemy == null or not is_instance_valid(enemy):
+            continue
+        if not enemy.has_method("force_shift_to_layer_b"):
+            continue
+        if bool(enemy.get("is_in_layer_b")):
+            continue
+        if not _is_enemy_in_kick_range(enemy as Node2D):
+            continue
+
+        var dir: int = signi(enemy.global_position.x - global_position.x)
+        if dir == 0:
+            dir = facing_direction
+
+        enemy.force_shift_to_layer_b(dir)
+        kicked_any = true
+
+    if kicked_any:
+        print("A层踢怪成功：目标已被送往 B 层。")
+    return kicked_any
+
+
+func perform_basic_hammer_attack() -> void:
+    if not is_in_layer_b or not can_use_hammer:
+        return
+    state_machine.travel("b_hammer")
+    if hammer_hitbox and hammer_hitbox.has_method("perform_basic_swing"):
+        hammer_hitbox.perform_basic_swing()
+
+
+func perform_return_cut() -> void:
+    if not is_in_layer_b or not can_use_hammer:
+        return
+    state_machine.travel("b_hammer_return")
+    if hammer_hitbox and hammer_hitbox.has_method("perform_return_cut"):
+        hammer_hitbox.perform_return_cut()
+
+
+func _should_trigger_return_cut(switch_layer_pressed: bool) -> bool:
+    return is_in_layer_b and can_use_hammer and can_switch_layer and switch_layer_pressed
+
+
+func _handle_combat_input(
+    wants_attack: bool,
+    wants_switch_layer: bool,
+    switch_layer_pressed: bool,
+    wants_kick_to_b: bool
+) -> void:
+    if wants_attack and _should_trigger_return_cut(switch_layer_pressed):
+        perform_return_cut()
+    elif wants_switch_layer and can_switch_layer:
+        toggle_dimension()
+    elif wants_kick_to_b and can_kick_to_b and not is_in_layer_b:
+        perform_kick_to_b()
+    elif wants_attack:
+        if is_in_layer_b and can_use_hammer:
+            perform_basic_hammer_attack()
+        else:
+            state_machine.travel("a_shoot")
+            shoot()
+
+
+func _is_enemy_in_kick_range(enemy: Node2D) -> bool:
+    if enemy == null:
+        return false
+
+    var local_delta: Vector2 = enemy.global_position - global_position
+    var vertical_ok: bool = absf(local_delta.y) <= 48.0
+    if not vertical_ok:
+        return false
+
+    if facing_direction >= 0:
+        return local_delta.x >= -6.0 and local_delta.x <= 72.0
+    return local_delta.x <= 6.0 and local_delta.x >= -72.0
 
 
 func take_damage(amount: int) -> void:
@@ -320,6 +423,59 @@ func _update_wind_foot_fx() -> void:
     var facing: float = float(facing_direction)
     var trailing_offset_x: float = -facing * 14.0
     wind_foot_fx.position = Vector2(trailing_offset_x, 18)
+
+
+func _play_layer_switch_screen_fx(effect_kind: String) -> void:
+    if screen_switch_flash == null or screen_switch_band == null or screen_switch_edge == null:
+        return
+    if screen_flash_tween:
+        screen_flash_tween.kill()
+    if screen_band_tween:
+        screen_band_tween.kill()
+
+    var flash_color: Color = Color(0.62, 0.9, 1.0, 0.0)
+    var peak_alpha: float = 0.16
+    var band_color: Color = Color(0.75, 0.97, 1.0, 0.0)
+    var edge_color: Color = Color(0.33, 0.72, 1.0, 0.0)
+    var band_scale: Vector2 = Vector2(0.18, 1.0)
+    if effect_kind == "return_cut":
+        flash_color = Color(1.0, 0.84, 0.45, 0.0)
+        peak_alpha = 0.24
+        band_color = Color(1.0, 0.9, 0.56, 0.0)
+        edge_color = Color(0.98, 0.7, 0.22, 0.0)
+        band_scale = Vector2(0.24, 1.0)
+
+    screen_switch_flash.visible = true
+    screen_switch_flash.color = flash_color
+    screen_switch_band.visible = true
+    screen_switch_band.color = band_color
+    screen_switch_band.scale = band_scale
+    screen_switch_edge.visible = true
+    screen_switch_edge.color = edge_color
+    screen_switch_edge.scale = Vector2(1.0, 0.2)
+
+    screen_flash_tween = create_tween()
+    screen_flash_tween.tween_property(screen_switch_flash, "color:a", peak_alpha, 0.08)
+    screen_flash_tween.tween_property(screen_switch_flash, "color:a", 0.0, 0.18)
+    screen_flash_tween.finished.connect(func() -> void:
+        if is_instance_valid(screen_switch_flash):
+            screen_switch_flash.visible = false
+    )
+
+    screen_band_tween = create_tween()
+    screen_band_tween.set_parallel(true)
+    screen_band_tween.tween_property(screen_switch_band, "color:a", 0.32, 0.06)
+    screen_band_tween.tween_property(screen_switch_band, "scale:x", 1.18, 0.18)
+    screen_band_tween.tween_property(screen_switch_band, "color:a", 0.0, 0.16).set_delay(0.08)
+    screen_band_tween.tween_property(screen_switch_edge, "color:a", 0.5, 0.04)
+    screen_band_tween.tween_property(screen_switch_edge, "scale:y", 1.15, 0.12)
+    screen_band_tween.tween_property(screen_switch_edge, "color:a", 0.0, 0.12).set_delay(0.1)
+    screen_band_tween.finished.connect(func() -> void:
+        if is_instance_valid(screen_switch_band):
+            screen_switch_band.visible = false
+        if is_instance_valid(screen_switch_edge):
+            screen_switch_edge.visible = false
+    )
 
 
 func _is_pressing_down() -> bool:

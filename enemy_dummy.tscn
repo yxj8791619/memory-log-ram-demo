@@ -16,7 +16,7 @@ size = Vector2(41, 41)
 
 [node name="Enemy_Dummy" type="CharacterBody2D" unique_id=50193690]
 collision_layer = 8
-collision_mask = 6
+collision_mask = 7
 script = ExtResource("1_33gkd")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1086831382]

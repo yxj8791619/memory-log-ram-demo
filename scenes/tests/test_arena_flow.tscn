@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bphs4e3wo3vls"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_arena_flow.gd" id="1_btfqf"]
+[ext_resource type="PackedScene" path="res://arena_trigger.tscn" id="2_g8sy5"]
+[ext_resource type="PackedScene" uid="uid://bsn8sde8vximc" path="res://player_g.tscn" id="3_hre4g"]
+[ext_resource type="PackedScene" uid="uid://bywcco0in2o01" path="res://enemy_dummy.tscn" id="4_mr19u"]
+
+[node name="TestArenaFlow" type="Node2D"]
+script = ExtResource("1_btfqf")
+
+[node name="Player_G" parent="." instance=ExtResource("3_hre4g")]
+position = Vector2(96, 160)
+can_switch_layer = true
+can_use_hammer = true
+
+[node name="ArenaTrigger" parent="." instance=ExtResource("2_g8sy5")]
+position = Vector2(320, 160)
+enemy_scene = ExtResource("4_mr19u")

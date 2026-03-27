@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://dbjwa7y0bh4us"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_hammer_return_single.gd" id="1_lf3yu"]
+[ext_resource type="PackedScene" uid="uid://bsn8sde8vximc" path="res://player_g.tscn" id="2_7vtei"]
+[ext_resource type="PackedScene" uid="uid://bywcco0in2o01" path="res://enemy_dummy.tscn" id="3_xm6cx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(640, 80)
+
+[node name="TestHammerReturnSingle" type="Node2D"]
+script = ExtResource("1_lf3yu")
+
+[node name="Ground_A" type="StaticBody2D" parent="."]
+position = Vector2(320, 520)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_A"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="Player_G" parent="." instance=ExtResource("2_7vtei")]
+position = Vector2(220, 480)
+can_switch_layer = false
+can_use_hammer = true
+can_kick_to_b = true
+
+[node name="Enemy_Dummy" parent="." instance=ExtResource("3_xm6cx")]
+position = Vector2(252, 480)

@@ -1,7 +1,7 @@
 《Project: Memory.log》项目快照
 
 更新时间：
-2026-03-27
+2026-03-28（完成 chapter2 可达性自动校验）
 
 --------------------------------------------------
 一、项目类型
@@ -15,6 +15,9 @@ project.godot
 
 当前主场景：
 test_room.tscn
+
+第二章新章节骨架入口：
+scenes/levels/chapter2/ch2_main.tscn
 
 --------------------------------------------------
 二、当前已知已存在系统
@@ -64,6 +67,92 @@ arena_trigger.tscn
 实现文件：
 player_g.gd
 
+10. 第二章 chapter2 结构骨架
+实现文件：
+scenes/levels/chapter2/ch2_main.tscn
+scenes/levels/chapter2/sections/ch2_01_run_intro.tscn
+scenes/levels/chapter2/sections/ch2_02_wrong_layer_room.tscn
+
+11. 最小自动测试基础设施
+实现文件：
+scripts/tests/test_assert.gd
+scripts/tests/test_helpers.gd
+scripts/tests/test_runner.gd
+scenes/tests/test_layer_switch.tscn
+scenes/tests/test_bullet_to_wind.tscn
+
+12. chapter2 前三段白盒迁移
+实现文件：
+scenes/levels/chapter2/sections/ch2_01_run_intro.tscn
+scenes/levels/chapter2/sections/ch2_02_wrong_layer_room.tscn
+scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn
+scenes/levels/chapter2/modules/setpieces/ch2_unlock_trigger.tscn
+scripts/chapter2/ch2_unlock_trigger.gd
+
+13. chapter2 六段结构对齐
+实现文件：
+scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+scenes/levels/chapter2/sections/ch2_05_return_combo_tutorial.tscn
+scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn
+scenes/levels/chapter2/ch2_main.tscn
+
+14. 竞技场流程自动测试
+实现文件：
+scenes/tests/test_arena_flow.tscn
+scripts/tests/test_arena_flow.gd
+
+15. A/B 层双向单体切层核心机制
+实现文件：
+player_g.gd
+player_g.tscn
+enemy_dummy.gd
+enemy_shield.gd
+hammer_hitbox.gd
+scenes/tests/test_kick_to_b.tscn
+scripts/tests/test_kick_to_b.gd
+scenes/tests/test_hammer_return_single.tscn
+scripts/tests/test_hammer_return_single.gd
+
+16. B 层优势怪样板 Page-Lock Guard
+实现文件：
+scripts/chapter2/page_lock_guard.gd
+scenes/levels/chapter2/modules/combat/page_lock_guard.tscn
+scenes/tests/test_page_lock_guard.tscn
+scripts/tests/test_page_lock_guard.gd
+
+17. A 层优势怪样板 Front Hound
+实现文件：
+scripts/chapter2/front_hound.gd
+scenes/levels/chapter2/modules/combat/front_hound.tscn
+scenes/tests/test_front_hound.tscn
+scripts/tests/test_front_hound.gd
+
+18. chapter2 章节冒烟测试
+实现文件：
+scenes/tests/test_chapter2_first10_smoke.tscn
+scripts/tests/test_chapter2_first10_smoke.gd
+
+19. 第一场综合战白盒与多波次混编竞技场
+实现文件：
+arena_trigger.gd
+scripts/chapter2/enemy_spawn_point.gd
+scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn
+scenes/tests/test_mixed_arena_flow.tscn
+scripts/tests/test_mixed_arena_flow.gd
+
+20. 权限解锁流程白盒导流
+实现文件：
+scripts/chapter2/ch2_unlock_trigger.gd
+scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn
+scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+scenes/tests/test_unlock_route_flow.tscn
+scripts/tests/test_unlock_route_flow.gd
+
+21. chapter2 关键跳点可达性自动校验
+实现文件：
+scenes/tests/test_chapter2_reachability.tscn
+scripts/tests/test_chapter2_reachability.gd
+
 说明：
 当前已存在 `can_switch_layer` 与 `can_use_hammer` 开关，
 但第二章前 10 分钟所需的“权限解锁流程”尚未正式编排进章节白盒。
@@ -103,10 +192,10 @@ player_g.gd
 五、当前最重要的实现缺口
 --------------------------------------------------
 
-1. test_room 还不是完整的第二章前 10 分钟白盒流程
-2. A 层“踢怪 / 强制挂起到 B 层”尚未作为正式第二章机制落地
-3. B 层普通锤击切层带回单体敌人尚未实现
-4. 真正服务第二章的新样板怪尚未实现
+1. chapter2 六段结构虽已补齐，但权限解锁节奏、风道教学与综合战后的收束仍主要是白盒强度
+2. 测试基础设施已覆盖章节冒烟与第一场综合战，但群体切层、功能怪和反馈层回归仍未建立
+3. `test_room` 仍保留为旧白盒参考，尚未完全退出第二章验证流程
+4. 权限解锁流程虽然已补到“解锁后立刻导向下一段”的白盒版本，但正式节奏、提示和演出仍未收束
 5. 切层反馈、顿帧、震屏仍未正式整理
 
 --------------------------------------------------

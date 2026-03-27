@@ -190,6 +190,82 @@ tracks/4/keys = {
 "values": [true, false, true]
 }
 
+[sub_resource type="Animation" id="Animation_4breturn"]
+resource_name = "b_hammer_return"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DirectionPivot/Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_8bwmx")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DirectionPivot/Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("DirectionPivot/Sprite2D:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DirectionPivot/Sprite2D:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.22, 0.44, 0.68),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 3, 2]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("DirectionPivot/HammerHitbox/CollisionShape2D:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.18, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("DirectionPivot/HammerHitbox/ReturnFlash:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.66),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+
 [sub_resource type="Animation" id="Animation_djq05"]
 resource_name = "idle"
 loop_mode = 1
@@ -301,6 +377,7 @@ _data = {
 &"RESET": SubResource("Animation_t5u8m"),
 &"a_shoot": SubResource("Animation_8itju"),
 &"b_hammer": SubResource("Animation_0u1wc"),
+&"b_hammer_return": SubResource("Animation_4breturn"),
 &"idle": SubResource("Animation_djq05"),
 &"run": SubResource("Animation_fy55a")
 }
@@ -310,6 +387,9 @@ animation = &"a_shoot"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ckpe6"]
 animation = &"b_hammer"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_returncut"]
+animation = &"b_hammer_return"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yhnu4"]
 animation = &"idle"
@@ -340,20 +420,33 @@ advance_mode = 2
 switch_mode = 2
 advance_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_return_from_idle"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_return_from_run"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_return_to_idle"]
+switch_mode = 2
+advance_mode = 2
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_3ewpr"]
 states/a_shoot/node = SubResource("AnimationNodeAnimation_o1o21")
 states/a_shoot/position = Vector2(325.75412, 164)
 states/b_hammer/node = SubResource("AnimationNodeAnimation_ckpe6")
 states/b_hammer/position = Vector2(518.75415, 172)
+states/b_hammer_return/node = SubResource("AnimationNodeAnimation_returncut")
+states/b_hammer_return/position = Vector2(690.0, 168.0)
 states/idle/node = SubResource("AnimationNodeAnimation_yhnu4")
 states/idle/position = Vector2(298.75412, 31)
 states/run/node = SubResource("AnimationNodeAnimation_x0r6i")
 states/run/position = Vector2(528.7541, 69)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_b1hbo"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_2e6ie"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_c8x4x"), "idle", "a_shoot", SubResource("AnimationNodeStateMachineTransition_jke1h"), "run", "a_shoot", SubResource("AnimationNodeStateMachineTransition_sbcvf"), "idle", "b_hammer", SubResource("AnimationNodeStateMachineTransition_r3eqi"), "run", "b_hammer", SubResource("AnimationNodeStateMachineTransition_n1e7y"), "a_shoot", "idle", SubResource("AnimationNodeStateMachineTransition_xseh7"), "b_hammer", "idle", SubResource("AnimationNodeStateMachineTransition_p7qce")]
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_b1hbo"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_2e6ie"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_c8x4x"), "idle", "a_shoot", SubResource("AnimationNodeStateMachineTransition_jke1h"), "run", "a_shoot", SubResource("AnimationNodeStateMachineTransition_sbcvf"), "idle", "b_hammer", SubResource("AnimationNodeStateMachineTransition_r3eqi"), "run", "b_hammer", SubResource("AnimationNodeStateMachineTransition_n1e7y"), "idle", "b_hammer_return", SubResource("AnimationNodeStateMachineTransition_return_from_idle"), "run", "b_hammer_return", SubResource("AnimationNodeStateMachineTransition_return_from_run"), "a_shoot", "idle", SubResource("AnimationNodeStateMachineTransition_xseh7"), "b_hammer", "idle", SubResource("AnimationNodeStateMachineTransition_p7qce"), "b_hammer_return", "idle", SubResource("AnimationNodeStateMachineTransition_return_to_idle")]
 graph_offset = Vector2(-53.245888, 0)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xx4h5"]
-size = Vector2(39.5, 18)
+size = Vector2(68, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kick"]
+size = Vector2(34, 26)
 
 [node name="Player_G" type="CharacterBody2D" unique_id=69848013]
 script = ExtResource("1_enawn")
@@ -367,13 +460,43 @@ b_run_speed = 120.0
 shape = SubResource("RectangleShape2D_w3f5a")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2120625387]
-limit_left = 0
-limit_bottom = 400
+position = Vector2(180, -88)
+limit_left = -10000000
+limit_right = 10000000
+limit_top = -10000000
+limit_bottom = 10000000
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
-drag_top_margin = 0.4
+drag_left_margin = 0.12
+drag_top_margin = 0.2
+drag_right_margin = 0.46
+drag_bottom_margin = 0.18
+
+[node name="ScreenSwitchFlash" type="ColorRect" parent="Camera2D"]
+visible = false
+offset_left = -960.0
+offset_top = -600.0
+offset_right = 960.0
+offset_bottom = 600.0
+color = Color(0.62, 0.9, 1, 0)
+
+[node name="ScreenSwitchBand" type="ColorRect" parent="Camera2D"]
+visible = false
+offset_left = -200.0
+offset_top = -600.0
+offset_right = 200.0
+offset_bottom = 600.0
+color = Color(0.75, 0.97, 1, 0)
+
+[node name="ScreenSwitchEdge" type="ColorRect" parent="Camera2D"]
+visible = false
+offset_left = -960.0
+offset_top = -72.0
+offset_right = 960.0
+offset_bottom = 72.0
+color = Color(0.33, 0.72, 1, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1979121855]
 libraries/ = SubResource("AnimationLibrary_adtux")
@@ -394,15 +517,40 @@ collision_layer = 0
 collision_mask = 8
 script = ExtResource("6_rpywt")
 
+[node name="SwingFlash" type="ColorRect" parent="DirectionPivot/HammerHitbox"]
+visible = false
+offset_left = 4.0
+offset_top = -18.0
+offset_right = 92.0
+offset_bottom = 26.0
+color = Color(0.55, 0.9, 1, 0.35)
+
+[node name="ReturnFlash" type="ColorRect" parent="DirectionPivot/HammerHitbox"]
+visible = false
+offset_left = 12.0
+offset_top = -26.0
+offset_right = 106.0
+offset_bottom = 34.0
+color = Color(1, 0.84, 0.45, 0.42)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DirectionPivot/HammerHitbox" unique_id=795158893]
-position = Vector2(35, 6)
+position = Vector2(42, 4)
 shape = SubResource("RectangleShape2D_xx4h5")
 disabled = true
 
 [node name="Muzzle" type="Marker2D" parent="DirectionPivot" unique_id=1870969259]
 position = Vector2(17, 0)
 
+[node name="KickHitbox" type="Area2D" parent="DirectionPivot"]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DirectionPivot/KickHitbox"]
+position = Vector2(24, 8)
+shape = SubResource("RectangleShape2D_kick")
+
 [node name="InvincibilityTimer" type="Timer" parent="." unique_id=598133548]
 one_shot = true
 
 [connection signal="area_entered" from="DirectionPivot/HammerHitbox" to="DirectionPivot/HammerHitbox" method="_on_area_entered"]
+[connection signal="body_entered" from="DirectionPivot/HammerHitbox" to="DirectionPivot/HammerHitbox" method="_on_body_entered"]

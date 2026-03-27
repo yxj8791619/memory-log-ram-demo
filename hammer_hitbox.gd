@@ -2,33 +2,136 @@ extends Area2D
 
 @export var damage: int = 50       
 @export var knockback_force: float = 600.0 
+var hit_targets: Dictionary = {}
+var swing_memory_frames: int = 0
+var swing_mode: String = "basic"
+var return_cut_consumed: bool = false
+
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var player_ref: Node = get_parent().get_parent()
+@onready var swing_flash: ColorRect = $SwingFlash
+@onready var return_flash: ColorRect = $ReturnFlash
 
 func _on_area_entered(area: Area2D) -> void:
-    # 只要有任何 Area2D 碰到大锤，都会先打印这句话！
-    print("【测试】大锤判定框开启，碰到了东西：", area.name) 
-    
-    if area.name == "Hurtbox":
-        # 稳妥起见，直接用 get_parent() 获取沙包根节点
-        var enemy = area.get_parent() 
-        
-        if enemy.has_method("take_damage"):
-            print("【测试】确认目标是沙包，准备执行击退！")
-            
-            # 简化方向判断：沙包的X坐标 减去 大锤的X坐标
-            var dir = sign(enemy.global_position.x - global_position.x)
-            if dir == 0: dir = 1
-            
-            enemy.take_damage(damage, dir, knockback_force)
-        else:
-            print("【测试】错误：碰到了Hurtbox，但它的父节点没有 take_damage 函数！")
-            
-            
+    _try_hit_area(area)
+
+
+func _on_body_entered(body: Node2D) -> void:
+    _try_hit_body(body)
+
+
 func _physics_process(delta: float) -> void:
-    # 如果碰撞框没有被禁用（也就是砸在地上的那一瞬间）
-    if not $CollisionShape2D.disabled:
-        # 主动获取当前与大锤重叠的所有 Area2D
-        var areas = get_overlapping_areas()
-        print("【强制扫描】大锤开启！当前重叠的区域数量: ", areas.size())
-        
-        for a in areas:
-            print(" ---- 重叠的区域名字是: ", a.name)
+    if collision_shape.disabled:
+        if swing_memory_frames > 0:
+            swing_memory_frames -= 1
+        else:
+            hit_targets.clear()
+            return_cut_consumed = false
+            if swing_flash:
+                swing_flash.visible = false
+            if return_flash:
+                return_flash.visible = false
+        return
+
+    for area in get_overlapping_areas():
+        _try_hit_area(area)
+    for body in get_overlapping_bodies():
+        _try_hit_body(body)
+    _try_hit_nearby_targets()
+    swing_memory_frames = 6
+
+
+func _try_hit_area(area: Area2D) -> void:
+    if area == null or area.name != "Hurtbox":
+        return
+
+    var enemy: Node = area.get_parent()
+    if enemy == null:
+        return
+
+    _apply_hit_to_enemy(enemy)
+
+
+func _try_hit_body(body: Node2D) -> void:
+    if body == null:
+        return
+    if body.has_node("Hurtbox"):
+        _apply_hit_to_enemy(body)
+
+
+func _apply_hit_to_enemy(enemy: Node) -> void:
+    if enemy == null:
+        return
+
+    var enemy_id: int = enemy.get_instance_id()
+    if hit_targets.has(enemy_id):
+        return
+    hit_targets[enemy_id] = true
+
+    var dir: int = signi(enemy.global_position.x - global_position.x)
+    if dir == 0:
+        dir = 1
+
+    if enemy.has_method("take_damage"):
+        enemy.take_damage(damage, dir, knockback_force)
+
+    if swing_mode == "return_cut" and not return_cut_consumed and player_ref and bool(player_ref.get("is_in_layer_b")) and bool(enemy.get("is_in_layer_b")) and enemy.has_method("force_shift_to_layer_a"):
+        return_cut_consumed = true
+        enemy.force_shift_to_layer_a(dir)
+        if player_ref.has_method("toggle_dimension"):
+            player_ref.toggle_dimension("return_cut")
+
+
+func _try_hit_nearby_targets() -> void:
+    if player_ref == null:
+        return
+    for enemy in get_tree().get_nodes_in_group("kick_targets"):
+        if enemy == null or not is_instance_valid(enemy):
+            continue
+        if not enemy.has_method("take_damage"):
+            continue
+        if not _is_enemy_in_hammer_range(enemy):
+            continue
+        _apply_hit_to_enemy(enemy)
+
+
+func _is_enemy_in_hammer_range(enemy: Node2D) -> bool:
+    if enemy == null:
+        return false
+    if player_ref and bool(player_ref.get("is_in_layer_b")) != bool(enemy.get("is_in_layer_b")):
+        return false
+
+    var local_delta: Vector2 = enemy.global_position - player_ref.global_position
+    if absf(local_delta.y) > 56.0:
+        return false
+
+    var facing: int = int(player_ref.get("facing_direction"))
+    if facing >= 0:
+        return local_delta.x >= -16.0 and local_delta.x <= 92.0
+    return local_delta.x <= 16.0 and local_delta.x >= -92.0
+
+
+func perform_basic_swing() -> void:
+    swing_mode = "basic"
+    return_cut_consumed = false
+    hit_targets.clear()
+    if swing_flash:
+        swing_flash.visible = true
+        swing_flash.color = Color(0.55, 0.9, 1.0, 0.35)
+    if return_flash:
+        return_flash.visible = false
+    _try_hit_nearby_targets()
+    swing_memory_frames = 6
+
+
+func perform_return_cut() -> void:
+    swing_mode = "return_cut"
+    return_cut_consumed = false
+    hit_targets.clear()
+    if swing_flash:
+        swing_flash.visible = true
+        swing_flash.color = Color(1.0, 0.86, 0.45, 0.42)
+    if return_flash:
+        return_flash.visible = true
+    _try_hit_nearby_targets()
+    swing_memory_frames = 8

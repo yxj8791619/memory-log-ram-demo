@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dcqg4xofhmo0j"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_chapter2_first10_smoke.gd" id="1_d6rta"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/ch2_main.tscn" id="2_26cb0"]
+
+[node name="TestChapter2First10Smoke" type="Node2D"]
+script = ExtResource("1_d6rta")
+
+[node name="Chapter2Main" parent="." instance=ExtResource("2_26cb0")]

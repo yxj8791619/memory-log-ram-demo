@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://de8kg0okrw2m1"]
+
+[ext_resource type="Script" path="res://scripts/chapter2/page_lock_guard.gd" id="1_uq8o6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(34, 42)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurtbox"]
+size = Vector2(42, 46)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
+size = Vector2(50, 42)
+
+[node name="PageLockGuard" type="CharacterBody2D"]
+collision_layer = 8
+collision_mask = 7
+script = ExtResource("1_uq8o6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="VisualRoot" type="Node2D" parent="."]
+
+[node name="Body" type="ColorRect" parent="VisualRoot"]
+offset_left = -18.0
+offset_top = -22.0
+offset_right = 18.0
+offset_bottom = 22.0
+color = Color(0.45, 0.5, 0.58, 1)
+
+[node name="ShieldPanel" type="ColorRect" parent="VisualRoot"]
+offset_left = -36.0
+offset_top = -20.0
+offset_right = -12.0
+offset_bottom = 20.0
+color = Color(0.82, 0.9, 1, 0.98)
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("RectangleShape2D_hurtbox")
+
+[node name="AttackBox" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackBox"]
+position = Vector2(-28, 0)
+shape = SubResource("RectangleShape2D_attack")
+
+[node name="VisionRay" type="RayCast2D" parent="."]
+target_position = Vector2(-360, 0)
+collision_mask = 7
+
+[node name="LedgeCheck" type="RayCast2D" parent="."]
+position = Vector2(-16, 0)
+target_position = Vector2(-18, 24)
+collision_mask = 2
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[node name="AlertMark" type="Label" parent="."]
+visible = false
+offset_left = -10.0
+offset_top = -58.0
+offset_right = 10.0
+offset_bottom = -24.0
+text = "!"
+horizontal_alignment = 1
+
+[node name="TurnTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AlertTimer" type="Timer" parent="."]
+one_shot = true
+wait_time = 0.45

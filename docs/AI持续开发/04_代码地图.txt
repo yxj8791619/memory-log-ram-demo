@@ -10,6 +10,9 @@ project.godot
 当前主场景：
 test_room.tscn
 
+第二章新章节骨架：
+scenes/levels/chapter2/ch2_main.tscn
+
 场景控制脚本：
 test_room.gd
 
@@ -62,8 +65,7 @@ bullet.gd
 hammer_hitbox.gd
 
 注意：
-当前该文件仍带有明显调试打印，属于未收束状态。
-如果要实现 B -> A 切层带怪，大概率要重写或显著整理这里的处理逻辑。
+当前该文件已接入 B -> A 单体带回逻辑，但仍缺视觉 / 打击反馈层。
 
 --------------------------------------------------
 五、现有敌人
@@ -98,6 +100,59 @@ one_way_platform.tscn
 瓦片集：
 main_tile_set.tres
 
+第二章结构骨架：
+scenes/levels/chapter2/ch2_main.tscn
+scenes/levels/chapter2/sections/ch2_01_run_intro.tscn
+scenes/levels/chapter2/sections/ch2_02_wrong_layer_room.tscn
+scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn
+scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+scenes/levels/chapter2/sections/ch2_05_return_combo_tutorial.tscn
+scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn
+scenes/levels/chapter2/modules/combat/front_hound.tscn
+scenes/levels/chapter2/modules/combat/page_lock_guard.tscn
+scenes/levels/chapter2/modules/setpieces/ch2_unlock_trigger.tscn
+
+测试场景与脚手架：
+scenes/tests/test_layer_switch.tscn
+scenes/tests/test_bullet_to_wind.tscn
+scenes/tests/test_arena_flow.tscn
+scenes/tests/test_kick_to_b.tscn
+scenes/tests/test_hammer_return_single.tscn
+scenes/tests/test_front_hound.tscn
+scenes/tests/test_page_lock_guard.tscn
+scenes/tests/test_chapter2_first10_smoke.tscn
+scenes/tests/test_mixed_arena_flow.tscn
+scenes/tests/test_unlock_route_flow.tscn
+scenes/tests/test_chapter2_reachability.tscn
+scenes/tests/test_chapter2_ground_survives_layer_switch.tscn
+scenes/tests/test_hammer_hits_chapter2_enemy.tscn
+scripts/tests/test_assert.gd
+scripts/tests/test_helpers.gd
+scripts/tests/test_runner.gd
+scripts/tests/test_arena_flow.gd
+scripts/tests/test_kick_to_b.gd
+scripts/tests/test_hammer_return_single.gd
+scripts/tests/test_front_hound.gd
+scripts/tests/test_page_lock_guard.gd
+scripts/tests/test_chapter2_first10_smoke.gd
+scripts/tests/test_mixed_arena_flow.gd
+scripts/tests/test_unlock_route_flow.gd
+scripts/tests/test_chapter2_reachability.gd
+scripts/tests/test_chapter2_ground_survives_layer_switch.gd
+scripts/tests/test_hammer_hits_chapter2_enemy.gd
+
+目录占位：
+scripts/level/
+scripts/chapter2/
+data/chapter2/enemy_profiles/
+data/chapter2/encounter_profiles/
+
+当前已接入的 chapter2 脚本：
+scripts/chapter2/ch2_unlock_trigger.gd
+scripts/chapter2/enemy_spawn_point.gd
+scripts/chapter2/front_hound.gd
+scripts/chapter2/page_lock_guard.gd
+
 --------------------------------------------------
 七、最可能被新 AI 修改的文件
 --------------------------------------------------
@@ -105,11 +160,46 @@ main_tile_set.tres
 如果下一轮开始做实现，最有可能改动的是：
 
 1. test_room.tscn
-2. test_room.gd
-3. player_g.gd
-4. player_g.tscn
-5. hammer_hitbox.gd
-6. 新增的敌人脚本与场景
+2. scenes/levels/chapter2/ch2_main.tscn
+3. scenes/levels/chapter2/sections/ch2_01_run_intro.tscn
+4. scenes/levels/chapter2/sections/ch2_02_wrong_layer_room.tscn
+5. scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn
+6. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+7. scenes/levels/chapter2/sections/ch2_05_return_combo_tutorial.tscn
+8. scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn
+9. scenes/levels/chapter2/modules/setpieces/ch2_unlock_trigger.tscn
+10. scenes/levels/chapter2/modules/combat/front_hound.tscn
+11. scenes/levels/chapter2/modules/combat/page_lock_guard.tscn
+12. scripts/chapter2/ch2_unlock_trigger.gd
+13. scripts/chapter2/front_hound.gd
+14. scripts/chapter2/page_lock_guard.gd
+15. scripts/chapter2/enemy_spawn_point.gd
+16. scenes/tests/test_layer_switch.tscn
+17. scenes/tests/test_bullet_to_wind.tscn
+18. scenes/tests/test_arena_flow.tscn
+19. scenes/tests/test_kick_to_b.tscn
+20. scenes/tests/test_hammer_return_single.tscn
+21. scenes/tests/test_front_hound.tscn
+22. scenes/tests/test_page_lock_guard.tscn
+23. scenes/tests/test_chapter2_first10_smoke.tscn
+24. scenes/tests/test_mixed_arena_flow.tscn
+25. scripts/tests/test_assert.gd
+26. scripts/tests/test_helpers.gd
+27. scripts/tests/test_arena_flow.gd
+28. scripts/tests/test_kick_to_b.gd
+29. scripts/tests/test_hammer_return_single.gd
+30. scripts/tests/test_front_hound.gd
+31. scripts/tests/test_page_lock_guard.gd
+32. scripts/tests/test_chapter2_first10_smoke.gd
+33. scripts/tests/test_mixed_arena_flow.gd
+34. test_room.gd
+35. player_g.gd
+36. player_g.tscn
+37. hammer_hitbox.gd
+38. enemy_dummy.gd
+39. enemy_shield.gd
+40. arena_trigger.gd
+41. 新增的敌人脚本与场景
 
 --------------------------------------------------
 八、推荐阅读顺序
@@ -119,11 +209,14 @@ main_tile_set.tres
 
 1. player_g.gd
 2. player_g.tscn
-3. bullet.gd
-4. hammer_hitbox.gd
-5. test_room.tscn
-6. test_room.gd
-7. 现有敌人脚本
+3. test_room.tscn
+4. scenes/levels/chapter2/ch2_main.tscn
+5. scenes/levels/chapter2/sections/ch2_01_run_intro.tscn
+6. scenes/levels/chapter2/sections/ch2_02_wrong_layer_room.tscn
+7. bullet.gd
+8. hammer_hitbox.gd
+9. test_room.gd
+10. 现有敌人脚本
 
 补充阅读建议：
 如果任务涉及叙事、命名、系统语义、角色动机或 UI 文案，应补读：

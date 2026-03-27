@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://be7x4i8b5y7xy"]
+
+[ext_resource type="PackedScene" path="res://cache_fragment.tscn" id="1_4lqep"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/front_hound.tscn" id="2_tclqb"]
+[ext_resource type="PackedScene" path="res://enemy_shield.tscn" id="3_as6ci"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(1184, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
+size = Vector2(240, 32)
+
+[node name="Section_05_ReturnComboTutorial" type="Node2D"]
+
+[node name="Terrain" type="Node2D" parent="."]
+
+[node name="Ground_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(592, 520)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/Ground_A"]
+offset_left = -592.0
+offset_top = -40.0
+offset_right = 592.0
+offset_bottom = 40.0
+color = Color(0.23, 0.26, 0.31, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Ground_A"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="MidPlatform_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(592, 416)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/MidPlatform_A"]
+offset_left = -120.0
+offset_top = -16.0
+offset_right = 120.0
+offset_bottom = 16.0
+color = Color(0.36, 0.42, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/MidPlatform_A"]
+shape = SubResource("RectangleShape2D_platform")
+
+[node name="RightPlatform_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(904, 344)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/RightPlatform_A"]
+offset_left = -120.0
+offset_top = -16.0
+offset_right = 120.0
+offset_bottom = 16.0
+color = Color(0.36, 0.42, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/RightPlatform_A"]
+shape = SubResource("RectangleShape2D_platform")
+
+[node name="Encounters" type="Node2D" parent="."]
+
+[node name="Spawn_A_ReturnTarget_01" parent="Encounters" instance=ExtResource("2_tclqb")]
+position = Vector2(604, 366)
+
+[node name="Spawn_A_ReturnTarget_02" parent="Encounters" instance=ExtResource("3_as6ci")]
+position = Vector2(894, 294)
+
+[node name="Pickups" type="Node2D" parent="."]
+
+[node name="Pickup_01" parent="Pickups" instance=ExtResource("1_4lqep")]
+position = Vector2(268, 438)
+
+[node name="Pickup_02" parent="Pickups" instance=ExtResource("1_4lqep")]
+position = Vector2(598, 382)
+
+[node name="Pickup_03" parent="Pickups" instance=ExtResource("1_4lqep")]
+position = Vector2(912, 262)
+
+[node name="Triggers" type="Node2D" parent="."]
+
+[node name="Hints" type="Node2D" parent="."]
+
+[node name="Hint_ReturnCombo" type="Label" parent="Hints"]
+offset_left = 82.0
+offset_top = 74.0
+offset_right = 474.0
+offset_bottom = 152.0
+text = "阶段 05: B -> A 单体切回 + 分流\n本段先固定敌人站位和回收路线，等待正式带怪机制接入。"
+
+[node name="Hint_SplitDecision" type="Label" parent="Hints"]
+offset_left = 740.0
+offset_top = 106.0
+offset_right = 1160.0
+offset_bottom = 184.0
+text = "后续这里要验证“留在 B 层稳杀”与“切回 A 层收尾”\n能否同时成立。"
+
+[node name="DebugMarkers" type="Node2D" parent="."]
+
+[node name="EntryMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(96, 320)
+
+[node name="ReturnHitMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(600, 312)
+
+[node name="ExitMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(1084, 280)

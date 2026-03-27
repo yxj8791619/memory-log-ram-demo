@@ -1,0 +1,127 @@
+[gd_scene format=3 uid="uid://bbv7epvj7ut5g"]
+
+[ext_resource type="PackedScene" path="res://cache_fragment.tscn" id="1_d0e2f"]
+[ext_resource type="PackedScene" path="res://arena_trigger.tscn" id="2_6pt7v"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/front_hound.tscn" id="3_8sfg8"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/page_lock_guard.tscn" id="4_8dqon"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/setpieces/ch2_unlock_trigger.tscn" id="5_a7tib"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(1184, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
+size = Vector2(240, 32)
+
+[node name="Section_03_UnlockArena" type="Node2D"]
+
+[node name="Terrain" type="Node2D" parent="."]
+
+[node name="Ground_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(592, 520)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/Ground_A"]
+offset_left = -592.0
+offset_top = -40.0
+offset_right = 592.0
+offset_bottom = 40.0
+color = Color(0.23, 0.26, 0.31, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Ground_A"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="LeftPerch_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(292, 416)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/LeftPerch_A"]
+offset_left = -120.0
+offset_top = -16.0
+offset_right = 120.0
+offset_bottom = 16.0
+color = Color(0.36, 0.42, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/LeftPerch_A"]
+shape = SubResource("RectangleShape2D_platform")
+
+[node name="RightPerch_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(896, 416)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/RightPerch_A"]
+offset_left = -120.0
+offset_top = -16.0
+offset_right = 120.0
+offset_bottom = 16.0
+color = Color(0.36, 0.42, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/RightPerch_A"]
+shape = SubResource("RectangleShape2D_platform")
+
+[node name="Encounters" type="Node2D" parent="."]
+
+[node name="Spawn_A_PageLockGuard_Intro" parent="Encounters" instance=ExtResource("4_8dqon")]
+position = Vector2(904, 366)
+
+[node name="Arena_Wave_01" parent="Encounters" instance=ExtResource("2_6pt7v")]
+position = Vector2(616, 432)
+enemy_scene = ExtResource("3_8sfg8")
+
+[node name="Pickups" type="Node2D" parent="."]
+
+[node name="Pickup_01" parent="Pickups" instance=ExtResource("1_d0e2f")]
+position = Vector2(204, 438)
+
+[node name="Pickup_02" parent="Pickups" instance=ExtResource("1_d0e2f")]
+position = Vector2(338, 382)
+
+[node name="Pickup_03" parent="Pickups" instance=ExtResource("1_d0e2f")]
+position = Vector2(712, 382)
+
+[node name="Triggers" type="Node2D" parent="."]
+
+[node name="Trigger_UnlockLayer" parent="Triggers" instance=ExtResource("5_a7tib")]
+position = Vector2(274, 432)
+hint_text = "阶段 03: 权限解锁\n进入节点后开放切层、踢怪与 B 层重锤。"
+unlocked_text = "已解锁：切层 / 踢怪 / B 层重锤"
+next_step_text = "下一段：清掉眼前封闭战斗房后继续向右，进入高差区学习枪 -> 风道路线。"
+
+[node name="Hints" type="Node2D" parent="."]
+
+[node name="Hint_UnlockArena" type="Label" parent="Hints"]
+offset_left = 84.0
+offset_top = 72.0
+offset_right = 430.0
+offset_bottom = 148.0
+text = "阶段 03: 权限解锁 + Kill Room\n旧白盒敌人暂作为占位，后续替换为第二章正式样板怪。"
+
+[node name="Hint_AbilityFlow" type="Label" parent="Hints"]
+offset_left = 720.0
+offset_top = 104.0
+offset_right = 1108.0
+offset_bottom = 180.0
+text = "先拿权限，再进竞技场。\n清房后直接向右接高差风道段，让“刚解锁 -> 立刻使用”更明确。"
+
+[node name="Hint_PostUnlockRoute" type="Label" parent="Hints"]
+offset_left = 846.0
+offset_top = 228.0
+offset_right = 1150.0
+offset_bottom = 290.0
+text = "出口导流：\n清房后继续向右，下一段只练枪 -> 风道。"
+
+[node name="DebugMarkers" type="Node2D" parent="."]
+
+[node name="EntryMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(96, 320)
+
+[node name="UnlockMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(274, 432)
+
+[node name="ArenaMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(616, 432)
+
+[node name="ExitMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(1112, 320)

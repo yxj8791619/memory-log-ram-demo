@@ -1,0 +1,114 @@
+[gd_scene format=3 uid="uid://d3o6f3e0m0sr5"]
+
+[ext_resource type="PackedScene" path="res://cache_fragment.tscn" id="1_a5w8o"]
+[ext_resource type="PackedScene" uid="uid://bywcco0in2o01" path="res://enemy_dummy.tscn" id="2_g2suo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(1056, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
+size = Vector2(224, 32)
+
+[node name="Section_04_WindTutorial" type="Node2D"]
+
+[node name="Terrain" type="Node2D" parent="."]
+
+[node name="Ground_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(196, 520)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/Ground_A"]
+offset_left = -528.0
+offset_top = -40.0
+offset_right = 528.0
+offset_bottom = 40.0
+color = Color(0.23, 0.26, 0.31, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Ground_A"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="HighLedge_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(824, 416)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/HighLedge_A"]
+offset_left = -112.0
+offset_top = -16.0
+offset_right = 112.0
+offset_bottom = 16.0
+color = Color(0.36, 0.42, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/HighLedge_A"]
+shape = SubResource("RectangleShape2D_platform")
+
+[node name="ChaseLedge_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(1112, 344)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/ChaseLedge_A"]
+offset_left = -112.0
+offset_top = -16.0
+offset_right = 112.0
+offset_bottom = 16.0
+color = Color(0.36, 0.42, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/ChaseLedge_A"]
+shape = SubResource("RectangleShape2D_platform")
+
+[node name="Encounters" type="Node2D" parent="."]
+
+[node name="Spawn_A_BackgroundThreat_01" parent="Encounters" instance=ExtResource("2_g2suo")]
+position = Vector2(872, 366)
+
+[node name="Spawn_A_BackgroundThreat_02" parent="Encounters" instance=ExtResource("2_g2suo")]
+position = Vector2(1152, 294)
+
+[node name="Pickups" type="Node2D" parent="."]
+
+[node name="Pickup_01" parent="Pickups" instance=ExtResource("1_a5w8o")]
+position = Vector2(390, 430)
+
+[node name="Pickup_02" parent="Pickups" instance=ExtResource("1_a5w8o")]
+position = Vector2(720, 382)
+
+[node name="Pickup_03" parent="Pickups" instance=ExtResource("1_a5w8o")]
+position = Vector2(1110, 262)
+
+[node name="Triggers" type="Node2D" parent="."]
+
+[node name="Hints" type="Node2D" parent="."]
+
+[node name="Hint_WindTutorial" type="Label" parent="Hints"]
+offset_left = 72.0
+offset_top = 74.0
+offset_right = 392.0
+offset_bottom = 152.0
+text = "阶段 04: A -> B 非目标切层\n本段用高差和追击路线承载枪 -> 风道教学。"
+
+[node name="Hint_WindPath" type="Label" parent="Hints"]
+offset_left = 760.0
+offset_top = 116.0
+offset_right = 1210.0
+offset_bottom = 194.0
+text = "这一段承接上一段刚解锁的能力，但只要求玩家先学会：\n用枪把子弹送进 B 层风道，借高差继续向前追。"
+
+[node name="Hint_WindInput" type="Label" parent="Hints"]
+offset_left = 352.0
+offset_top = 210.0
+offset_right = 724.0
+offset_bottom = 286.0
+text = "入口导流：\n看到高差先别急着切人，先用枪制造 B 层风道路线。"
+
+[node name="DebugMarkers" type="Node2D" parent="."]
+
+[node name="EntryMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(72, 320)
+
+[node name="WindShotMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(624, 416)
+
+[node name="ExitMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(1240, 280)

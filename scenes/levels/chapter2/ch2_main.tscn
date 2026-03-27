@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://d4pylb6ofux56"]
+
+[ext_resource type="PackedScene" uid="uid://bsn8sde8vximc" path="res://player_g.tscn" id="1_u7l8f"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_01_run_intro.tscn" id="2_0j2n4"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_02_wrong_layer_room.tscn" id="3_t18ta"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn" id="4_dq5ye"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn" id="5_w7v5u"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_05_return_combo_tutorial.tscn" id="6_wgsm7"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn" id="7_2531o"]
+
+[node name="Chapter2Main" type="Node2D"]
+
+[node name="Player_G" parent="." instance=ExtResource("1_u7l8f")]
+position = Vector2(160, 320)
+can_switch_layer = false
+can_use_hammer = false
+
+[node name="Sections" type="Node2D" parent="."]
+
+[node name="Section_01_RunIntro" parent="Sections" instance=ExtResource("2_0j2n4")]
+
+[node name="Section_02_WrongLayerRoom" parent="Sections" instance=ExtResource("3_t18ta")]
+position = Vector2(960, 0)
+
+[node name="Section_03_UnlockArena" parent="Sections" instance=ExtResource("4_dq5ye")]
+position = Vector2(1920, 0)
+
+[node name="Section_04_WindTutorial" parent="Sections" instance=ExtResource("5_w7v5u")]
+position = Vector2(3104, 0)
+
+[node name="Section_05_ReturnComboTutorial" parent="Sections" instance=ExtResource("6_wgsm7")]
+position = Vector2(4160, 0)
+
+[node name="Section_06_FirstMixedArena" parent="Sections" instance=ExtResource("7_2531o")]
+position = Vector2(5344, 0)
+
+[node name="DebugMarkers" type="Node2D" parent="."]

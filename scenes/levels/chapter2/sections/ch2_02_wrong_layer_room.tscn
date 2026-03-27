@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://dkm8pf3hva4e8"]
+
+[ext_resource type="PackedScene" path="res://cache_fragment.tscn" id="1_l4e1v"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/page_lock_guard.tscn" id="2_2jop6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(960, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
+size = Vector2(240, 32)
+
+[node name="Section_02_WrongLayerRoom" type="Node2D"]
+
+[node name="Terrain" type="Node2D" parent="."]
+
+[node name="Ground_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(480, 520)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/Ground_A"]
+offset_left = -480.0
+offset_top = -40.0
+offset_right = 480.0
+offset_bottom = 40.0
+color = Color(0.23, 0.26, 0.31, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Ground_A"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="MidPlatform_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(620, 416)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/MidPlatform_A"]
+offset_left = -120.0
+offset_top = -16.0
+offset_right = 120.0
+offset_bottom = 16.0
+color = Color(0.36, 0.42, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/MidPlatform_A"]
+shape = SubResource("RectangleShape2D_platform")
+
+[node name="Encounters" type="Node2D" parent="."]
+
+[node name="Spawn_A_PageLockGuard_01" parent="Encounters" instance=ExtResource("2_2jop6")]
+position = Vector2(612, 366)
+
+[node name="Pickups" type="Node2D" parent="."]
+
+[node name="Pickup_01" parent="Pickups" instance=ExtResource("1_l4e1v")]
+position = Vector2(302, 438)
+
+[node name="Pickup_02" parent="Pickups" instance=ExtResource("1_l4e1v")]
+position = Vector2(470, 438)
+
+[node name="Pickup_03" parent="Pickups" instance=ExtResource("1_l4e1v")]
+position = Vector2(704, 326)
+
+[node name="Triggers" type="Node2D" parent="."]
+
+[node name="Hints" type="Node2D" parent="."]
+
+[node name="Hint_WrongLayer" type="Label" parent="Hints"]
+offset_left = 76.0
+offset_top = 84.0
+offset_right = 392.0
+offset_bottom = 160.0
+text = "阶段 02: 错误层痛感\nPage-Lock Guard 新样板已接入。先让玩家在 A 层感到刮痧。"
+
+[node name="Hint_HighGround" type="Label" parent="Hints"]
+offset_left = 540.0
+offset_top = 144.0
+offset_right = 900.0
+offset_bottom = 212.0
+text = "高低差和平台让玩家停下来观察敌人行为，\n而不是继续无脑平推。"
+
+[node name="DebugMarkers" type="Node2D" parent="."]
+
+[node name="EntryMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(128, 320)
+
+[node name="ArenaCenter" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(560, 320)
+
+[node name="ExitMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(928, 320)

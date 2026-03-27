@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://7ffaqpfo0ve2"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_unlock_route_flow.gd" id="1_6jthm"]
+[ext_resource type="PackedScene" path="res://player_g.tscn" id="2_a5rs3"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn" id="3_g1jmn"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn" id="4_mxq6h"]
+
+[node name="TestUnlockRouteFlow" type="Node2D"]
+script = ExtResource("1_6jthm")
+
+[node name="Player_G" parent="." instance=ExtResource("2_a5rs3")]
+position = Vector2(96, 320)
+
+[node name="UnlockSection" parent="." instance=ExtResource("3_g1jmn")]
+
+[node name="WindSection" parent="." instance=ExtResource("4_mxq6h")]
+position = Vector2(1440, 0)

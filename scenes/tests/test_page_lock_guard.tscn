@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://ce42g8g6d6q11"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_page_lock_guard.gd" id="1_knmx1"]
+[ext_resource type="PackedScene" uid="uid://bsn8sde8vximc" path="res://player_g.tscn" id="2_p7j0n"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/page_lock_guard.tscn" id="3_uf4s7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(640, 80)
+
+[node name="TestPageLockGuard" type="Node2D"]
+script = ExtResource("1_knmx1")
+
+[node name="Ground_A" type="StaticBody2D" parent="."]
+position = Vector2(320, 520)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground_A"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="Player_G" parent="." instance=ExtResource("2_p7j0n")]
+position = Vector2(180, 480)
+can_switch_layer = true
+can_use_hammer = true
+can_kick_to_b = true
+
+[node name="PageLockGuard" parent="." instance=ExtResource("3_uf4s7")]
+position = Vector2(280, 480)

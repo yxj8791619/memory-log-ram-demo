@@ -6,7 +6,7 @@
 size = Vector2(360, 180)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
-size = Vector2(24, 160)
+size = Vector2(48, 420)
 
 [node name="ArenaTrigger" type="Node2D"]
 script = ExtResource("1_s8l5c")
@@ -19,15 +19,15 @@ collision_mask = 1
 shape = SubResource("RectangleShape2D_trigger")
 
 [node name="LeftDoor" type="StaticBody2D" parent="."]
-position = Vector2(-200, 0)
+position = Vector2(-200, 50)
 collision_layer = 1
 collision_mask = 0
 
 [node name="ColorRect" type="ColorRect" parent="LeftDoor"]
-offset_left = -12.0
-offset_top = -80.0
-offset_right = 12.0
-offset_bottom = 80.0
+offset_left = -24.0
+offset_top = -210.0
+offset_right = 24.0
+offset_bottom = 210.0
 color = Color(0.3, 0.9, 1, 0.8)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftDoor"]
@@ -35,15 +35,15 @@ shape = SubResource("RectangleShape2D_door")
 disabled = true
 
 [node name="RightDoor" type="StaticBody2D" parent="."]
-position = Vector2(200, 0)
+position = Vector2(200, 50)
 collision_layer = 1
 collision_mask = 0
 
 [node name="ColorRect" type="ColorRect" parent="RightDoor"]
-offset_left = -12.0
-offset_top = -80.0
-offset_right = 12.0
-offset_bottom = 80.0
+offset_left = -24.0
+offset_top = -210.0
+offset_right = 24.0
+offset_bottom = 210.0
 color = Color(0.3, 0.9, 1, 0.8)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightDoor"]

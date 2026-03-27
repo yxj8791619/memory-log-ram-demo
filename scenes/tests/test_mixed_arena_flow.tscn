@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://drd6bqbbw6j3r"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_mixed_arena_flow.gd" id="1_fm1nx"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn" id="2_4psr6"]
+
+[node name="TestMixedArenaFlow" type="Node2D"]
+script = ExtResource("1_fm1nx")
+
+[node name="Section06" parent="." instance=ExtResource("2_4psr6")]

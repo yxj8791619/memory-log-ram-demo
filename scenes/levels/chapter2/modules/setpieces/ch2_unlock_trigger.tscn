@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://btw4w1ir3i5bv"]
+
+[ext_resource type="Script" path="res://scripts/chapter2/ch2_unlock_trigger.gd" id="1_1j8lk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_unlock"]
+size = Vector2(240, 140)
+
+[node name="Trigger_UnlockLayer" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_1j8lk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_unlock")
+
+[node name="HintLabel" type="Label" parent="."]
+offset_left = -140.0
+offset_top = -112.0
+offset_right = 140.0
+offset_bottom = -40.0
+text = "C.O.R.E. 权限节点"
+horizontal_alignment = 1

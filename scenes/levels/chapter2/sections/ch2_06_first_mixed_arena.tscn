@@ -1,0 +1,134 @@
+[gd_scene format=3 uid="uid://dr7ngyj1uqrbq"]
+
+[ext_resource type="PackedScene" path="res://arena_trigger.tscn" id="1_w1s1r"]
+[ext_resource type="PackedScene" uid="uid://bywcco0in2o01" path="res://enemy_dummy.tscn" id="2_9wu80"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/page_lock_guard.tscn" id="3_vwlfn"]
+[ext_resource type="PackedScene" path="res://cache_fragment.tscn" id="4_vfqqv"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/front_hound.tscn" id="5_j4l3k"]
+[ext_resource type="Script" path="res://scripts/chapter2/enemy_spawn_point.gd" id="6_xyxrm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(1472, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
+size = Vector2(240, 32)
+
+[node name="Section_06_FirstMixedArena" type="Node2D"]
+
+[node name="Terrain" type="Node2D" parent="."]
+
+[node name="Ground_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(736, 520)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/Ground_A"]
+offset_left = -736.0
+offset_top = -40.0
+offset_right = 736.0
+offset_bottom = 40.0
+color = Color(0.23, 0.26, 0.31, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Ground_A"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="LeftPlatform_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(500, 416)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/LeftPlatform_A"]
+offset_left = -120.0
+offset_top = -16.0
+offset_right = 120.0
+offset_bottom = 16.0
+color = Color(0.36, 0.42, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/LeftPlatform_A"]
+shape = SubResource("RectangleShape2D_platform")
+
+[node name="RightPlatform_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(820, 344)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/RightPlatform_A"]
+offset_left = -120.0
+offset_top = -16.0
+offset_right = 120.0
+offset_bottom = 16.0
+color = Color(0.36, 0.42, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/RightPlatform_A"]
+shape = SubResource("RectangleShape2D_platform")
+
+[node name="Encounters" type="Node2D" parent="."]
+
+[node name="Arena_Wave_01" parent="Encounters" instance=ExtResource("1_w1s1r")]
+position = Vector2(736, 432)
+
+[node name="Waves" type="Node2D" parent="Encounters/Arena_Wave_01"]
+
+[node name="Wave_01" type="Node2D" parent="Encounters/Arena_Wave_01/Waves"]
+
+[node name="Spawn_A_FrontHound_Ground" type="Marker2D" parent="Encounters/Arena_Wave_01/Waves/Wave_01"]
+position = Vector2(-96, 0)
+script = ExtResource("6_xyxrm")
+enemy_scene = ExtResource("5_j4l3k")
+
+[node name="Spawn_B_PageLockGuard_High" type="Marker2D" parent="Encounters/Arena_Wave_01/Waves/Wave_01"]
+position = Vector2(84, -138)
+script = ExtResource("6_xyxrm")
+enemy_scene = ExtResource("3_vwlfn")
+
+[node name="Wave_02" type="Node2D" parent="Encounters/Arena_Wave_01/Waves"]
+
+[node name="Spawn_A_FrontHound_LeftPlatform" type="Marker2D" parent="Encounters/Arena_Wave_01/Waves/Wave_02"]
+position = Vector2(-236, -16)
+script = ExtResource("6_xyxrm")
+enemy_scene = ExtResource("5_j4l3k")
+
+[node name="Spawn_A_TempoDummy_Ground" type="Marker2D" parent="Encounters/Arena_Wave_01/Waves/Wave_02"]
+position = Vector2(96, 0)
+script = ExtResource("6_xyxrm")
+enemy_scene = ExtResource("2_9wu80")
+
+[node name="Pickups" type="Node2D" parent="."]
+
+[node name="Pickup_01" parent="Pickups" instance=ExtResource("4_vfqqv")]
+position = Vector2(292, 432)
+
+[node name="Pickup_02" parent="Pickups" instance=ExtResource("4_vfqqv")]
+position = Vector2(744, 294)
+
+[node name="Pickup_03" parent="Pickups" instance=ExtResource("4_vfqqv")]
+position = Vector2(884, 222)
+
+[node name="Triggers" type="Node2D" parent="."]
+
+[node name="Hints" type="Node2D" parent="."]
+
+[node name="Hint_MixedArena" type="Label" parent="Hints"]
+offset_left = 88.0
+offset_top = 70.0
+offset_right = 558.0
+offset_bottom = 170.0
+text = "阶段 06: 第一次完整综合战\nWave 1: Front Hound + Page-Lock Guard\nWave 2: Front Hound + 节奏怪，要求玩家先判断谁该在哪层处理。"
+
+[node name="Hint_Composition" type="Label" parent="Hints"]
+offset_left = 760.0
+offset_top = 96.0
+offset_right = 1380.0
+offset_bottom = 220.0
+text = "白盒目标：\n1. 先读 Front Hound 的追击压力\n2. 再决定何时去 B 层处理高台上的 Page-Lock Guard\n3. 第二波用额外节奏怪打乱回层时机。"
+
+[node name="DebugMarkers" type="Node2D" parent="."]
+
+[node name="EntryMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(96, 320)
+
+[node name="ArenaCenter" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(736, 320)
+
+[node name="ExitMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(1392, 248)

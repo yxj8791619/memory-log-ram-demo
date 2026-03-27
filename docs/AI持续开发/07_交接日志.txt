@@ -1,5 +1,696 @@
 《Project: Memory.log》第二章交接日志
 
+[2026-03-28]
+本次主目标：
+修复 chapter2 当前最影响人工试玩的 3 个白盒问题：切层掉出世界、综合战门体失效、B 层锤击表现不清楚。
+
+完成内容：
+1. 把 chapter2 六个 section 的地形碰撞改成同时服务 A/B 两层，修复切层后直接穿地
+2. 调整 `ch2_main` 的 section 拼接与 `ch2_06_first_mixed_arena` 平台高度，让当前动作组能实际跑通综合战
+3. 加高并下探 `ArenaTrigger` 的门体，同时让敌人把门层当阻挡
+4. 修正 B 层朝向被鼠标覆盖导致的反向挥锤问题
+5. 为锤击补了更明确的白盒反馈和 chapter2 新敌人的命中回归测试
+
+修改文件：
+1. scenes/levels/chapter2/ch2_main.tscn
+2. scenes/levels/chapter2/sections/ch2_01_run_intro.tscn
+3. scenes/levels/chapter2/sections/ch2_02_wrong_layer_room.tscn
+4. scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn
+5. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+6. scenes/levels/chapter2/sections/ch2_05_return_combo_tutorial.tscn
+7. scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn
+8. arena_trigger.tscn
+9. hammer_hitbox.gd
+10. player_g.gd
+11. player_g.tscn
+12. enemy_dummy.tscn
+13. enemy_shield.tscn
+14. scenes/levels/chapter2/modules/combat/front_hound.tscn
+15. scenes/levels/chapter2/modules/combat/page_lock_guard.tscn
+16. scenes/tests/test_chapter2_ground_survives_layer_switch.tscn
+17. scripts/tests/test_chapter2_ground_survives_layer_switch.gd
+18. scenes/tests/test_hammer_hits_chapter2_enemy.tscn
+19. scripts/tests/test_hammer_hits_chapter2_enemy.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_chapter2_ground_survives_layer_switch.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_hammer_hits_chapter2_enemy.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_single.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_mixed_arena_flow.tscn`
+5. `godot --headless --path . --scene res://scenes/tests/test_chapter2_reachability.tscn`
+6. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+测试结论：
+1. chapter2 现在不会再因为切层直接掉出世界
+2. B 层锤击对 chapter2 样板怪已可稳定命中
+3. 综合战高台和门体已回到当前白盒可玩状态
+
+[2026-03-28]
+本次主目标：
+为 chapter2 建立基于当前玩家参数的关键跳点可达性自动校验，避免后续白盒几何再次超线。
+
+完成内容：
+1. 核对当前玩家 A 层实际运行参数，确认关键可达范围约为：跳高 108、平跳水平 98（含小安全边际）
+2. 回收 `ch2_02`、`ch2_03`、`ch2_04`、`ch2_05` 中超过当前参数线的平台高度和关键 gap
+3. 新建 `test_chapter2_reachability.tscn`，按真实玩家参数校验关键平台对之间的垂直抬升和水平 gap
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_02_wrong_layer_room.tscn
+2. scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn
+3. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+4. scenes/levels/chapter2/sections/ch2_05_return_combo_tutorial.tscn
+5. scenes/tests/test_chapter2_reachability.tscn
+6. scripts/tests/test_chapter2_reachability.gd
+7. docs/AI持续开发/01_项目快照.txt
+8. docs/AI持续开发/03_第二章当前状态.txt
+9. docs/AI持续开发/04_代码地图.txt
+10. docs/AI持续开发/07_交接日志.txt
+11. docs/AI持续开发/15_项目管理进度汇报.txt
+
+验证情况：
+1. 运行 `godot --headless --path . --scene res://scenes/tests/test_chapter2_reachability.tscn`，输出 `[TEST PASS] chapter2_reachability`
+2. 运行 `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`，确认章节装配回归通过
+
+未完成 / 遗留：
+1. 这条测试当前覆盖的是 chapter2 关键平台对，不是全图任意跳点自动扫描
+2. 测试按当前 `player_g.tscn` 覆盖值计算；若后续再次调整玩家参数，应同步让这条测试继续作为红线
+
+下一步建议：
+1. 继续按看板处理 `P1-FEEDBACK-01`
+2. 之后可考虑把 reachability 校验扩到更多 section 或把平台对配置数据化
+
+[本轮测试]
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_chapter2_reachability.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `chapter2_reachability`
+2. PASS: `chapter2_first10_smoke`
+3. FAIL: 无
+4. BLOCKED: 无
+
+测试结论：
+1. chapter2 当前关键跳点已处于参数级可达状态
+2. 后续若再把平台拉高或拉远，这条测试会直接报错
+
+[2026-03-27]
+本次主目标：
+完成看板任务 [P0-FLOW-01]，把权限解锁段和风道教学段补成最小导流闭环。
+
+完成内容：
+1. 扩展 `ch2_unlock_trigger.gd`，让解锁提示同时包含“已解锁什么”和“下一段该去做什么”
+2. 更新 `ch2_03_unlock_arena.tscn`，把权限解锁后的出口导流明确写进关卡提示
+3. 更新 `ch2_04_wind_tutorial.tscn`，让入口提示明确承接上一段的“枪 -> 风道”目标
+4. 新建 `test_unlock_route_flow.tscn`，验证能力解锁、导流提示与下一段入口提示都已接通
+
+修改文件：
+1. scripts/chapter2/ch2_unlock_trigger.gd
+2. scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn
+3. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+4. scenes/tests/test_unlock_route_flow.tscn
+5. scripts/tests/test_unlock_route_flow.gd
+6. docs/AI持续开发/01_项目快照.txt
+7. docs/AI持续开发/03_第二章当前状态.txt
+8. docs/AI持续开发/04_代码地图.txt
+9. docs/AI持续开发/05_任务看板.txt
+10. docs/AI持续开发/07_交接日志.txt
+11. docs/AI持续开发/15_项目管理进度汇报.txt
+
+验证情况：
+1. 运行 `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`，输出 `[TEST PASS] unlock_route_flow`
+2. 运行 `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`，确认章节冒烟回归通过
+3. 运行 `godot --headless --path . --quit --scene res://scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn`
+4. 运行 `godot --headless --path . --quit --scene res://scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn`
+5. 运行 `godot --headless --path . --quit --scene res://scenes/levels/chapter2/ch2_main.tscn`
+
+未完成 / 遗留：
+1. 当前导流闭环仍以文字提示为主，正式节奏、空间诱导和演出仍待后续继续收束
+2. 风道教学段的追击压力和高差读图仍需人工试玩确认
+3. B -> A 带回当前仍偏功能正确，反馈层尚未补齐
+
+下一步建议：
+1. 优先处理 [P1-FEEDBACK-01]，为 B -> A 带回补最小反馈
+2. 再推进群体切层原型或功能怪样板
+3. 风道教学段的空间与追击感可在反馈层之后继续收束
+
+[本轮测试]
+必须测试：
+1. 权限解锁导流测试
+2. 章节冒烟回归
+3. section / chapter2 主场景加载检查
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+3. `godot --headless --path . --quit --scene res://scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn`
+4. `godot --headless --path . --quit --scene res://scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn`
+5. `godot --headless --path . --quit --scene res://scenes/levels/chapter2/ch2_main.tscn`
+
+结果：
+1. PASS: `unlock_route_flow`
+2. PASS: `chapter2_first10_smoke`
+3. PASS: `ch2_03_unlock_arena.tscn` 可加载
+4. PASS: `ch2_04_wind_tutorial.tscn` 可加载
+5. PASS: `ch2_main.tscn` 可加载
+6. FAIL: 初版 `unlock_route_flow` 因实例文案未包含“下一段”前缀失败，补齐后通过
+7. BLOCKED: 无
+8. MANUAL: 玩家是否会在这一段真正自然地从“权限解锁”过渡到“枪 -> 风道”仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+2. 下一轮最适合给 B -> A 带回补反馈层
+
+[2026-03-27]
+本次主目标：
+完成看板任务 [P1-CONTENT-01]，把 `ch2_06_first_mixed_arena` 从结构占位改成真正可测试的第一次综合战白盒。
+
+完成内容：
+1. 扩展 `arena_trigger.gd`，让竞技场支持 chapter2 使用自定义多波次敌人编组
+2. 新建 `scripts/chapter2/enemy_spawn_point.gd`，让 section 内可直接声明每个刷怪点要实例化的敌人场景
+3. 更新 `ch2_06_first_mixed_arena.tscn`，把原来的单波占位替换为两波混编：`Front Hound`、`Page-Lock Guard` 与旧 `Enemy_Dummy` 节奏位
+4. 新建 `test_mixed_arena_flow.tscn`，验证双波次综合战会正常开门、刷怪、换波与结算
+
+修改文件：
+1. arena_trigger.gd
+2. scripts/chapter2/enemy_spawn_point.gd
+3. scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn
+4. scenes/tests/test_mixed_arena_flow.tscn
+5. scripts/tests/test_mixed_arena_flow.gd
+6. docs/AI持续开发/01_项目快照.txt
+7. docs/AI持续开发/03_第二章当前状态.txt
+8. docs/AI持续开发/04_代码地图.txt
+9. docs/AI持续开发/05_任务看板.txt
+10. docs/AI持续开发/07_交接日志.txt
+11. docs/AI持续开发/15_项目管理进度汇报.txt
+
+验证情况：
+1. 运行 `godot --headless --path . --scene res://scenes/tests/test_mixed_arena_flow.tscn`，输出 `[TEST PASS] mixed_arena_flow`
+2. 运行 `godot --headless --path . --scene res://scenes/tests/test_arena_flow.tscn`，确认旧竞技场流程测试仍通过
+3. 运行 `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`，确认章节主线路回归通过
+4. 运行 `godot --headless --path . --quit --scene res://scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn` 与 `ch2_main.tscn`，确认场景可加载
+5. 回归运行 `Front Hound`、`Page-Lock Guard`、`kick_to_b` 与 `hammer_return_single`，确认综合战接入未破坏样板怪与关键机制
+
+未完成 / 遗留：
+1. 第一次综合战里的“功能怪 / 节奏怪”位置暂时还由旧 `Enemy_Dummy` 承担，后续应替换为真正的新样板怪
+2. `arena_trigger.gd` 现已支持多波次编组，但结算日志仍会在 headless 下出现重复打印，不影响 PASS，但后续可以整理
+3. 权限解锁与风道教学的路线衔接、提示与演出仍未收束
+
+下一步建议：
+1. 优先收束 [P0-FLOW-01]，把权限解锁流程与前 10 分钟教学路线衔接补完整
+2. 然后处理 [P1-FEEDBACK-01]，为 B -> A 切层带回补最小反馈
+3. 再独立实现功能怪样板，替换综合战里的旧节奏怪
+
+[本轮测试]
+必须测试：
+1. 新综合战流程测试
+2. 旧竞技场流程回归
+3. 章节冒烟回归
+4. section / chapter2 主场景加载检查
+5. 关键样板怪与关键切层机制回归
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_mixed_arena_flow.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_arena_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+4. `godot --headless --path . --quit --scene res://scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn`
+5. `godot --headless --path . --quit --scene res://scenes/levels/chapter2/ch2_main.tscn`
+6. `godot --headless --path . --scene res://scenes/tests/test_front_hound.tscn`
+7. `godot --headless --path . --scene res://scenes/tests/test_page_lock_guard.tscn`
+8. `godot --headless --path . --scene res://scenes/tests/test_kick_to_b.tscn`
+9. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_single.tscn`
+
+结果：
+1. PASS: `mixed_arena_flow`
+2. PASS: `arena_flow_basic`
+3. PASS: `chapter2_first10_smoke`
+4. PASS: `ch2_06_first_mixed_arena.tscn` 可加载
+5. PASS: `ch2_main.tscn` 可加载
+6. PASS: `front_hound_profile`
+7. PASS: `page_lock_guard_profile`
+8. PASS: `kick_to_b`
+9. PASS: `hammer_return_single`
+10. FAIL: 无
+11. BLOCKED: 无
+12. MANUAL: 第一次综合战的读场速度、波次压力和“是否会自然先读敌人分工”仍需后续人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+2. 下一轮最适合收束权限解锁与路线衔接，再补反馈层
+
+[2026-03-27]
+本次主目标：
+完成任务看板顶部唯一推荐动作 [P0-ENEMY-01]，实现真正服务第二章判断的 B 层优势怪样板 `Page-Lock Guard`。
+
+完成内容：
+1. 新建 `scripts/chapter2/page_lock_guard.gd`
+2. 新建 `scenes/levels/chapter2/modules/combat/page_lock_guard.tscn`
+3. 将 `ch2_02_wrong_layer_room` 与 `ch2_03_unlock_arena` 中的旧护盾怪占位替换为新版 `Page-Lock Guard`
+4. 新建 `test_page_lock_guard.tscn`，验证其 A 层正面刮痧、B 层背后更易处理的轮廓
+
+修改文件：
+1. scripts/chapter2/page_lock_guard.gd
+2. scenes/levels/chapter2/modules/combat/page_lock_guard.tscn
+3. scenes/levels/chapter2/sections/ch2_02_wrong_layer_room.tscn
+4. scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn
+5. scenes/tests/test_page_lock_guard.tscn
+6. scripts/tests/test_page_lock_guard.gd
+7. docs/AI持续开发/01_项目快照.txt
+8. docs/AI持续开发/03_第二章当前状态.txt
+9. docs/AI持续开发/04_代码地图.txt
+10. docs/AI持续开发/05_任务看板.txt
+11. docs/AI持续开发/07_交接日志.txt
+12. docs/AI持续开发/15_项目管理进度汇报.txt
+
+验证情况：
+1. 运行 `godot --headless --path . --scene res://scenes/tests/test_page_lock_guard.tscn`，输出 `[TEST PASS] page_lock_guard_profile`
+2. 运行 `godot --headless --path . --quit --scene res://scenes/levels/chapter2/ch2_main.tscn`，chapter2 主场景可加载
+3. 回归运行 `kick_to_b`、`hammer_return_single` 与 `arena_flow_basic`，确认新样板怪接入未破坏关键机制测试
+
+未完成 / 遗留：
+1. 新版 `Page-Lock Guard` 目前先覆盖“错误层刮痧、正确层兑现”的核心轮廓，细节 AI 仍可继续强化
+2. A 层优势怪样板还没建立，因此第二章的双层分流验证还差另一半
+3. 章节级冒烟测试仍未建立
+
+下一步建议：
+1. 优先制作 A 层优势怪样板
+2. 再补章节冒烟测试
+3. 然后组织第一场综合战白盒
+
+[本轮测试]
+必须测试：
+1. 新敌人场景加载与最小交互验证
+2. chapter2 主场景加载回归
+3. 关键机制测试回归
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_page_lock_guard.tscn`
+2. `godot --headless --path . --quit --scene res://scenes/levels/chapter2/ch2_main.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_kick_to_b.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_single.tscn`
+5. `godot --headless --path . --scene res://scenes/tests/test_arena_flow.tscn`
+
+结果：
+1. PASS: `page_lock_guard_profile`
+2. PASS: `ch2_main.tscn` 可加载
+3. PASS: `kick_to_b`
+4. PASS: `hammer_return_single`
+5. PASS: `arena_flow_basic`
+6. FAIL: 无
+7. BLOCKED: 无
+8. MANUAL: `Page-Lock Guard` 的压迫感、绕背读招和“是否会让玩家自然想去 B 层”仍需后续人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+2. 下一轮适合制作 A 层优势怪样板，形成第二章最核心的双怪判断组合
+
+[2026-03-27]
+本次主目标：
+落地第二章前 10 分钟主循环里最关键的两条单体切层机制：A 层踢怪 / 强制挂起到 B 层，以及 B 层普通锤击切层带回单体敌人。
+
+完成内容：
+1. 为玩家新增 `kick_to_b` 输入与 `can_kick_to_b` 能力开关
+2. 为敌人补上最小层级归属状态、同层交互控制以及 `force_shift_to_layer_b` / `force_shift_to_layer_a` 接口
+3. 落地 A 层踢怪 / 强制挂起到 B 层
+4. 重写 `hammer_hitbox.gd` 的命中处理，落地 B 层普通锤击切层带回单体敌人
+5. 更新权限解锁触发器，把踢怪能力一起纳入 chapter2 路线
+6. 新建 `test_kick_to_b.tscn` 与 `test_hammer_return_single.tscn`，跑通 TC-07 与 TC-03
+
+修改文件：
+1. project.godot
+2. player_g.gd
+3. player_g.tscn
+4. enemy_dummy.gd
+5. enemy_shield.gd
+6. hammer_hitbox.gd
+7. scripts/chapter2/ch2_unlock_trigger.gd
+8. scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn
+9. scenes/tests/test_kick_to_b.tscn
+10. scripts/tests/test_kick_to_b.gd
+11. scenes/tests/test_hammer_return_single.tscn
+12. scripts/tests/test_hammer_return_single.gd
+13. docs/AI持续开发/01_项目快照.txt
+14. docs/AI持续开发/03_第二章当前状态.txt
+15. docs/AI持续开发/04_代码地图.txt
+16. docs/AI持续开发/05_任务看板.txt
+17. docs/AI持续开发/07_交接日志.txt
+18. docs/AI持续开发/15_项目管理进度汇报.txt
+
+验证情况：
+1. 运行 `godot --headless --path . --scene res://scenes/tests/test_kick_to_b.tscn`，输出 `[TEST PASS] kick_to_b`
+2. 运行 `godot --headless --path . --scene res://scenes/tests/test_hammer_return_single.tscn`，输出 `[TEST PASS] hammer_return_single`
+3. 回归运行 TC-01 / TC-02 / TC-04，确认本轮机制改动未破坏已有测试
+
+未完成 / 遗留：
+1. 当前双向单体切层已具备最小白盒版本，但仍缺打击反馈与切层反馈
+2. 现有敌人仍是旧白盒占位，尚未成为真正服务第二章判断的样板怪
+3. 章节级冒烟测试还没建立，当前仍以机制测试为主
+
+下一步建议：
+1. 优先制作 B 层优势怪样板
+2. 再制作 A 层优势怪样板
+3. 然后补章节冒烟测试与第一场综合战白盒
+
+[本轮测试]
+必须测试：
+1. TC-07 A 层踢怪 / 强制挂起验证
+2. TC-03 B 层普通锤击切层带回单体敌人
+3. 已有测试回归
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_kick_to_b.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_hammer_return_single.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_layer_switch.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_bullet_to_wind.tscn`
+5. `godot --headless --path . --scene res://scenes/tests/test_arena_flow.tscn`
+
+结果：
+1. PASS: `kick_to_b`
+2. PASS: `hammer_return_single`
+3. PASS: `layer_switch_basic`
+4. PASS: `bullet_to_wind`
+5. PASS: `arena_flow_basic`
+6. FAIL: TC-07 测试初版受 headless 朝向与敌人 AI 干扰，已固定朝向与站位后通过
+7. BLOCKED: 无
+8. MANUAL: 踢怪与带回的手感、风险感与教学自然度仍需后续人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+2. 当前已具备双向单体切层的基础可测闭环，下一轮适合转向真正的样板怪验证
+
+[2026-03-27]
+本次主目标：
+完成任务看板顶部唯一推荐动作 [P0-TEST-05]，建立竞技场流程自动测试。
+
+完成内容：
+1. 新建 `scenes/tests/test_arena_flow.tscn`
+2. 新建 `scripts/tests/test_arena_flow.gd`
+3. 将 ArenaTrigger 的“关门 -> 刷怪 -> 清怪 -> 开门”流程接入固定日志格式测试
+4. 回归运行 TC-01 与 TC-02，确认新增测试未破坏既有脚手架
+
+修改文件：
+1. scenes/tests/test_arena_flow.tscn
+2. scripts/tests/test_arena_flow.gd
+3. docs/AI持续开发/01_项目快照.txt
+4. docs/AI持续开发/03_第二章当前状态.txt
+5. docs/AI持续开发/04_代码地图.txt
+6. docs/AI持续开发/05_任务看板.txt
+7. docs/AI持续开发/07_交接日志.txt
+8. docs/AI持续开发/15_项目管理进度汇报.txt
+
+验证情况：
+1. 运行 `godot --headless --path . --scene res://scenes/tests/test_arena_flow.tscn`，输出 `[TEST PASS] arena_flow_basic`
+2. 运行 `godot --headless --path . --scene res://scenes/tests/test_layer_switch.tscn`，输出 `[TEST PASS] layer_switch_basic`
+3. 运行 `godot --headless --path . --scene res://scenes/tests/test_bullet_to_wind.tscn`，输出 `[TEST PASS] bullet_to_wind`
+
+未完成 / 遗留：
+1. 竞技场测试当前验证的是 ArenaTrigger 的门控和计数逻辑，不覆盖更复杂的多波次或样板怪组合
+2. 竞技场结算在 headless 下不适合直接依赖 `tree_exited` 时序，因此测试使用了显式结算入口
+3. A 层踢怪与 B 层普通锤击切层仍未落地，后续关键战斗测试还未补齐
+
+下一步建议：
+1. 优先实现 A 层“踢怪 / 强制挂起到 B 层”
+2. 机制落地后立即补 `test_kick_to_b.tscn`
+3. 再实现 B 层普通锤击切层并补 `test_hammer_return_single.tscn`
+
+[本轮测试]
+必须测试：
+1. TC-04 竞技场开关门流程验证
+2. 测试脚手架回归
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_arena_flow.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_layer_switch.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_bullet_to_wind.tscn`
+
+结果：
+1. PASS: `arena_flow_basic`
+2. PASS: `layer_switch_basic`
+3. PASS: `bullet_to_wind`
+4. FAIL: 测试首次尝试直接等待敌人 `tree_exited` 清怪，在 headless 下时序不稳定；已改为验证 ArenaTrigger 的显式结算逻辑后通过
+5. BLOCKED: 无
+6. MANUAL: 竞技场敌人组合、战斗密度和教学节奏仍需后续人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+2. 下一轮应先做 A 层踢怪 / 强制挂起，并同步补对应测试
+
+[2026-03-27]
+本次主目标：
+完成任务看板顶部唯一推荐动作 [P0-STRUCT-02]，按完成定义补齐 chapter2 的后 3 个 section。
+
+完成内容：
+1. 新建 `ch2_04_wind_tutorial.tscn`
+2. 新建 `ch2_05_return_combo_tutorial.tscn`
+3. 新建 `ch2_06_first_mixed_arena.tscn`
+4. 更新 `ch2_main.tscn`，将 chapter2 扩充到 6 个 section 打包单元
+5. 用现有敌人、竞技场触发器和提示节点为后半段教学先建立可扩写的空间骨架
+
+修改文件：
+1. scenes/levels/chapter2/ch2_main.tscn
+2. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+3. scenes/levels/chapter2/sections/ch2_05_return_combo_tutorial.tscn
+4. scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn
+5. docs/AI持续开发/01_项目快照.txt
+6. docs/AI持续开发/03_第二章当前状态.txt
+7. docs/AI持续开发/04_代码地图.txt
+8. docs/AI持续开发/05_任务看板.txt
+9. docs/AI持续开发/07_交接日志.txt
+10. docs/AI持续开发/15_项目管理进度汇报.txt
+
+验证情况：
+1. 运行 `godot --headless --path . --quit --scene res://scenes/levels/chapter2/ch2_main.tscn`，扩充后的 chapter2 主场景可加载
+2. 运行 `godot --headless --path . --quit --scene res://scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn`，新增综合战 section 可加载
+3. 回归运行 TC-01 与 TC-02，确认新增 section 未破坏已有测试底盘
+
+未完成 / 遗留：
+1. 后 3 个 section 当前仍以流程、地形和敌人占位为主，尚未接入正式机制
+2. 竞技场流程虽然已在关卡里使用，但还没有独立自动测试场景
+3. `test_room` 仍保留为旧白盒参考，尚未完全退出验证职责
+
+下一步建议：
+1. 立刻建立 `test_arena_flow.tscn`，把已存在的竞技场逻辑纳入自动验证
+2. 再补 `test_hammer_return_single.tscn` 与 `test_kick_to_b.tscn`
+3. 然后推进 A 层踢怪与 B 层普通锤击切层
+
+[本轮测试]
+必须测试：
+1. chapter2 主场景加载检查
+2. 新 section 加载检查
+3. 关卡结构扩充后的最小测试回归
+
+实际执行：
+1. `godot --headless --path . --quit --scene res://scenes/levels/chapter2/ch2_main.tscn`
+2. `godot --headless --path . --quit --scene res://scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_layer_switch.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_bullet_to_wind.tscn`
+
+结果：
+1. PASS: `ch2_main.tscn` 可加载
+2. PASS: `ch2_06_first_mixed_arena.tscn` 可加载
+3. PASS: `layer_switch_basic`
+4. PASS: `bullet_to_wind`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 后 3 个 section 的节奏、教学自然度与空间可读性仍需后续人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+2. 下一轮应先补竞技场流程自动测试，再继续关键机制开发
+
+[2026-03-27]
+本次主目标：
+完成任务看板顶部唯一推荐动作 [P0-CONTENT-01]，把第二章前 10 分钟白盒路线的前 3 个关键阶段迁入 chapter2 新结构。
+
+完成内容：
+1. 扩写 `ch2_01_run_intro`，加入 A 层基础跑打的敌人、收集品和提示占位
+2. 扩写 `ch2_02_wrong_layer_room`，加入错误层痛感的护盾怪、高低差和提示占位
+3. 新建 `ch2_03_unlock_arena.tscn`，承载权限解锁与封闭战斗房
+4. 新建可复用 setpiece `ch2_unlock_trigger.tscn` 与脚本 `ch2_unlock_trigger.gd`
+5. 更新 `ch2_main.tscn`，把前三段串进 chapter2 主场景
+
+修改文件：
+1. scenes/levels/chapter2/ch2_main.tscn
+2. scenes/levels/chapter2/sections/ch2_01_run_intro.tscn
+3. scenes/levels/chapter2/sections/ch2_02_wrong_layer_room.tscn
+4. scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn
+5. scenes/levels/chapter2/modules/setpieces/ch2_unlock_trigger.tscn
+6. scripts/chapter2/ch2_unlock_trigger.gd
+7. docs/AI持续开发/01_项目快照.txt
+8. docs/AI持续开发/03_第二章当前状态.txt
+9. docs/AI持续开发/04_代码地图.txt
+10. docs/AI持续开发/05_任务看板.txt
+11. docs/AI持续开发/07_交接日志.txt
+12. docs/AI持续开发/15_项目管理进度汇报.txt
+
+验证情况：
+1. 运行 `godot --headless --path . --quit --scene res://scenes/levels/chapter2/ch2_main.tscn`，chapter2 主场景可加载
+2. 运行 `godot --headless --path . --quit --scene res://scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn`，新 section 可加载
+3. 回归运行 TC-01 与 TC-02，确认本轮关卡迁移未破坏最小测试底盘
+
+未完成 / 遗留：
+1. chapter2 目前只迁入前 3 个关键阶段，后 3 个 section 仍未建立
+2. `ch2_unlock_trigger` 先以最小能力开关形式落地，后续仍需与正式权限解锁演出和教学节奏整合
+3. 旧敌人仍只是白盒占位，尚未替换成第二章正式样板怪
+
+下一步建议：
+1. 继续补齐 `ch2_04_wind_tutorial`、`ch2_05_return_combo_tutorial`、`ch2_06_first_mixed_arena`
+2. 补 `test_arena_flow.tscn`，把现已接入的新封闭战斗房纳入自动验证
+3. 在内容结构继续成形后，再落 A 层踢怪与 B 层普通锤击切层
+
+[本轮测试]
+必须测试：
+1. chapter2 主场景加载检查
+2. 新 section 加载检查
+3. 关卡迁移后的最小测试回归
+
+实际执行：
+1. `godot --headless --path . --quit --scene res://scenes/levels/chapter2/ch2_main.tscn`
+2. `godot --headless --path . --quit --scene res://scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_layer_switch.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_bullet_to_wind.tscn`
+
+结果：
+1. PASS: `ch2_main.tscn` 可加载
+2. PASS: `ch2_03_unlock_arena.tscn` 可加载
+3. PASS: `layer_switch_basic`
+4. PASS: `bullet_to_wind`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 新前三段的教学节奏、敌人摆放和解锁触发时机仍需后续人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+2. 下一轮适合继续补齐 chapter2 后 3 个 section，并准备竞技场流程测试
+
+[2026-03-27]
+本次主目标：
+完成任务看板顶部唯一推荐动作 [P0-TEST-01]，建立最小自动测试基础设施并落地 TC-01 / TC-02。
+
+完成内容：
+1. 新建 `scripts/tests/test_assert.gd`、`test_helpers.gd` 与 `test_runner.gd`
+2. 新建 `scenes/tests/test_layer_switch.tscn` 与 `scenes/tests/test_bullet_to_wind.tscn`
+3. 新建 `scripts/tests/test_layer_switch.gd` 与 `scripts/tests/test_bullet_to_wind.gd`
+4. 固定 `[TEST START] / [TEST PASS] / [TEST FAIL] / [TEST BLOCKED]` 日志格式
+5. 跑通 TC-01 层切换基础验证与 TC-02 子弹切层转风道验证
+
+修改文件：
+1. scripts/tests/test_assert.gd
+2. scripts/tests/test_helpers.gd
+3. scripts/tests/test_runner.gd
+4. scripts/tests/test_layer_switch.gd
+5. scripts/tests/test_bullet_to_wind.gd
+6. scenes/tests/test_layer_switch.tscn
+7. scenes/tests/test_bullet_to_wind.tscn
+8. docs/AI持续开发/01_项目快照.txt
+9. docs/AI持续开发/03_第二章当前状态.txt
+10. docs/AI持续开发/04_代码地图.txt
+11. docs/AI持续开发/05_任务看板.txt
+12. docs/AI持续开发/07_交接日志.txt
+13. docs/AI持续开发/15_项目管理进度汇报.txt
+
+验证情况：
+1. 运行 `godot --headless --path . --scene res://scenes/tests/test_layer_switch.tscn`，输出 `[TEST PASS] layer_switch_basic`
+2. 运行 `godot --headless --path . --scene res://scenes/tests/test_bullet_to_wind.tscn`，输出 `[TEST PASS] bullet_to_wind`
+3. 测试脚手架已能以固定日志格式返回明确结果，不再依赖肉眼猜测
+
+未完成 / 遗留：
+1. 当前测试底盘仅覆盖 TC-01 与 TC-02，尚未补到 TC-03 / TC-04 / TC-07
+2. `test_runner.gd` 已创建，但本轮主要仍以逐场景 headless 方式执行
+3. 第二章前 10 分钟白盒内容仍未迁移到 chapter2 新结构
+
+下一步建议：
+1. 开始把 `test_room` 中可复用的白盒内容迁移进 chapter2 section
+2. 当 A 层踢怪、B 层普通锤击切层和竞技场流程落地后，立刻补 TC-03 / TC-04 / TC-07
+3. 保持每轮新增机制都配最小测试场景，不再回到“只改功能不补回归”的模式
+
+[本轮测试]
+必须测试：
+1. 测试场景能否加载
+2. PASS / FAIL / BLOCKED 日志是否正确输出
+3. TC-01 玩家层切换基础验证
+4. TC-02 子弹切层转风道验证
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_layer_switch.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_bullet_to_wind.tscn`
+
+结果：
+1. PASS: `layer_switch_basic`
+2. PASS: `bullet_to_wind`
+3. FAIL: 首次运行时测试脚本未显式 `preload` 工具类，且异步失败返回写法不合法；已修复后重跑通过
+4. BLOCKED: 无
+5. MANUAL: 风道的战术吸引力、视觉可读性和操作手感仍需后续人工试玩判断
+
+测试结论：
+1. 可继续下一任务
+2. 后续应优先迁移前 10 分钟白盒内容，并继续把关键机制逐条接入测试场景
+
+[2026-03-27]
+本次主目标：
+完成任务看板顶部唯一推荐动作 [P0-STRUCT-01]，为第二章建立 AI 友好的 chapter2 第一版结构骨架。
+
+完成内容：
+1. 新建 `scenes/levels/chapter2/ch2_main.tscn`
+2. 新建 `scenes/levels/chapter2/sections/ch2_01_run_intro.tscn` 与 `ch2_02_wrong_layer_room.tscn`
+3. 按结构方案补齐 `scenes/levels/chapter2/modules/` 四类目录占位
+4. 补齐 `scripts/level/`、`scripts/chapter2/`、`data/chapter2/enemy_profiles/`、`data/chapter2/encounter_profiles/` 目录占位
+5. 保留 `test_room.tscn` 不动，并确认现有主入口未被结构改造破坏
+
+修改文件：
+1. scenes/levels/chapter2/ch2_main.tscn
+2. scenes/levels/chapter2/sections/ch2_01_run_intro.tscn
+3. scenes/levels/chapter2/sections/ch2_02_wrong_layer_room.tscn
+4. scenes/levels/chapter2/modules/terrain/.gitkeep
+5. scenes/levels/chapter2/modules/combat/.gitkeep
+6. scenes/levels/chapter2/modules/traversal/.gitkeep
+7. scenes/levels/chapter2/modules/setpieces/.gitkeep
+8. scripts/level/.gitkeep
+9. scripts/chapter2/.gitkeep
+10. data/chapter2/enemy_profiles/.gitkeep
+11. data/chapter2/encounter_profiles/.gitkeep
+12. docs/AI持续开发/01_项目快照.txt
+13. docs/AI持续开发/03_第二章当前状态.txt
+14. docs/AI持续开发/04_代码地图.txt
+15. docs/AI持续开发/05_任务看板.txt
+16. docs/AI持续开发/07_交接日志.txt
+17. docs/AI持续开发/15_项目管理进度汇报.txt
+
+验证情况：
+1. 运行 `godot --headless --path . --quit --scene res://scenes/levels/chapter2/ch2_main.tscn`，新章节骨架可加载
+2. 运行 `godot --headless --path . --quit --scene res://test_room.tscn`，旧主场景仍可加载
+3. 检查 `test_room.tscn` 未被删除，且看板要求的 chapter2 目录、`ch2_main` 与两个 section 均已落地
+
+未完成 / 遗留：
+1. 当前仅完成结构骨架第一版，chapter2 仍未承载完整前 10 分钟白盒路线
+2. module 目录目前仅为占位，尚未抽出可复用地形、战斗、跑跳和 setpiece 模块
+3. 自动测试基础设施仍未建立，后续机制开发的回归能力仍偏弱
+
+下一步建议：
+1. 按 `docs/AI持续开发/09_AI可执行测试改造方案.txt` 先建立 `scenes/tests/`、`scripts/tests/` 与最小日志脚手架
+2. 先补 TC-01 与 TC-02 的可执行测试，再继续迁移 `test_room` 内容到 chapter2 结构
+3. 结构和测试底盘具备后，再推进 A 层踢怪与 B 层普通锤击切层
+
+[本轮测试]
+必须测试：
+1. 项目 / 场景加载检查
+2. section / 关卡结构改动后的最小场景验证
+
+实际执行：
+1. `godot --headless --path . --quit --scene res://scenes/levels/chapter2/ch2_main.tscn`
+2. `godot --headless --path . --quit --scene res://test_room.tscn`
+
+结果：
+1. PASS: `ch2_main.tscn` 可加载
+2. PASS: `test_room.tscn` 可加载
+3. FAIL: 无
+4. BLOCKED: 无
+5. MANUAL: 新 section 的教学节奏、地形合理性和承载方式仍需后续人工试玩与内容迁移后再判断
+
+测试结论：
+1. 可继续下一任务
+2. 下一轮应先补最小自动测试基础设施，而不是直接叠加更多战斗内容
+
 [2026-03-27]
 本次主目标：
 为 AI 自动开发补充面向项目管理人员的进度汇报文档，并把“小节点即维护、给人看”的规则写入持续开发规范。
@@ -232,3 +923,61 @@
 
 测试结论：
 1. 可继续下一任务
+[2026-03-28]
+本次主目标：
+把 B 层切技收口为“锤攻击 + 切层键”的组合输入，并把相关测试与持续开发文档回写到一致。
+
+完成内容：
+1. 修改 `player_g.gd`，把 B 层切技改成 `attack` 与 `switch_layer` 的组合输入优先判定
+2. 保持 `TAB / 右键` 单独触发时仍只切玩家本人，不带敌人切层
+3. 删除 `project.godot` 中已不再使用的独立 `return_cut` 输入动作
+4. 更新 `test_hammer_return_single.gd`，让测试显式校验“普通锤击不切层，锤攻击 + 切层键才带回”
+5. 回写 `03 / 05 / 06 / 09 / 10 / 11 / 12 / 13 / 15` 与主设计文档中的切技表述
+
+修改文件：
+1. player_g.gd
+2. project.godot
+3. scripts/tests/test_hammer_return_single.gd
+4. docs/AI持续开发/03_第二章当前状态.txt
+5. docs/AI持续开发/05_任务看板.txt
+6. docs/AI持续开发/06_遗留问题与风险.txt
+7. docs/AI持续开发/07_交接日志.txt
+8. docs/AI持续开发/09_AI可执行测试改造方案.txt
+9. docs/AI持续开发/10_AI测试标准与案例清单.txt
+10. docs/AI持续开发/11_每轮开发后的最小测试要求.txt
+11. docs/AI持续开发/12_人工试玩待测清单.txt
+12. docs/AI持续开发/13_前10分钟白盒完成定义.txt
+13. docs/AI持续开发/15_项目管理进度汇报.txt
+14. docs/第二章前10分钟关卡编排表-4.0.txt
+
+验证情况：
+1. PASS: `godot --headless --log-file /tmp/memorylog_test_layer_switch.log --path . --script res://scripts/tests/test_runner.gd -- res://scenes/tests/test_layer_switch.tscn`
+2. PASS: `godot --headless --log-file /tmp/memorylog_test_hammer_return.log --path . --script res://scripts/tests/test_runner.gd -- res://scenes/tests/test_hammer_return_single.tscn`
+3. PASS: `AI持续开发/README.txt` 要求的关键回写文档已同步更新
+
+未完成 / 遗留：
+1. `AI持续开发` 目录中更早的历史记录仍保留旧规则表述，未逐条改写历史条目
+2. 章节教学文本与怪物设计文档中仍有部分更大范围的旧规则描述，后续若继续收束教学，应集中再清一轮
+
+下一步建议：
+1. 在 `ch2_05_return_combo_tutorial` 的提示里明确写出“B 层锤攻击 + 切层键”
+2. 继续补一条章节内自动回归，锁住组合输入不会退回成独立技能键
+3. 再推进 B 层重击切层群体带回原型
+
+[本轮测试]
+必须测试：
+1. TC-01 层切换基础验证
+2. TC-03 B 层组合切技带回单体敌人
+
+实际执行：
+1. 运行 `test_layer_switch.tscn`
+2. 运行 `test_hammer_return_single.tscn`
+
+结果：
+1. PASS: `layer_switch_basic`
+2. PASS: `hammer_return_single`
+3. BLOCKED: 无
+
+测试结论：
+1. B 层切技已按“锤攻击 + 切层键”实现，并通过当前最小回归
+2. 文档与实现现在不再依赖独立 `return_cut` 输入动作

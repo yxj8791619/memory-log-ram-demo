@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://dvg31mv33wsmw"]
+
+[ext_resource type="PackedScene" path="res://cache_fragment.tscn" id="1_hx34f"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/front_hound.tscn" id="2_l5hci"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(960, 80)
+
+[node name="Section_01_RunIntro" type="Node2D"]
+
+[node name="Terrain" type="Node2D" parent="."]
+
+[node name="Ground_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(480, 520)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/Ground_A"]
+offset_left = -480.0
+offset_top = -40.0
+offset_right = 480.0
+offset_bottom = 40.0
+color = Color(0.23, 0.26, 0.31, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/Ground_A"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="Encounters" type="Node2D" parent="."]
+
+[node name="Spawn_A_FrontHound_01" parent="Encounters" instance=ExtResource("2_l5hci")]
+position = Vector2(548, 488)
+
+[node name="Spawn_A_FrontHound_02" parent="Encounters" instance=ExtResource("2_l5hci")]
+position = Vector2(812, 488)
+
+[node name="Pickups" type="Node2D" parent="."]
+
+[node name="Pickup_01" parent="Pickups" instance=ExtResource("1_hx34f")]
+position = Vector2(240, 432)
+
+[node name="Pickup_02" parent="Pickups" instance=ExtResource("1_hx34f")]
+position = Vector2(388, 392)
+
+[node name="Pickup_03" parent="Pickups" instance=ExtResource("1_hx34f")]
+position = Vector2(640, 432)
+
+[node name="Pickup_04" parent="Pickups" instance=ExtResource("1_hx34f")]
+position = Vector2(892, 392)
+
+[node name="Triggers" type="Node2D" parent="."]
+
+[node name="Hints" type="Node2D" parent="."]
+
+[node name="Hint_RunIntro" type="Label" parent="Hints"]
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 376.0
+offset_bottom = 164.0
+text = "阶段 01: A 层基础跑打\n先用移动、跳跃和射击建立前台错觉。"
+
+[node name="Hint_PickupTrail" type="Label" parent="Hints"]
+offset_left = 500.0
+offset_top = 72.0
+offset_right = 838.0
+offset_bottom = 140.0
+text = "缓存碎片作为面包屑引导，\n把玩家带向下一段战斗教学。"
+
+[node name="DebugMarkers" type="Node2D" parent="."]
+
+[node name="EntryMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(160, 320)
+
+[node name="ExitMarker" type="Marker2D" parent="DebugMarkers"]
+position = Vector2(920, 320)
