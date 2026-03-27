@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://b2h1f0plowr1p"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_bomb_mutation_mixed_hint.gd" id="1_4hw0e"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn" id="2_efnvh"]
+
+[node name="TestBombMutationMixedHint" type="Node2D"]
+script = ExtResource("1_4hw0e")
+
+[node name="MixedArenaSection" parent="." instance=ExtResource("2_efnvh")]

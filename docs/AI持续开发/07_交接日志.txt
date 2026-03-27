@@ -2,6 +2,54 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-05]，把炸弹异化原型接进 chapter2 白盒段落。
+
+完成内容：
+1. 在 `ch2_06_first_mixed_arena.tscn` 的综合战提示中补充“炸弹 + 切层键 -> B 层异化爆发”的白盒说明
+2. 新建 `test_bomb_mutation_mixed_hint.tscn`，把这条章节内容提示钉成回归
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn
+2. scripts/tests/test_bomb_mutation_mixed_hint.gd
+3. scenes/tests/test_bomb_mutation_mixed_hint.tscn
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_bomb_mutation_mixed_hint.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_mixed_arena_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是把炸弹异化接进了综合战提示，还没做独立的炸弹异化教学段
+2. 风道教学段的空间与追击感仍未完全收束
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-02]，收束风道教学段的空间与追击感
+2. 之后再视情况补更高阶综合战实战回归
+
+[本轮测试]
+必须测试：
+1. 炸弹异化章节提示回归
+2. 综合战流程回归
+3. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_bomb_mutation_mixed_hint.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_mixed_arena_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `bomb_mutation_mixed_hint`
+2. PASS: `mixed_arena_flow`
+3. PASS: `chapter2_first10_smoke`
+4. FAIL: 无
+5. BLOCKED: 无
+6. MANUAL: 玩家是否会在综合战里自然把炸弹异化当成“改场工具”而不是单纯更大爆炸，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-04]，把控制技护盾原型接进 chapter2 白盒段落。
 
 完成内容：

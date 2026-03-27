@@ -120,7 +120,7 @@ offset_left = 760.0
 offset_top = 96.0
 offset_right = 1380.0
 offset_bottom = 220.0
-text = "白盒目标：\n1. 先读 Front Hound 的追击压力\n2. 再决定何时去 B 层处理高台上的 Page-Lock Guard\n3. 记住重击单按留在 B 层，只有“重击 + 切层键”才群体带回\n4. 第二波用后台炮台持续向 A 层施压，逼玩家考虑切入 B 层点杀。"
+text = "白盒目标：\n1. 先读 Front Hound 的追击压力\n2. 再决定何时去 B 层处理高台上的 Page-Lock Guard\n3. 记住重击单按留在 B 层，只有“重击 + 切层键”才群体带回\n4. 第二波用后台炮台持续向 A 层施压，逼玩家考虑切入 B 层点杀\n5. 若怪堆和路线压力同时变大，可用“炸弹 + 切层键”把 A 层预埋转成 B 层异化爆发。"
 
 [node name="DebugMarkers" type="Node2D" parent="."]
 
