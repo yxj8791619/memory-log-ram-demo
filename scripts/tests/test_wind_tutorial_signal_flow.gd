@@ -24,6 +24,7 @@ func _run_test() -> void:
     var turret_lane = wind_section.find_child("TurretPressureLane", true, false)
     var exit_beacon = wind_section.find_child("ExitGoalBeacon", true, false)
     var exit_landing = wind_section.find_child("ExitLandingZone", true, false)
+    var fallback_gate = wind_section.find_child("FallbackGate", true, false)
     var wind_hint = wind_section.find_child("Hint_WindPath", true, false)
     var shield_zone = wind_section.find_child("ShieldFallbackZone", true, false)
     var shield_zone_hint = wind_section.find_child("Hint_ShieldFallbackZone", true, false)
@@ -32,7 +33,7 @@ func _run_test() -> void:
     if not TestAssert.expect_true(chase_trigger != null and fallback_trigger != null and turret != null and hound != null, CASE_NAME, "wind tutorial should include both reveal triggers, the backline turret, and the chase hound"):
         await _finish(false)
         return
-    if not TestAssert.expect_true(route_beam != null and chase_zone != null and turret_lane != null and exit_beacon != null and exit_landing != null, CASE_NAME, "wind tutorial should include whitebox signals for the chase lane, pressure zone, exit goal, exit landing, and late turret lane"):
+    if not TestAssert.expect_true(route_beam != null and chase_zone != null and turret_lane != null and exit_beacon != null and exit_landing != null and fallback_gate != null, CASE_NAME, "wind tutorial should include whitebox signals for the chase lane, pressure zone, exit goal, exit landing, fallback gate, and late turret lane"):
         await _finish(false)
         return
     if not TestAssert.expect_true(absf(float(turret.get("fire_interval")) - 1.7) < 0.01, CASE_NAME, "wind turret should start in a slower pressure state before the fallback reveal"):
@@ -60,6 +61,9 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true(not (exit_landing as ColorRect).visible, CASE_NAME, "exit landing zone should start hidden"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(not (fallback_gate as ColorRect).visible, CASE_NAME, "fallback gate should start hidden"):
         await _finish(false)
         return
     if not TestAssert.expect_true(not (shield_zone_hint as Label).visible, CASE_NAME, "shield fallback hint should start hidden"):
@@ -102,11 +106,17 @@ func _run_test() -> void:
     if not TestAssert.expect_true(not (turret_lane as ColorRect).visible, CASE_NAME, "late turret lane should still stay hidden after the mid-route reveal"):
         await _finish(false)
         return
+    if not TestAssert.expect_true(not (fallback_gate as ColorRect).visible, CASE_NAME, "fallback gate should still stay hidden after the mid-route reveal"):
+        await _finish(false)
+        return
 
     fallback_trigger._on_body_entered(player)
     await TestHelpers.wait_physics_frames(self, 1)
 
     if not TestAssert.expect_true((turret_lane as ColorRect).visible, CASE_NAME, "late-route reveal should show the turret pressure lane"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((fallback_gate as ColorRect).visible, CASE_NAME, "late-route reveal should show the fallback gate"):
         await _finish(false)
         return
     if not TestAssert.expect_true((shield_zone as ColorRect).visible, CASE_NAME, "late-route reveal should show the fallback zone"):
