@@ -110,7 +110,7 @@ position = Vector2(718, 344)
 collision_layer = 0
 collision_mask = 1
 script = ExtResource("4_ty4qt")
-target_node_paths = Array[NodePath]([NodePath("../../WhiteboxSignals/WindRouteBeam"), NodePath("../../WhiteboxSignals/ChasePressureZone"), NodePath("../../WhiteboxSignals/ExitGoalBeacon"), NodePath("../../Hints/Hint_WindPath")])
+target_node_paths = Array[NodePath]([NodePath("../../WhiteboxSignals/WindRouteBeam"), NodePath("../../WhiteboxSignals/ChasePressureZone"), NodePath("../../WhiteboxSignals/ExitGoalBeacon"), NodePath("../../WhiteboxSignals/ExitLandingZone"), NodePath("../../Hints/Hint_WindPath")])
 front_hound_path = NodePath("../../Encounters/Spawn_A_FrontHound_Chase_01")
 front_hound_chase_scale_override = 1.0
 front_hound_cooldown_scale_override = 1.0
@@ -162,6 +162,14 @@ offset_top = 188.0
 offset_right = 1276.0
 offset_bottom = 268.0
 color = Color(0.98, 0.96, 0.58, 0.26)
+visible = false
+
+[node name="ExitLandingZone" type="ColorRect" parent="WhiteboxSignals"]
+offset_left = 1144.0
+offset_top = 270.0
+offset_right = 1304.0
+offset_bottom = 334.0
+color = Color(0.72, 0.96, 0.7, 0.18)
 visible = false
 
 [node name="ShieldFallbackZone" type="ColorRect" parent="WhiteboxSignals"]
