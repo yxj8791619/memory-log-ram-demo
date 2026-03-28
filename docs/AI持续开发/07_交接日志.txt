@@ -2,6 +2,58 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-07-J]，继续压缩 `ch2_04_wind_tutorial` 的第一步标签。
+
+完成内容：
+1. 把 `Hint_RouteStep01` 从“先开枪做 B 层风道，再踩中间预备台接高差”压缩为“先开枪做 B 层风道，再接预备台”
+2. 让 `Step 1` 继续聚焦“起手做风道 + 接预备台”这两个决定，把高差细节交给入口起手位和预备台攀升区场景信号承担
+3. 更新 `test_wind_tutorial_pressure_layout.gd`，回归检查 `Step 1` 保留预备台指向，但不再依赖“接高差”旧表述
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+2. scripts/tests/test_wind_tutorial_pressure_layout.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_signal_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是继续压缩起手步骤标签，风道段整体的正式节奏与演出仍未收束
+2. 章节提示链里可能仍有局部重复表达
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-02]，收束 `ch2_04_wind_tutorial` 的正式节奏与演出
+2. 再继续校验章节提示链里的重复文案
+
+[本轮测试]
+必须测试：
+1. 风道教学段布局回归
+2. 风道动态提示显隐回归
+3. 控制技护盾提示回归
+4. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_signal_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `wind_tutorial_pressure_layout`
+2. PASS: `wind_tutorial_signal_flow`
+3. PASS: `control_shield_route_hint`
+4. PASS: `chapter2_first10_smoke`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 玩家是否会因为 `Step 1` 继续收短，而更自然地把高差细节交给入口起手位和攀升区去理解，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-07-I]，继续压缩 `ch2_04_wind_tutorial` 的入口导流文案。
 
 完成内容：

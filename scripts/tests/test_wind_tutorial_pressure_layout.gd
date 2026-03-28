@@ -231,7 +231,10 @@ func _run_test() -> void:
     if not TestAssert.expect_true((route_step_01 as Label).text.contains("先开枪做 B 层风道"), CASE_NAME, "wind tutorial should mark the first route step explicitly"):
         await _finish(false)
         return
-    if not TestAssert.expect_true((route_step_01 as Label).text.contains("中间预备台"), CASE_NAME, "wind tutorial should keep the prep ledge instruction inside the first route step"):
+    if not TestAssert.expect_true((route_step_01 as Label).text.contains("预备台"), CASE_NAME, "wind tutorial should keep the prep ledge instruction inside the first route step"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(not (route_step_01 as Label).text.contains("接高差"), CASE_NAME, "wind tutorial should let the new climb signals carry the local height detail instead of repeating it in Step 1"):
         await _finish(false)
         return
     if not TestAssert.expect_true((route_step_02 as Label).text.contains("先躲 Front Hound"), CASE_NAME, "wind tutorial should mark the foreground chase step explicitly"):

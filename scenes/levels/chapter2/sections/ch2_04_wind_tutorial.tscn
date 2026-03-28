@@ -232,7 +232,7 @@ offset_left = 220.0
 offset_top = 350.0
 offset_right = 686.0
 offset_bottom = 430.0
-text = "Step 1\n先开枪做 B 层风道，再踩中间预备台接高差。"
+text = "Step 1\n先开枪做 B 层风道，再接预备台。"
 
 [node name="Hint_RouteStep02" type="Label" parent="Hints"]
 offset_left = 694.0
