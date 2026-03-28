@@ -122,18 +122,11 @@ offset_bottom = 286.0
 text = "入口导流：\n先别急着切人，先开枪做风道，再处理高台压力。"
 
 [node name="Hint_RouteStep01" type="Label" parent="Hints"]
-offset_left = 184.0
-offset_top = 336.0
-offset_right = 420.0
-offset_bottom = 390.0
-text = "Step 1\n先开枪做 B 层风道。"
-
-[node name="Hint_RouteStep01B" type="Label" parent="Hints"]
-offset_left = 476.0
-offset_top = 392.0
-offset_right = 732.0
-offset_bottom = 446.0
-text = "Step 1.5\n先踩中间预备台接高差。"
+offset_left = 220.0
+offset_top = 350.0
+offset_right = 686.0
+offset_bottom = 430.0
+text = "Step 1\n先开枪做 B 层风道，再踩中间预备台接高差。"
 
 [node name="Hint_RouteStep02" type="Label" parent="Hints"]
 offset_left = 694.0

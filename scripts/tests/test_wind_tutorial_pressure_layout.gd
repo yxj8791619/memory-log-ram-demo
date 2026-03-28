@@ -22,7 +22,6 @@ func _run_test() -> void:
     var wind_hint = section.find_child("Hint_WindPath", true, false)
     var input_hint = section.find_child("Hint_WindInput", true, false)
     var route_step_01 = section.find_child("Hint_RouteStep01", true, false)
-    var route_step_01b = section.find_child("Hint_RouteStep01B", true, false)
     var route_step_02 = section.find_child("Hint_RouteStep02", true, false)
     var route_step_03 = section.find_child("Hint_RouteStep03", true, false)
     var shield_zone_hint = section.find_child("Hint_ShieldFallbackZone", true, false)
@@ -60,9 +59,6 @@ func _run_test() -> void:
     if not TestAssert.expect_true(route_step_01 != null, CASE_NAME, "wind tutorial should include Hint_RouteStep01"):
         await _finish(false)
         return
-    if not TestAssert.expect_true(route_step_01b != null, CASE_NAME, "wind tutorial should include Hint_RouteStep01B"):
-        await _finish(false)
-        return
     if not TestAssert.expect_true(route_step_02 != null, CASE_NAME, "wind tutorial should include Hint_RouteStep02"):
         await _finish(false)
         return
@@ -96,7 +92,7 @@ func _run_test() -> void:
     if not TestAssert.expect_true((route_step_01 as Label).text.contains("先开枪做 B 层风道"), CASE_NAME, "wind tutorial should mark the first route step explicitly"):
         await _finish(false)
         return
-    if not TestAssert.expect_true((route_step_01b as Label).text.contains("中间预备台"), CASE_NAME, "wind tutorial should mark the prep ledge step explicitly"):
+    if not TestAssert.expect_true((route_step_01 as Label).text.contains("中间预备台"), CASE_NAME, "wind tutorial should keep the prep ledge instruction inside the first route step"):
         await _finish(false)
         return
     if not TestAssert.expect_true((route_step_02 as Label).text.contains("先躲 Front Hound"), CASE_NAME, "wind tutorial should mark the foreground chase step explicitly"):
