@@ -25,6 +25,7 @@ func _run_test() -> void:
     var exit_beacon = section.find_child("ExitGoalBeacon", true, false)
     var exit_landing = section.find_child("ExitLandingZone", true, false)
     var fallback_gate = section.find_child("FallbackGate", true, false)
+    var fallback_stand = section.find_child("FallbackStandZone", true, false)
     var shield_zone = section.find_child("ShieldFallbackZone", true, false)
     var late_pickup = section.find_child("Pickup_03", true, false)
     var wind_hint = section.find_child("Hint_WindPath", true, false)
@@ -66,6 +67,9 @@ func _run_test() -> void:
     if not TestAssert.expect_true(fallback_gate != null, CASE_NAME, "wind tutorial should include a visible fallback gate for the start of the retreat route"):
         await _finish(false)
         return
+    if not TestAssert.expect_true(fallback_stand != null, CASE_NAME, "wind tutorial should include a visible fallback stand zone inside the retreat route"):
+        await _finish(false)
+        return
     if not TestAssert.expect_true(shield_zone != null, CASE_NAME, "wind tutorial should include a visible shield fallback zone for human-readable testing"):
         await _finish(false)
         return
@@ -100,6 +104,12 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true((fallback_gate as ColorRect).global_position.x >= (turret_lane as ColorRect).global_position.x - 20.0, CASE_NAME, "wind tutorial should place the fallback gate inside the late turret-pressure area so the player reads it as a response to pressure rather than a default route"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((fallback_stand as ColorRect).global_position.x > (fallback_gate as ColorRect).global_position.x + 24.0, CASE_NAME, "wind tutorial should place the fallback stand zone after the fallback gate so the player reads a clear retreat progression"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((fallback_stand as ColorRect).global_position.x < (shield_zone as ColorRect).global_position.x + 120.0, CASE_NAME, "wind tutorial should keep the fallback stand zone inside the shield fallback area rather than beyond it"):
         await _finish(false)
         return
     if not TestAssert.expect_true((turret_lane as ColorRect).global_position.x >= (turret as Node2D).global_position.x - 120.0, CASE_NAME, "wind tutorial should place the late turret-pressure lane around the backline pressure source"):
@@ -151,6 +161,9 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true(not (fallback_gate as ColorRect).visible, CASE_NAME, "wind tutorial should hide the fallback gate until the player reaches the late-route reveal zone"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(not (fallback_stand as ColorRect).visible, CASE_NAME, "wind tutorial should hide the fallback stand zone until the player reaches the late-route reveal zone"):
         await _finish(false)
         return
     if not TestAssert.expect_true(not (shield_zone as ColorRect).visible, CASE_NAME, "wind tutorial should hide the fallback-zone whitebox signal until the late-route reveal fires"):
