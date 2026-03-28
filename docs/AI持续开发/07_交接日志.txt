@@ -2,6 +2,60 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-02-C]，把 `ch2_04_wind_tutorial` 的路线顺序继续落到实体场景上，而不是只靠标签说明。
+
+完成内容：
+1. 在 `ch2_04_wind_tutorial.tscn` 新增 `PrepLedge_A` 中间预备台
+2. 调整这一段的路线提示和拾取物，让“先做风道 -> 上中间台 -> 再追到高台 / 炮台点”更容易从场景本体读出来
+3. 扩展 `test_wind_tutorial_pressure_layout.gd`，回归检查中间预备台和新增路线提示
+4. 扩展 `test_chapter2_reachability.gd`，把风道段的新增跳跃拆点纳入可达性验证
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+2. scripts/tests/test_wind_tutorial_pressure_layout.gd
+3. scripts/tests/test_chapter2_reachability.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_chapter2_reachability.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是把风道段拆成更清晰的实体台阶，正式演出与节奏仍未收束
+2. 章节提示链中可能仍存在局部重复表达
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-02]，收束 `ch2_04_wind_tutorial` 的正式节奏与演出
+2. 同时继续校验章节提示链里的重复文案是否还能再减
+
+[本轮测试]
+必须测试：
+1. 风道教学段布局回归
+2. chapter2 可达性回归
+3. 控制技护盾提示回归
+4. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_chapter2_reachability.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `wind_tutorial_pressure_layout`
+2. PASS: `chapter2_reachability`
+3. PASS: `control_shield_route_hint`
+4. PASS: `chapter2_first10_smoke`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 玩家是否会因为中间预备台而更自然地理解“先造路再追”的节奏，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-07-A]，压缩 `ch2_03_unlock_arena` 的解锁说明密度，让权限段只强调眼前要做的事。
 
 完成内容：

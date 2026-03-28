@@ -44,6 +44,21 @@ color = Color(0.36, 0.42, 0.5, 1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/HighLedge_A"]
 shape = SubResource("RectangleShape2D_platform")
 
+[node name="PrepLedge_A" type="StaticBody2D" parent="Terrain"]
+position = Vector2(540, 468)
+collision_layer = 6
+collision_mask = 0
+
+[node name="Visual" type="ColorRect" parent="Terrain/PrepLedge_A"]
+offset_left = -112.0
+offset_top = -16.0
+offset_right = 112.0
+offset_bottom = 16.0
+color = Color(0.32, 0.37, 0.45, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terrain/PrepLedge_A"]
+shape = SubResource("RectangleShape2D_platform")
+
 [node name="ChaseLedge_A" type="StaticBody2D" parent="Terrain"]
 position = Vector2(1112, 344)
 collision_layer = 6
@@ -73,7 +88,7 @@ position = Vector2(1116, 294)
 position = Vector2(390, 430)
 
 [node name="Pickup_02" parent="Pickups" instance=ExtResource("1_a5w8o")]
-position = Vector2(720, 382)
+position = Vector2(540, 434)
 
 [node name="Pickup_03" parent="Pickups" instance=ExtResource("1_a5w8o")]
 position = Vector2(1110, 262)
@@ -109,6 +124,13 @@ offset_top = 336.0
 offset_right = 420.0
 offset_bottom = 390.0
 text = "Step 1\n先开枪做 B 层风道。"
+
+[node name="Hint_RouteStep01B" type="Label" parent="Hints"]
+offset_left = 476.0
+offset_top = 392.0
+offset_right = 732.0
+offset_bottom = 446.0
+text = "Step 1.5\n先踩中间预备台接高差。"
 
 [node name="Hint_RouteStep02" type="Label" parent="Hints"]
 offset_left = 694.0

@@ -15,13 +15,18 @@ func _run_test() -> void:
     await TestHelpers.wait_physics_frames(self, 2)
 
     var turret = section.find_child("Spawn_B_BackgroundTurret_01", true, false)
+    var prep_ledge = section.find_child("PrepLedge_A", true, false)
     var wind_hint = section.find_child("Hint_WindPath", true, false)
     var input_hint = section.find_child("Hint_WindInput", true, false)
     var route_step_01 = section.find_child("Hint_RouteStep01", true, false)
+    var route_step_01b = section.find_child("Hint_RouteStep01B", true, false)
     var route_step_02 = section.find_child("Hint_RouteStep02", true, false)
     var route_step_03 = section.find_child("Hint_RouteStep03", true, false)
 
     if not TestAssert.expect_true(turret != null, CASE_NAME, "wind tutorial should include a Background Turret pressure source"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(prep_ledge != null, CASE_NAME, "wind tutorial should include a prep ledge that bridges into the chase route"):
         await _finish(false)
         return
     if not TestAssert.expect_true(wind_hint != null, CASE_NAME, "wind tutorial should include Hint_WindPath"):
@@ -31,6 +36,9 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true(route_step_01 != null, CASE_NAME, "wind tutorial should include Hint_RouteStep01"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(route_step_01b != null, CASE_NAME, "wind tutorial should include Hint_RouteStep01B"):
         await _finish(false)
         return
     if not TestAssert.expect_true(route_step_02 != null, CASE_NAME, "wind tutorial should include Hint_RouteStep02"):
@@ -46,6 +54,9 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true((route_step_01 as Label).text.contains("先开枪做 B 层风道"), CASE_NAME, "wind tutorial should mark the first route step explicitly"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((route_step_01b as Label).text.contains("中间预备台"), CASE_NAME, "wind tutorial should mark the prep ledge step explicitly"):
         await _finish(false)
         return
     if not TestAssert.expect_true((route_step_02 as Label).text.contains("沿风道继续追"), CASE_NAME, "wind tutorial should mark the chase step explicitly"):

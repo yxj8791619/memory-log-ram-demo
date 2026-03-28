@@ -48,6 +48,17 @@ func _run_test() -> void:
             "vertical_only": true
         },
         {
+            "label": "Section04 ground -> prep ledge",
+            "from": section04.get_node("Terrain/Ground_A"),
+            "to": section04.get_node("Terrain/PrepLedge_A"),
+            "vertical_only": true
+        },
+        {
+            "label": "Section04 prep ledge -> high ledge",
+            "from": section04.get_node("Terrain/PrepLedge_A"),
+            "to": section04.get_node("Terrain/HighLedge_A")
+        },
+        {
             "label": "Section04 ground -> high ledge",
             "from": section04.get_node("Terrain/Ground_A"),
             "to": section04.get_node("Terrain/HighLedge_A"),
