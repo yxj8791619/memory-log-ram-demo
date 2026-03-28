@@ -108,10 +108,10 @@ color = Color(0.52, 0.9, 1, 0.14)
 [node name="Hints" type="Node2D" parent="."]
 
 [node name="Hint_WindPath" type="Label" parent="Hints"]
-offset_left = 760.0
-offset_top = 116.0
-offset_right = 1210.0
-offset_bottom = 194.0
+offset_left = 700.0
+offset_top = 138.0
+offset_right = 1116.0
+offset_bottom = 216.0
 text = "这一段承接上一段刚解锁的能力：\n先被 Front Hound 追着走位，再读后台炮台的压迫线。\n主路线先走枪 -> 风道；护盾只留给后段兜底。"
 
 [node name="Hint_WindInput" type="Label" parent="Hints"]

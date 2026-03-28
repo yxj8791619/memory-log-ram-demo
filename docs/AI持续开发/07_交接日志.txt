@@ -2,6 +2,58 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-07-H]，把 `ch2_04_wind_tutorial` 的主路线说明贴近中段追击区。
+
+完成内容：
+1. 调整 `Hint_WindPath` 的屏幕位置，让它更靠近 `Hint_RouteStep02`
+2. 保持主路线说明内容不变，但减少玩家在中段区域来回扫视
+3. 更新 `test_wind_tutorial_pressure_layout.gd`，回归检查主路线说明与 `Step 2` 的距离关系
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+2. scripts/tests/test_wind_tutorial_pressure_layout.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是继续降低了中段提示的扫视成本，正式节奏与演出仍未收束
+2. 章节提示链里可能仍有局部重复表达
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-02]，收束 `ch2_04_wind_tutorial` 的正式节奏与演出
+2. 再继续校验章节提示链里的重复文案
+
+[本轮测试]
+必须测试：
+1. 风道教学段布局与中段提示距离回归
+2. 控制技护盾提示回归
+3. 解锁导流回归
+4. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `wind_tutorial_pressure_layout`
+2. PASS: `control_shield_route_hint`
+3. PASS: `unlock_route_flow`
+4. PASS: `chapter2_first10_smoke`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 玩家是否会因为主路线说明更靠近追击区而更少回头找字，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-07-G]，把 `ch2_04_wind_tutorial` 的控制技输入提示贴近兜底区。
 
 完成内容：

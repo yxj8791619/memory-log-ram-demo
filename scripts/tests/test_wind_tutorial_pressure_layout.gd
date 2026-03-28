@@ -64,6 +64,9 @@ func _run_test() -> void:
     if not TestAssert.expect_true(shield_zone_hint != null, CASE_NAME, "wind tutorial should include Hint_ShieldFallbackZone"):
         await _finish(false)
         return
+    if not TestAssert.expect_true((wind_hint as Label).position.distance_to((route_step_02 as Label).position) < 260.0, CASE_NAME, "wind tutorial should place the main-route hint near the chase-step label to reduce mid-route scanning"):
+        await _finish(false)
+        return
     if not TestAssert.expect_true((wind_hint as Label).text.contains("后台炮台"), CASE_NAME, "wind tutorial path hint should mention the turret pressure explicitly"):
         await _finish(false)
         return
