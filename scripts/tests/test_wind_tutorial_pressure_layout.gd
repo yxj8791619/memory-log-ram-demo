@@ -22,6 +22,7 @@ func _run_test() -> void:
     var route_beam = section.find_child("WindRouteBeam", true, false)
     var chase_zone = section.find_child("ChasePressureZone", true, false)
     var turret_lane = section.find_child("TurretPressureLane", true, false)
+    var exit_beacon = section.find_child("ExitGoalBeacon", true, false)
     var shield_zone = section.find_child("ShieldFallbackZone", true, false)
     var late_pickup = section.find_child("Pickup_03", true, false)
     var wind_hint = section.find_child("Hint_WindPath", true, false)
@@ -54,6 +55,9 @@ func _run_test() -> void:
     if not TestAssert.expect_true(turret_lane != null, CASE_NAME, "wind tutorial should include a visible late turret-pressure lane signal"):
         await _finish(false)
         return
+    if not TestAssert.expect_true(exit_beacon != null, CASE_NAME, "wind tutorial should include a visible exit-goal beacon for the end of the main route"):
+        await _finish(false)
+        return
     if not TestAssert.expect_true(shield_zone != null, CASE_NAME, "wind tutorial should include a visible shield fallback zone for human-readable testing"):
         await _finish(false)
         return
@@ -70,6 +74,12 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true((route_beam as ColorRect).global_position.x < (shield_zone as ColorRect).global_position.x, CASE_NAME, "wind tutorial should keep the main-route beam before the shield fallback zone"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((exit_beacon as ColorRect).global_position.x >= (route_beam as ColorRect).global_position.x + 220.0, CASE_NAME, "wind tutorial should place the exit-goal beacon after the mid-route beam so the player can read where the chase route is leading"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((exit_beacon as ColorRect).global_position.x >= (turret as Node2D).global_position.x - 80.0, CASE_NAME, "wind tutorial should place the exit-goal beacon near the backline turret point"):
         await _finish(false)
         return
     if not TestAssert.expect_true((turret_lane as ColorRect).global_position.x >= (turret as Node2D).global_position.x - 120.0, CASE_NAME, "wind tutorial should place the late turret-pressure lane around the backline pressure source"):
@@ -112,6 +122,9 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true(not (turret_lane as ColorRect).visible, CASE_NAME, "wind tutorial should hide the turret-pressure lane until the player reaches the late-route reveal zone"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(not (exit_beacon as ColorRect).visible, CASE_NAME, "wind tutorial should hide the exit-goal beacon until the player reaches the mid-route reveal zone"):
         await _finish(false)
         return
     if not TestAssert.expect_true(not (shield_zone as ColorRect).visible, CASE_NAME, "wind tutorial should hide the fallback-zone whitebox signal until the late-route reveal fires"):
