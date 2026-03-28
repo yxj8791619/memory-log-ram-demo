@@ -2,6 +2,58 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-07-C]，再减一层 `ch2_04_wind_tutorial` 的标签负担，让入口判断更短、更直接。
+
+完成内容：
+1. 删除 `Hint_WindTutorial` 这类只重复“这一段是什么”的泛标题提示
+2. 把 `Hint_WindInput` 压成一句短决策：先开枪做风道，再处理高台压力
+3. 扩展 `test_wind_tutorial_pressure_layout.gd`，回归检查入口提示仍保留“先开枪做风道”的核心决策
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+2. scripts/tests/test_wind_tutorial_pressure_layout.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是继续降低了风道段内部的标签负担，正式节奏与演出仍未收束
+2. 章节提示链里可能仍有局部重复表达
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-02]，收束 `ch2_04_wind_tutorial` 的正式节奏与演出
+2. 再继续校验章节提示链里的重复文案
+
+[本轮测试]
+必须测试：
+1. 风道教学段布局与入口短决策回归
+2. 解锁导流回归
+3. 控制技护盾提示回归
+4. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `wind_tutorial_pressure_layout`
+2. PASS: `unlock_route_flow`
+3. PASS: `control_shield_route_hint`
+4. PASS: `chapter2_first10_smoke`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 玩家是否会因为泛标题减少而更愿意先看场景和步骤标签，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-07-B]，压缩 `ch2_04_wind_tutorial` 里已经被场景和白盒区重复表达的说明文字。
 
 完成内容：

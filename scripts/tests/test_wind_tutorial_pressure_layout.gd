@@ -90,6 +90,9 @@ func _run_test() -> void:
     if not TestAssert.expect_true((input_hint as Label).text.contains("高台压力"), CASE_NAME, "wind tutorial input hint should explain the local chase pressure explicitly"):
         await _finish(false)
         return
+    if not TestAssert.expect_true((input_hint as Label).text.contains("先开枪做风道"), CASE_NAME, "wind tutorial input hint should stay focused on the short entry decision"):
+        await _finish(false)
+        return
     if not TestAssert.expect_true((route_step_01 as Label).text.contains("先开枪做 B 层风道"), CASE_NAME, "wind tutorial should mark the first route step explicitly"):
         await _finish(false)
         return

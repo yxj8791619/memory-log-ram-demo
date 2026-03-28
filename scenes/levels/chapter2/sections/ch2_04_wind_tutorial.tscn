@@ -107,13 +107,6 @@ color = Color(0.52, 0.9, 1, 0.14)
 
 [node name="Hints" type="Node2D" parent="."]
 
-[node name="Hint_WindTutorial" type="Label" parent="Hints"]
-offset_left = 72.0
-offset_top = 74.0
-offset_right = 392.0
-offset_bottom = 152.0
-text = "阶段 04: A -> B 非目标切层\n本段用高差和追击路线承载枪 -> 风道教学。"
-
 [node name="Hint_WindPath" type="Label" parent="Hints"]
 offset_left = 760.0
 offset_top = 116.0
@@ -126,7 +119,7 @@ offset_left = 352.0
 offset_top = 210.0
 offset_right = 724.0
 offset_bottom = 286.0
-text = "入口导流：\n看到高差先别急着切人，先用枪制造 B 层风道路线，再处理高台压力。"
+text = "入口导流：\n先别急着切人，先开枪做风道，再处理高台压力。"
 
 [node name="Hint_RouteStep01" type="Label" parent="Hints"]
 offset_left = 184.0
