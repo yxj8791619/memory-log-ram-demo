@@ -2,6 +2,66 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-06-B]，把第二章现有能力提示从“分散存在”串成可回归的章节链路。
+
+完成内容：
+1. 更新 `ch2_05_return_combo_tutorial.tscn`，让组合切回教学明确预告下一段会扩展到群体切回、炸弹异化与护盾兜底
+2. 新建 `test_chapter2_ability_arc_hints.tscn`，把权限解锁说明、组合切回教学、风道护盾提示与综合战异化提示钉成同一条章节能力提示链
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_05_return_combo_tutorial.tscn
+2. scripts/tests/test_chapter2_ability_arc_hints.gd
+3. scenes/tests/test_chapter2_ability_arc_hints.tscn
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_chapter2_ability_arc_hints.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_return_combo_tutorial.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+5. `godot --headless --path . --scene res://scenes/tests/test_bomb_mutation_mixed_hint.tscn`
+6. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是把章节能力提示链串起来，风道教学段的正式节奏与演出仍未收束
+2. 权限解锁后的说明项正在变多，是否需要进一步压缩表述仍需人工试玩判断
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-02]，收束 `ch2_04_wind_tutorial` 的正式节奏与演出
+2. 之后视情况推进 [P1-CONTENT-07]，压缩权限解锁后的提示密度
+
+[本轮测试]
+必须测试：
+1. 章节能力提示链回归
+2. 组合切回教学回归
+3. 解锁导流回归
+4. 控制技护盾提示回归
+5. 炸弹异化提示回归
+6. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_chapter2_ability_arc_hints.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_return_combo_tutorial.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+5. `godot --headless --path . --scene res://scenes/tests/test_bomb_mutation_mixed_hint.tscn`
+6. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `chapter2_ability_arc_hints`
+2. PASS: `return_combo_tutorial`
+3. PASS: `unlock_route_flow`
+4. PASS: `control_shield_route_hint`
+5. PASS: `bomb_mutation_mixed_hint`
+6. PASS: `chapter2_first10_smoke`
+7. FAIL: 无
+8. BLOCKED: 无
+9. MANUAL: 玩家是否会顺着这条能力提示链自然形成“先学单体切回，再进入护盾/异化/群体改场”的理解，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 推进 [P1-CONTENT-06] 的一部分，把权限解锁节点对新原型能力的说明同步进章节内容层。
 
 完成内容：

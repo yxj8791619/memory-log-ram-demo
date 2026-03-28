@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://bc8twvhd2mcs7"]
+
+[ext_resource type="Script" path="res://scripts/tests/test_chapter2_ability_arc_hints.gd" id="1_t5d71"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn" id="2_q3x9h"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn" id="3_qs6pr"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_05_return_combo_tutorial.tscn" id="4_h2b3g"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/sections/ch2_06_first_mixed_arena.tscn" id="5_7wuv1"]
+
+[node name="TestChapter2AbilityArcHints" type="Node2D"]
+script = ExtResource("1_t5d71")
+
+[node name="UnlockSection" parent="." instance=ExtResource("2_q3x9h")]
+
+[node name="WindSection" parent="." instance=ExtResource("3_qs6pr")]
+position = Vector2(1200, 0)
+
+[node name="ReturnSection" parent="." instance=ExtResource("4_h2b3g")]
+position = Vector2(2400, 0)
+
+[node name="MixedSection" parent="." instance=ExtResource("5_7wuv1")]
+position = Vector2(3600, 0)

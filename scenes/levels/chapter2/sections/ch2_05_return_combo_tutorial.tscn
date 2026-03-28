@@ -94,7 +94,7 @@ offset_left = 740.0
 offset_top = 106.0
 offset_right = 1188.0
 offset_bottom = 202.0
-text = "这里要练的是分流判断：\n能稳杀就留在 B 层；想改场或收尾时，再用“锤攻击 + 切层键”把目标带回 A 层。"
+text = "这里要练的是分流判断：\n能稳杀就留在 B 层；想改场或收尾时，再用“锤攻击 + 切层键”把目标带回 A 层。\n下一段会把这条判断扩成群体切回、炸弹异化和护盾兜底的组合题。"
 
 [node name="DebugMarkers" type="Node2D" parent="."]
 
