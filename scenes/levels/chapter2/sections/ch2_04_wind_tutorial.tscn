@@ -103,6 +103,27 @@ offset_right = 724.0
 offset_bottom = 286.0
 text = "入口导流：\n看到高差先别急着切人，先用枪制造 B 层风道路线，再处理高台压力。"
 
+[node name="Hint_RouteStep01" type="Label" parent="Hints"]
+offset_left = 184.0
+offset_top = 336.0
+offset_right = 420.0
+offset_bottom = 390.0
+text = "Step 1\n先开枪做 B 层风道。"
+
+[node name="Hint_RouteStep02" type="Label" parent="Hints"]
+offset_left = 694.0
+offset_top = 332.0
+offset_right = 978.0
+offset_bottom = 386.0
+text = "Step 2\n借高差沿风道继续追。"
+
+[node name="Hint_RouteStep03" type="Label" parent="Hints"]
+offset_left = 1048.0
+offset_top = 220.0
+offset_right = 1324.0
+offset_bottom = 292.0
+text = "Step 3\n压得太狠再带护盾切进 B 层。"
+
 [node name="Hint_ControlShield" type="Label" parent="Hints"]
 offset_left = 760.0
 offset_top = 210.0

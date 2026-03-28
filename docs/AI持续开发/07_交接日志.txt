@@ -2,6 +2,58 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-02-B]，把 `ch2_04_wind_tutorial` 从大段说明收束成更直接的三步路线提示。
+
+完成内容：
+1. 更新 `ch2_04_wind_tutorial.tscn`，补出 `Step 1 / Step 2 / Step 3` 三个白盒路线标签
+2. 让这一段更明确地呈现“先开枪做 B 层风道 -> 借高差继续追 -> 压力太大再带护盾切入 B 层”的顺序
+3. 扩展 `test_wind_tutorial_pressure_layout.gd`，把三步路线标签也纳入自动回归
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+2. scripts/tests/test_wind_tutorial_pressure_layout.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是把路线顺序标得更清楚，风道教学段的正式演出与节奏仍未收束
+2. 权限解锁段的说明仍偏长，后续最好再压一轮
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-07]，压缩权限解锁后的提示密度
+2. 之后再回头继续收束风道教学段的正式演出与空间节奏
+
+[本轮测试]
+必须测试：
+1. 风道教学段压迫布局与三步路线回归
+2. 控制技护盾提示回归
+3. 解锁导流回归
+4. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `wind_tutorial_pressure_layout`
+2. PASS: `control_shield_route_hint`
+3. PASS: `unlock_route_flow`
+4. PASS: `chapter2_first10_smoke`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 玩家是否会因为三步路线标签而更自然地先用风道、再把护盾当兜底，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-06-B]，把第二章现有能力提示从“分散存在”串成可回归的章节链路。
 
 完成内容：
