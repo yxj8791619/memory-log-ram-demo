@@ -77,10 +77,11 @@ shape = SubResource("RectangleShape2D_platform")
 [node name="Encounters" type="Node2D" parent="."]
 
 [node name="Spawn_A_FrontHound_Chase_01" parent="Encounters" instance=ExtResource("2_l51rj")]
-position = Vector2(804, 366)
+position = Vector2(666, 418)
 
 [node name="Spawn_B_BackgroundTurret_01" parent="Encounters" instance=ExtResource("3_23utp")]
-position = Vector2(1116, 294)
+position = Vector2(1228, 282)
+fire_interval = 1.45
 
 [node name="Pickups" type="Node2D" parent="."]
 
@@ -91,7 +92,7 @@ position = Vector2(390, 430)
 position = Vector2(540, 434)
 
 [node name="Pickup_03" parent="Pickups" instance=ExtResource("1_a5w8o")]
-position = Vector2(1110, 262)
+position = Vector2(1182, 250)
 
 [node name="Triggers" type="Node2D" parent="."]
 
@@ -109,7 +110,7 @@ offset_left = 760.0
 offset_top = 116.0
 offset_right = 1210.0
 offset_bottom = 194.0
-text = "这一段承接上一段刚解锁的能力：\n前台有 Front Hound 追击，后台有炮台持续施压。先用枪把子弹送进 B 层风道，借高差继续向前追；如果后台炮台压得太狠，再考虑带着护盾切进 B 层。"
+text = "这一段承接上一段刚解锁的能力：\n先被 Front Hound 追着走位，再读后台炮台的压迫线。先用枪把子弹送进 B 层风道，借高差继续向前追；如果后台炮台压得太狠，再考虑带着护盾切进 B 层。"
 
 [node name="Hint_WindInput" type="Label" parent="Hints"]
 offset_left = 352.0
@@ -137,14 +138,14 @@ offset_left = 694.0
 offset_top = 332.0
 offset_right = 978.0
 offset_bottom = 386.0
-text = "Step 2\n借高差沿风道继续追。"
+text = "Step 2\n先躲 Front Hound，再借高差继续追。"
 
 [node name="Hint_RouteStep03" type="Label" parent="Hints"]
 offset_left = 1048.0
 offset_top = 220.0
 offset_right = 1324.0
 offset_bottom = 292.0
-text = "Step 3\n压得太狠再带护盾切进 B 层。"
+text = "Step 3\n炮台线太狠再带护盾切进 B 层。"
 
 [node name="Hint_ControlShield" type="Label" parent="Hints"]
 offset_left = 760.0

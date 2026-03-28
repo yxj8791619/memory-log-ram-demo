@@ -33,6 +33,9 @@ func _run_test() -> void:
     if not TestAssert.expect_true(prep_ledge != null, CASE_NAME, "wind tutorial should include a prep ledge that bridges into the chase route"):
         await _finish(false)
         return
+    if not TestAssert.expect_true((front_hound as Node2D).global_position.x < (turret as Node2D).global_position.x, CASE_NAME, "wind tutorial should stage the front chase threat before the backline turret pressure"):
+        await _finish(false)
+        return
     if not TestAssert.expect_true(wind_hint != null, CASE_NAME, "wind tutorial should include Hint_WindPath"):
         await _finish(false)
         return
@@ -57,6 +60,9 @@ func _run_test() -> void:
     if not TestAssert.expect_true((wind_hint as Label).text.contains("Front Hound"), CASE_NAME, "wind tutorial path hint should mention the foreground chase threat explicitly"):
         await _finish(false)
         return
+    if not TestAssert.expect_true((wind_hint as Label).text.contains("先被"), CASE_NAME, "wind tutorial path hint should make the pressure order explicit"):
+        await _finish(false)
+        return
     if not TestAssert.expect_true((input_hint as Label).text.contains("高台压力"), CASE_NAME, "wind tutorial input hint should explain the local chase pressure explicitly"):
         await _finish(false)
         return
@@ -66,7 +72,7 @@ func _run_test() -> void:
     if not TestAssert.expect_true((route_step_01b as Label).text.contains("中间预备台"), CASE_NAME, "wind tutorial should mark the prep ledge step explicitly"):
         await _finish(false)
         return
-    if not TestAssert.expect_true((route_step_02 as Label).text.contains("沿风道继续追"), CASE_NAME, "wind tutorial should mark the chase step explicitly"):
+    if not TestAssert.expect_true((route_step_02 as Label).text.contains("先躲 Front Hound"), CASE_NAME, "wind tutorial should mark the foreground chase step explicitly"):
         await _finish(false)
         return
     if not TestAssert.expect_true((route_step_03 as Label).text.contains("带护盾切进 B 层"), CASE_NAME, "wind tutorial should mark the fallback shield step explicitly"):
