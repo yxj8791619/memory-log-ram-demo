@@ -1,7 +1,7 @@
 《Project: Memory.log》第二章任务看板
 
 最后更新时间：
-2026-03-28（收束风道教学段的压迫布局）
+2026-03-28（同步解锁节点对新原型的说明）
 
 --------------------------------------------------
 一、待做
@@ -69,6 +69,7 @@
 31. [P1-CONTENT-04] 已把控制技护盾提示接入 `ch2_04_wind_tutorial`，`test_control_shield_route_hint.tscn` 通过
 32. [P1-CONTENT-05] 已把炸弹异化提示接入 `ch2_06_first_mixed_arena`，`test_bomb_mutation_mixed_hint.tscn` 通过
 33. [P1-CONTENT-02-A] 已为 `ch2_04_wind_tutorial` 接入 `Background Turret` 压迫源，并补 `test_wind_tutorial_pressure_layout.tscn`
+34. [P1-CONTENT-06-A] 已把 `ch2_03_unlock_arena` 的解锁说明同步到控制技护盾与炸弹异化，并保持 `test_unlock_route_flow.tscn` 通过
 
 --------------------------------------------------
 四、阻塞

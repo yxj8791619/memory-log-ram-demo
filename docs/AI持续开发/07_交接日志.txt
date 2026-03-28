@@ -2,6 +2,49 @@
 
 [2026-03-28]
 本次主目标：
+推进 [P1-CONTENT-06] 的一部分，把权限解锁节点对新原型能力的说明同步进章节内容层。
+
+完成内容：
+1. 更新 `ch2_03_unlock_arena.tscn` 的解锁说明，把控制技护盾与炸弹异化写进“已解锁”与后续路线说明
+2. 扩展 `test_unlock_route_flow.gd`，让解锁导流回归同时校验这两条新能力已被明确写入章节提示
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn
+2. scripts/tests/test_unlock_route_flow.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 目前只是把新原型同步写进解锁说明，是否信息量过大仍需人工试玩确认
+2. 章节内容层仍有更多原型需要继续收束为更自然的教学顺序
+
+下一步建议：
+1. 继续沿 `P1-CONTENT-06` 把原型从“测试可用”继续迁到“章节会自然遇到”
+2. 然后再回头压缩或整理解锁后的信息密度
+
+[本轮测试]
+必须测试：
+1. 解锁导流回归
+2. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `unlock_route_flow`
+2. PASS: `chapter2_first10_smoke`
+3. FAIL: 初版测试误读了 `ch2_unlock_trigger.gd` 的标签接口，改为读取 `hint_label.text` 后通过
+4. BLOCKED: 无
+5. MANUAL: 解锁节点一次性告知的能力是否过多，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 推进 [P1-CONTENT-02] 的第一步，先收束 `ch2_04_wind_tutorial` 的压迫布局与读法。
 
 完成内容：
