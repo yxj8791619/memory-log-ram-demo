@@ -17,12 +17,14 @@ func _run_test() -> void:
     var turret = section.find_child("Spawn_B_BackgroundTurret_01", true, false)
     var front_hound = section.find_child("Spawn_A_FrontHound_Chase_01", true, false)
     var prep_ledge = section.find_child("PrepLedge_A", true, false)
+    var shield_zone = section.find_child("ShieldFallbackZone", true, false)
     var wind_hint = section.find_child("Hint_WindPath", true, false)
     var input_hint = section.find_child("Hint_WindInput", true, false)
     var route_step_01 = section.find_child("Hint_RouteStep01", true, false)
     var route_step_01b = section.find_child("Hint_RouteStep01B", true, false)
     var route_step_02 = section.find_child("Hint_RouteStep02", true, false)
     var route_step_03 = section.find_child("Hint_RouteStep03", true, false)
+    var shield_zone_hint = section.find_child("Hint_ShieldFallbackZone", true, false)
 
     if not TestAssert.expect_true(turret != null, CASE_NAME, "wind tutorial should include a Background Turret pressure source"):
         await _finish(false)
@@ -33,7 +35,13 @@ func _run_test() -> void:
     if not TestAssert.expect_true(prep_ledge != null, CASE_NAME, "wind tutorial should include a prep ledge that bridges into the chase route"):
         await _finish(false)
         return
+    if not TestAssert.expect_true(shield_zone != null, CASE_NAME, "wind tutorial should include a visible shield fallback zone for human-readable testing"):
+        await _finish(false)
+        return
     if not TestAssert.expect_true((front_hound as Node2D).global_position.x < (turret as Node2D).global_position.x, CASE_NAME, "wind tutorial should stage the front chase threat before the backline turret pressure"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((shield_zone as ColorRect).global_position.x >= (turret as Node2D).global_position.x - 240.0, CASE_NAME, "wind tutorial should place the shield fallback zone near the late-pressure area"):
         await _finish(false)
         return
     if not TestAssert.expect_true(wind_hint != null, CASE_NAME, "wind tutorial should include Hint_WindPath"):
@@ -52,6 +60,9 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true(route_step_03 != null, CASE_NAME, "wind tutorial should include Hint_RouteStep03"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(shield_zone_hint != null, CASE_NAME, "wind tutorial should include Hint_ShieldFallbackZone"):
         await _finish(false)
         return
     if not TestAssert.expect_true((wind_hint as Label).text.contains("后台炮台"), CASE_NAME, "wind tutorial path hint should mention the turret pressure explicitly"):
@@ -76,6 +87,9 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true((route_step_03 as Label).text.contains("带护盾切进 B 层"), CASE_NAME, "wind tutorial should mark the fallback shield step explicitly"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((shield_zone_hint as Label).text.contains("护盾兜底区"), CASE_NAME, "wind tutorial should label the shield fallback zone explicitly"):
         await _finish(false)
         return
 

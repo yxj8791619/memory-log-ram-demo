@@ -2,6 +2,58 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-02-F]，把 `ch2_04_wind_tutorial` 里“什么时候才该开护盾切层”做成可见白盒信号。
+
+完成内容：
+1. 在 `ch2_04_wind_tutorial.tscn` 新增 `ShieldFallbackZone` 可见白盒区
+2. 补 `Hint_ShieldFallbackZone`，把“到这里再考虑切进 B 层”写成场景内标签
+3. 扩展 `test_wind_tutorial_pressure_layout.gd`，回归检查护盾兜底区的位置和标签存在
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+2. scripts/tests/test_wind_tutorial_pressure_layout.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_reachability.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是把护盾兜底时机做成可见白盒区，真实试玩中的触发手感和演出仍需继续收束
+2. 章节提示链里可能仍有局部重复表达
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-02]，收束 `ch2_04_wind_tutorial` 的正式节奏与演出
+2. 再继续校验章节提示链里的重复文案
+
+[本轮测试]
+必须测试：
+1. 风道教学段布局与护盾兜底区回归
+2. 控制技护盾提示回归
+3. chapter2 可达性回归
+4. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_reachability.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `wind_tutorial_pressure_layout`
+2. PASS: `control_shield_route_hint`
+3. PASS: `chapter2_reachability`
+4. PASS: `chapter2_first10_smoke`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 玩家是否会把护盾兜底区理解为“最后手段”而不是“默认答案”，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-02-E]，把 `ch2_04_wind_tutorial` 的双压力从“同时存在”继续收束成更可读的出现顺序。
 
 完成内容：
