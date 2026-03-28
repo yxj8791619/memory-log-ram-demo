@@ -143,10 +143,10 @@ offset_bottom = 520.0
 text = "护盾兜底区\n炮台线太狠或错过主路线，再把这里当退路。"
 
 [node name="Hint_ControlShield" type="Label" parent="Hints"]
-offset_left = 864.0
-offset_top = 214.0
-offset_right = 1220.0
-offset_bottom = 286.0
+offset_left = 1184.0
+offset_top = 198.0
+offset_right = 1464.0
+offset_bottom = 270.0
 text = "控制技 + 切层键\n带着护盾切入 B 层。"
 
 [node name="DebugMarkers" type="Node2D" parent="."]
