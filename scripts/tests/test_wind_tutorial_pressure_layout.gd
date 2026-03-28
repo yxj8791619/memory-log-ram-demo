@@ -81,6 +81,12 @@ func _run_test() -> void:
     if not TestAssert.expect_true((wind_hint as Label).text.contains("先被"), CASE_NAME, "wind tutorial path hint should make the pressure order explicit"):
         await _finish(false)
         return
+    if not TestAssert.expect_true((wind_hint as Label).text.contains("主路线先走枪 -> 风道"), CASE_NAME, "wind tutorial path hint should keep the main route focused on gun-to-wind"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((wind_hint as Label).text.contains("护盾只留给后段兜底"), CASE_NAME, "wind tutorial path hint should describe shield as a late fallback instead of the default route"):
+        await _finish(false)
+        return
     if not TestAssert.expect_true((input_hint as Label).text.contains("高台压力"), CASE_NAME, "wind tutorial input hint should explain the local chase pressure explicitly"):
         await _finish(false)
         return

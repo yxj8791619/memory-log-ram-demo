@@ -119,7 +119,7 @@ offset_left = 760.0
 offset_top = 116.0
 offset_right = 1210.0
 offset_bottom = 194.0
-text = "这一段承接上一段刚解锁的能力：\n先被 Front Hound 追着走位，再读后台炮台的压迫线。先用枪把子弹送进 B 层风道，借高差继续向前追；如果后台炮台压得太狠，再考虑带着护盾切进 B 层。"
+text = "这一段承接上一段刚解锁的能力：\n先被 Front Hound 追着走位，再读后台炮台的压迫线。\n主路线先走枪 -> 风道；护盾只留给后段兜底。"
 
 [node name="Hint_WindInput" type="Label" parent="Hints"]
 offset_left = 352.0
@@ -168,7 +168,7 @@ offset_left = 760.0
 offset_top = 210.0
 offset_right = 1248.0
 offset_bottom = 304.0
-text = "补充白盒提示：\n若前面压力太大，可用“控制技 + 切层键”带着护盾切入 B 层，先保命再追路线。"
+text = "补充白盒提示：\n只有主路线失手或炮台线太狠时，才用“控制技 + 切层键”带着护盾切入 B 层。"
 
 [node name="DebugMarkers" type="Node2D" parent="."]
 

@@ -2,6 +2,58 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-07-B]，压缩 `ch2_04_wind_tutorial` 里已经被场景和白盒区重复表达的说明文字。
+
+完成内容：
+1. 收短 `Hint_WindPath`，只保留“先被追、再读炮台线、主路线先枪 -> 风道、护盾只作后段兜底”的最小顺序信息
+2. 收短 `Hint_ControlShield`，改成只强调“主路线失手或炮台线太狠时才考虑切入 B 层”
+3. 扩展 `test_wind_tutorial_pressure_layout.gd`，把“主路线先枪 -> 风道”“护盾只留给后段兜底”钉成回归
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+2. scripts/tests/test_wind_tutorial_pressure_layout.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_reachability.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是压缩了风道段内部重复说明，章节其它段落之间的重复表达仍需后续继续校验
+2. 风道教学段的正式节奏与演出仍未完全收束
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-02]，收束 `ch2_04_wind_tutorial` 的正式节奏与演出
+2. 再继续校验章节提示链里的重复文案
+
+[本轮测试]
+必须测试：
+1. 风道教学段布局与精简提示回归
+2. 控制技护盾提示回归
+3. chapter2 可达性回归
+4. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_reachability.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `wind_tutorial_pressure_layout`
+2. PASS: `control_shield_route_hint`
+3. PASS: `chapter2_reachability`
+4. PASS: `chapter2_first10_smoke`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 玩家是否会因为说明更短而更自然地先看场景、再读补充文字，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-02-G]，把 `ch2_04_wind_tutorial` 的护盾兜底区从“靠近主路线”进一步收束成更明确的晚段退路。
 
 完成内容：
