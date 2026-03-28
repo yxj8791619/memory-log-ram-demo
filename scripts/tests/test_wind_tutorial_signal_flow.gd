@@ -17,12 +17,16 @@ func _run_test() -> void:
 
     var chase_trigger = wind_section.find_child("Trigger_RevealChasePlan", true, false)
     var fallback_trigger = wind_section.find_child("Trigger_RevealFallback", true, false)
+    var turret = wind_section.find_child("Spawn_B_BackgroundTurret_01", true, false)
     var wind_hint = wind_section.find_child("Hint_WindPath", true, false)
     var shield_zone = wind_section.find_child("ShieldFallbackZone", true, false)
     var shield_zone_hint = wind_section.find_child("Hint_ShieldFallbackZone", true, false)
     var shield_input_hint = wind_section.find_child("Hint_ControlShield", true, false)
 
-    if not TestAssert.expect_true(chase_trigger != null and fallback_trigger != null, CASE_NAME, "wind tutorial should include both reveal triggers"):
+    if not TestAssert.expect_true(chase_trigger != null and fallback_trigger != null and turret != null, CASE_NAME, "wind tutorial should include both reveal triggers and the backline turret"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(absf(float(turret.get("fire_interval")) - 1.7) < 0.01, CASE_NAME, "wind turret should start in a slower pressure state before the fallback reveal"):
         await _finish(false)
         return
     if not TestAssert.expect_true(not (wind_hint as Label).visible, CASE_NAME, "wind path hint should start hidden"):
@@ -58,6 +62,9 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true((shield_input_hint as Label).visible, CASE_NAME, "late-route reveal should show the shield input hint"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(absf(float(turret.get("fire_interval")) - 1.05) < 0.01, CASE_NAME, "late-route reveal should speed up the turret to make the fallback timing real"):
         await _finish(false)
         return
 

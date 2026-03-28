@@ -88,7 +88,7 @@ position = Vector2(666, 418)
 
 [node name="Spawn_B_BackgroundTurret_01" parent="Encounters" instance=ExtResource("3_23utp")]
 position = Vector2(1228, 282)
-fire_interval = 1.45
+fire_interval = 1.7
 
 [node name="Pickups" type="Node2D" parent="."]
 
@@ -119,6 +119,8 @@ collision_layer = 0
 collision_mask = 1
 script = ExtResource("4_ty4qt")
 target_node_paths = Array[NodePath]([NodePath("../../WhiteboxSignals/ShieldFallbackZone"), NodePath("../../Hints/Hint_ShieldFallbackZone"), NodePath("../../Hints/Hint_ControlShield")])
+turret_path = NodePath("../../Encounters/Spawn_B_BackgroundTurret_01")
+turret_fire_interval_override = 1.05
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/Trigger_RevealFallback"]
 shape = SubResource("RectangleShape2D_fallback_signal")

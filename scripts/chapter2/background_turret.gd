@@ -49,6 +49,11 @@ func _physics_process(_delta: float) -> void:
         fire_timer.start()
 
 
+func set_fire_interval(value: float) -> void:
+    fire_interval = value
+    fire_timer.wait_time = fire_interval
+
+
 func _refresh_player_ref() -> void:
     if player_ref and is_instance_valid(player_ref):
         return
