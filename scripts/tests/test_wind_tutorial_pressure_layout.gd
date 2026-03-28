@@ -23,7 +23,6 @@ func _run_test() -> void:
     var input_hint = section.find_child("Hint_WindInput", true, false)
     var route_step_01 = section.find_child("Hint_RouteStep01", true, false)
     var route_step_02 = section.find_child("Hint_RouteStep02", true, false)
-    var route_step_03 = section.find_child("Hint_RouteStep03", true, false)
     var shield_zone_hint = section.find_child("Hint_ShieldFallbackZone", true, false)
 
     if not TestAssert.expect_true(turret != null, CASE_NAME, "wind tutorial should include a Background Turret pressure source"):
@@ -62,9 +61,6 @@ func _run_test() -> void:
     if not TestAssert.expect_true(route_step_02 != null, CASE_NAME, "wind tutorial should include Hint_RouteStep02"):
         await _finish(false)
         return
-    if not TestAssert.expect_true(route_step_03 != null, CASE_NAME, "wind tutorial should include Hint_RouteStep03"):
-        await _finish(false)
-        return
     if not TestAssert.expect_true(shield_zone_hint != null, CASE_NAME, "wind tutorial should include Hint_ShieldFallbackZone"):
         await _finish(false)
         return
@@ -98,10 +94,10 @@ func _run_test() -> void:
     if not TestAssert.expect_true((route_step_02 as Label).text.contains("先躲 Front Hound"), CASE_NAME, "wind tutorial should mark the foreground chase step explicitly"):
         await _finish(false)
         return
-    if not TestAssert.expect_true((route_step_03 as Label).text.contains("带护盾切进 B 层"), CASE_NAME, "wind tutorial should mark the fallback shield step explicitly"):
+    if not TestAssert.expect_true((shield_zone_hint as Label).text.contains("护盾兜底区"), CASE_NAME, "wind tutorial should label the shield fallback zone explicitly"):
         await _finish(false)
         return
-    if not TestAssert.expect_true((shield_zone_hint as Label).text.contains("护盾兜底区"), CASE_NAME, "wind tutorial should label the shield fallback zone explicitly"):
+    if not TestAssert.expect_true((shield_zone_hint as Label).text.contains("炮台线太狠"), CASE_NAME, "wind tutorial should move the late shield timing into the fallback-zone label explicitly"):
         await _finish(false)
         return
     if not TestAssert.expect_true((shield_zone_hint as Label).text.contains("退路"), CASE_NAME, "wind tutorial should describe the shield fallback zone as a fallback route explicitly"):

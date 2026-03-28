@@ -135,19 +135,12 @@ offset_right = 978.0
 offset_bottom = 386.0
 text = "Step 2\n先躲 Front Hound，再借高差继续追。"
 
-[node name="Hint_RouteStep03" type="Label" parent="Hints"]
-offset_left = 1048.0
-offset_top = 220.0
-offset_right = 1324.0
-offset_bottom = 292.0
-text = "Step 3\n炮台线太狠再带护盾切进 B 层。"
-
 [node name="Hint_ShieldFallbackZone" type="Label" parent="Hints"]
 offset_left = 1216.0
 offset_top = 466.0
 offset_right = 1462.0
 offset_bottom = 520.0
-text = "护盾兜底区\n错过主路线再把这里当退路。"
+text = "护盾兜底区\n炮台线太狠或错过主路线，再把这里当退路。"
 
 [node name="Hint_ControlShield" type="Label" parent="Hints"]
 offset_left = 760.0
