@@ -2,6 +2,60 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-02-M]，为 `ch2_04_wind_tutorial` 补末段炮台压迫线白盒演出。
+
+完成内容：
+1. 在 `ch2_04_wind_tutorial.tscn` 新增 `TurretPressureLane` 末段白盒信号
+2. 让 `Trigger_RevealFallback` 不只显现兜底区与护盾输入提示，还会同步显现末段炮台压迫线
+3. 更新 `test_wind_tutorial_signal_flow.gd`，回归检查末段炮台压迫线会在后段触发后才显现
+4. 更新 `test_wind_tutorial_pressure_layout.gd`，回归检查末段炮台压迫线仍覆盖后台炮台与护盾退路附近，读法符合“压力到了才退”
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+2. scripts/tests/test_wind_tutorial_signal_flow.gd
+3. scripts/tests/test_wind_tutorial_pressure_layout.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_signal_flow.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是继续把末段压力与退路关系做成场景级演出信号，风道段整体的正式节奏与演出仍未收束
+2. 章节提示链里可能仍有局部重复表达
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-02]，收束 `ch2_04_wind_tutorial` 的正式节奏与演出
+2. 再继续校验章节提示链里的重复文案
+
+[本轮测试]
+必须测试：
+1. 风道动态提示与末段炮台压迫线显隐回归
+2. 风道教学段布局回归
+3. 控制技护盾提示回归
+4. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_signal_flow.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `wind_tutorial_signal_flow`
+2. PASS: `wind_tutorial_pressure_layout`
+3. PASS: `control_shield_route_hint`
+4. PASS: `chapter2_first10_smoke`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 玩家是否会因为末段出现更明确的炮台压迫线，而更自然地把护盾兜底区理解成“压力拐点后的退路”，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-02-L]，为 `ch2_04_wind_tutorial` 补中段主路线显影与追击压力区白盒演出。
 
 完成内容：

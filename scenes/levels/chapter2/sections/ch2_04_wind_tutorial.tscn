@@ -123,7 +123,7 @@ position = Vector2(1236, 324)
 collision_layer = 0
 collision_mask = 1
 script = ExtResource("4_ty4qt")
-target_node_paths = Array[NodePath]([NodePath("../../WhiteboxSignals/ShieldFallbackZone"), NodePath("../../Hints/Hint_ShieldFallbackZone"), NodePath("../../Hints/Hint_ControlShield")])
+target_node_paths = Array[NodePath]([NodePath("../../WhiteboxSignals/TurretPressureLane"), NodePath("../../WhiteboxSignals/ShieldFallbackZone"), NodePath("../../Hints/Hint_ShieldFallbackZone"), NodePath("../../Hints/Hint_ControlShield")])
 turret_path = NodePath("../../Encounters/Spawn_B_BackgroundTurret_01")
 turret_fire_interval_override = 1.05
 
@@ -146,6 +146,14 @@ offset_top = 284.0
 offset_right = 914.0
 offset_bottom = 514.0
 color = Color(1, 0.53, 0.31, 0.16)
+visible = false
+
+[node name="TurretPressureLane" type="ColorRect" parent="WhiteboxSignals"]
+offset_left = 1148.0
+offset_top = 220.0
+offset_right = 1326.0
+offset_bottom = 496.0
+color = Color(1, 0.7, 0.26, 0.18)
 visible = false
 
 [node name="ShieldFallbackZone" type="ColorRect" parent="WhiteboxSignals"]
