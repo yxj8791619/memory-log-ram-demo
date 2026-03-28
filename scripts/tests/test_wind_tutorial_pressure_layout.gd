@@ -17,6 +17,8 @@ func _run_test() -> void:
     var turret = section.find_child("Spawn_B_BackgroundTurret_01", true, false)
     var front_hound = section.find_child("Spawn_A_FrontHound_Chase_01", true, false)
     var prep_ledge = section.find_child("PrepLedge_A", true, false)
+    var chase_trigger = section.find_child("Trigger_RevealChasePlan", true, false)
+    var fallback_trigger = section.find_child("Trigger_RevealFallback", true, false)
     var shield_zone = section.find_child("ShieldFallbackZone", true, false)
     var late_pickup = section.find_child("Pickup_03", true, false)
     var wind_hint = section.find_child("Hint_WindPath", true, false)
@@ -32,6 +34,12 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true(prep_ledge != null, CASE_NAME, "wind tutorial should include a prep ledge that bridges into the chase route"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(chase_trigger != null, CASE_NAME, "wind tutorial should include a chase-plan reveal trigger"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(fallback_trigger != null, CASE_NAME, "wind tutorial should include a fallback reveal trigger"):
         await _finish(false)
         return
     if not TestAssert.expect_true(shield_zone != null, CASE_NAME, "wind tutorial should include a visible shield fallback zone for human-readable testing"):
@@ -65,6 +73,15 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true((wind_hint as Label).position.distance_to((route_step_02 as Label).position) < 260.0, CASE_NAME, "wind tutorial should place the main-route hint near the chase-step label to reduce mid-route scanning"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(not (wind_hint as Label).visible, CASE_NAME, "wind tutorial should hide the chase-plan hint until the player reaches the mid-route reveal zone"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(not (shield_zone as ColorRect).visible, CASE_NAME, "wind tutorial should hide the fallback-zone whitebox signal until the late-route reveal fires"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(not (shield_zone_hint as Label).visible, CASE_NAME, "wind tutorial should hide the fallback-zone hint until the player reaches the late route"):
         await _finish(false)
         return
     if not TestAssert.expect_true((wind_hint as Label).text.contains("后台炮台"), CASE_NAME, "wind tutorial path hint should mention the turret pressure explicitly"):

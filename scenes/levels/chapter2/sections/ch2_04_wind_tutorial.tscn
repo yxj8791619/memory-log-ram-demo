@@ -3,12 +3,19 @@
 [ext_resource type="PackedScene" path="res://cache_fragment.tscn" id="1_a5w8o"]
 [ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/front_hound.tscn" id="2_l51rj"]
 [ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/background_turret.tscn" id="3_23utp"]
+[ext_resource type="Script" path="res://scripts/chapter2/wind_route_signal.gd" id="4_ty4qt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(1056, 80)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
 size = Vector2(224, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_chase_signal"]
+size = Vector2(220, 220)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fallback_signal"]
+size = Vector2(220, 260)
 
 [node name="Section_04_WindTutorial" type="Node2D"]
 
@@ -96,6 +103,26 @@ position = Vector2(1182, 250)
 
 [node name="Triggers" type="Node2D" parent="."]
 
+[node name="Trigger_RevealChasePlan" type="Area2D" parent="Triggers"]
+position = Vector2(718, 344)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("4_ty4qt")
+target_node_paths = Array[NodePath]([NodePath("../../Hints/Hint_WindPath")])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/Trigger_RevealChasePlan"]
+shape = SubResource("RectangleShape2D_chase_signal")
+
+[node name="Trigger_RevealFallback" type="Area2D" parent="Triggers"]
+position = Vector2(1236, 324)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("4_ty4qt")
+target_node_paths = Array[NodePath]([NodePath("../../WhiteboxSignals/ShieldFallbackZone"), NodePath("../../Hints/Hint_ShieldFallbackZone"), NodePath("../../Hints/Hint_ControlShield")])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/Trigger_RevealFallback"]
+shape = SubResource("RectangleShape2D_fallback_signal")
+
 [node name="WhiteboxSignals" type="Node2D" parent="."]
 
 [node name="ShieldFallbackZone" type="ColorRect" parent="WhiteboxSignals"]
@@ -104,6 +131,7 @@ offset_top = 258.0
 offset_right = 1388.0
 offset_bottom = 490.0
 color = Color(0.52, 0.9, 1, 0.14)
+visible = false
 
 [node name="Hints" type="Node2D" parent="."]
 
@@ -113,6 +141,7 @@ offset_top = 138.0
 offset_right = 1116.0
 offset_bottom = 216.0
 text = "这一段承接上一段刚解锁的能力：\n先被 Front Hound 追着走位，再读后台炮台的压迫线。\n主路线先走枪 -> 风道；护盾只留给后段兜底。"
+visible = false
 
 [node name="Hint_WindInput" type="Label" parent="Hints"]
 offset_left = 352.0
@@ -141,6 +170,7 @@ offset_top = 466.0
 offset_right = 1462.0
 offset_bottom = 520.0
 text = "护盾兜底区\n炮台线太狠或错过主路线，再把这里当退路。"
+visible = false
 
 [node name="Hint_ControlShield" type="Label" parent="Hints"]
 offset_left = 1184.0
@@ -148,6 +178,7 @@ offset_top = 198.0
 offset_right = 1464.0
 offset_bottom = 270.0
 text = "控制技 + 切层键\n带着护盾切入 B 层。"
+visible = false
 
 [node name="DebugMarkers" type="Node2D" parent="."]
 

@@ -2,6 +2,62 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-02-I]，为 `ch2_04_wind_tutorial` 接入动态提示触发，不再一开场把所有信息同时贴出来。
+
+完成内容：
+1. 新建 `scripts/chapter2/wind_route_signal.gd`，作为风道段的最小动态提示触发器
+2. 在 `ch2_04_wind_tutorial.tscn` 中接入中段追击触发和末段兜底触发
+3. 让 `Hint_WindPath`、`ShieldFallbackZone`、`Hint_ShieldFallbackZone`、`Hint_ControlShield` 改为进入对应区域后才显现
+4. 新建 `test_wind_tutorial_signal_flow.tscn`，回归检查中段先显主路线说明、后段再显兜底区和护盾输入提示
+
+修改文件：
+1. scripts/chapter2/wind_route_signal.gd
+2. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+3. scripts/tests/test_wind_tutorial_pressure_layout.gd
+4. scripts/tests/test_wind_tutorial_signal_flow.gd
+5. scenes/tests/test_wind_tutorial_signal_flow.tscn
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_signal_flow.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是把风道段的信息投放改成分段显现，正式演出与节奏仍未收束
+2. 章节提示链里可能仍有局部重复表达
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-02]，收束 `ch2_04_wind_tutorial` 的正式节奏与演出
+2. 再继续校验章节提示链里的重复文案
+
+[本轮测试]
+必须测试：
+1. 风道动态提示显隐顺序回归
+2. 风道教学段布局回归
+3. 控制技护盾提示回归
+4. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_signal_flow.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `wind_tutorial_signal_flow`
+2. PASS: `wind_tutorial_pressure_layout`
+3. PASS: `control_shield_route_hint`
+4. PASS: `chapter2_first10_smoke`
+5. FAIL: 初版动态测试夹具使用了假 `Player_G`，触发了现有敌人脚本的层状态读取错误；改成真实 `player_g.tscn` 实例后通过
+6. BLOCKED: 无
+7. MANUAL: 玩家是否会因为信息分段显现而更自然地按节奏学习，而不是一进段先读一堆提示，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-07-H]，把 `ch2_04_wind_tutorial` 的主路线说明贴近中段追击区。
 
 完成内容：
