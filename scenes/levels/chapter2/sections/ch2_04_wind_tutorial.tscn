@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d3o6f3e0m0sr5"]
 
 [ext_resource type="PackedScene" path="res://cache_fragment.tscn" id="1_a5w8o"]
-[ext_resource type="PackedScene" uid="uid://bywcco0in2o01" path="res://enemy_dummy.tscn" id="2_g2suo"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/front_hound.tscn" id="2_l51rj"]
 [ext_resource type="PackedScene" path="res://scenes/levels/chapter2/modules/combat/background_turret.tscn" id="3_23utp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
@@ -76,7 +76,7 @@ shape = SubResource("RectangleShape2D_platform")
 
 [node name="Encounters" type="Node2D" parent="."]
 
-[node name="Spawn_A_BackgroundThreat_01" parent="Encounters" instance=ExtResource("2_g2suo")]
+[node name="Spawn_A_FrontHound_Chase_01" parent="Encounters" instance=ExtResource("2_l51rj")]
 position = Vector2(804, 366)
 
 [node name="Spawn_B_BackgroundTurret_01" parent="Encounters" instance=ExtResource("3_23utp")]
@@ -109,7 +109,7 @@ offset_left = 760.0
 offset_top = 116.0
 offset_right = 1210.0
 offset_bottom = 194.0
-text = "这一段承接上一段刚解锁的能力：\n先用枪把子弹送进 B 层风道，借高差继续向前追；如果后台炮台压得太狠，再考虑带着护盾切进 B 层。"
+text = "这一段承接上一段刚解锁的能力：\n前台有 Front Hound 追击，后台有炮台持续施压。先用枪把子弹送进 B 层风道，借高差继续向前追；如果后台炮台压得太狠，再考虑带着护盾切进 B 层。"
 
 [node name="Hint_WindInput" type="Label" parent="Hints"]
 offset_left = 352.0

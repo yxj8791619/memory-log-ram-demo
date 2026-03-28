@@ -15,6 +15,7 @@ func _run_test() -> void:
     await TestHelpers.wait_physics_frames(self, 2)
 
     var turret = section.find_child("Spawn_B_BackgroundTurret_01", true, false)
+    var front_hound = section.find_child("Spawn_A_FrontHound_Chase_01", true, false)
     var prep_ledge = section.find_child("PrepLedge_A", true, false)
     var wind_hint = section.find_child("Hint_WindPath", true, false)
     var input_hint = section.find_child("Hint_WindInput", true, false)
@@ -24,6 +25,9 @@ func _run_test() -> void:
     var route_step_03 = section.find_child("Hint_RouteStep03", true, false)
 
     if not TestAssert.expect_true(turret != null, CASE_NAME, "wind tutorial should include a Background Turret pressure source"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(front_hound != null, CASE_NAME, "wind tutorial should include a Front Hound chase threat instead of a dummy placeholder"):
         await _finish(false)
         return
     if not TestAssert.expect_true(prep_ledge != null, CASE_NAME, "wind tutorial should include a prep ledge that bridges into the chase route"):
@@ -48,6 +52,9 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true((wind_hint as Label).text.contains("后台炮台"), CASE_NAME, "wind tutorial path hint should mention the turret pressure explicitly"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((wind_hint as Label).text.contains("Front Hound"), CASE_NAME, "wind tutorial path hint should mention the foreground chase threat explicitly"):
         await _finish(false)
         return
     if not TestAssert.expect_true((input_hint as Label).text.contains("高台压力"), CASE_NAME, "wind tutorial input hint should explain the local chase pressure explicitly"):

@@ -2,6 +2,58 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-02-D]，把 `ch2_04_wind_tutorial` 的前台追击从旧占位改成真实样板怪。
+
+完成内容：
+1. 更新 `ch2_04_wind_tutorial.tscn`，把前台旧 `Enemy_Dummy` 占位替换为 `Front Hound`
+2. 调整风道段提示文案，让这一段明确变成“前台追击 + 后台炮台”的双压力白盒
+3. 扩展 `test_wind_tutorial_pressure_layout.gd`，回归检查 `Front Hound` 追击威胁和提示文案都已接通
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+2. scripts/tests/test_wind_tutorial_pressure_layout.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_reachability.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+
+未完成 / 遗留：
+1. 当前只是把风道段的前台压力换成真实样板怪，节奏、演出和人工试玩读感仍未完全收束
+2. 章节提示链里可能仍有局部重复表达
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-02]，收束 `ch2_04_wind_tutorial` 的正式节奏与演出
+2. 再继续校验章节提示链里的重复文案
+
+[本轮测试]
+必须测试：
+1. 风道教学段布局与怪组回归
+2. chapter2 前 10 分钟主线路冒烟
+3. chapter2 可达性回归
+4. 控制技护盾提示回归
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_reachability.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+
+结果：
+1. PASS: `wind_tutorial_pressure_layout`
+2. PASS: `chapter2_first10_smoke`
+3. PASS: `chapter2_reachability`
+4. PASS: `control_shield_route_hint`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 玩家是否会更自然地把这段读成“前台追击逼你动，后台炮台逼你择机护盾切层”，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-02-C]，把 `ch2_04_wind_tutorial` 的路线顺序继续落到实体场景上，而不是只靠标签说明。
 
 完成内容：
