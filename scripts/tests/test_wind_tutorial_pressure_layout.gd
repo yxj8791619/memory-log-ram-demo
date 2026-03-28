@@ -19,6 +19,7 @@ func _run_test() -> void:
     var prep_ledge = section.find_child("PrepLedge_A", true, false)
     var chase_trigger = section.find_child("Trigger_RevealChasePlan", true, false)
     var fallback_trigger = section.find_child("Trigger_RevealFallback", true, false)
+    var launch_zone = section.find_child("WindLaunchZone", true, false)
     var route_beam = section.find_child("WindRouteBeam", true, false)
     var chase_zone = section.find_child("ChasePressureZone", true, false)
     var turret_lane = section.find_child("TurretPressureLane", true, false)
@@ -49,6 +50,9 @@ func _run_test() -> void:
     if not TestAssert.expect_true(fallback_trigger != null, CASE_NAME, "wind tutorial should include a fallback reveal trigger"):
         await _finish(false)
         return
+    if not TestAssert.expect_true(launch_zone != null, CASE_NAME, "wind tutorial should include a visible wind-launch zone for the route start"):
+        await _finish(false)
+        return
     if not TestAssert.expect_true(route_beam != null, CASE_NAME, "wind tutorial should include a visible mid-route beam for the main wind lane"):
         await _finish(false)
         return
@@ -77,6 +81,15 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true((front_hound as Node2D).global_position.x < (turret as Node2D).global_position.x, CASE_NAME, "wind tutorial should stage the front chase threat before the backline turret pressure"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((launch_zone as ColorRect).global_position.x >= (prep_ledge as Node2D).global_position.x - 100.0, CASE_NAME, "wind tutorial should place the wind-launch zone near the prep ledge so the route start reads as part of the climb"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((launch_zone as ColorRect).position.distance_to((input_hint as Label).position) < 260.0, CASE_NAME, "wind tutorial should place the wind-launch zone near the entry hint so the player can match the instruction to a clear start point"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((launch_zone as ColorRect).position.distance_to((route_step_01 as Label).position) < 340.0, CASE_NAME, "wind tutorial should place the wind-launch zone near Step 1 so the route start is readable without extra text"):
         await _finish(false)
         return
     if not TestAssert.expect_true((chase_zone as ColorRect).global_position.x <= (front_hound as Node2D).global_position.x + 40.0, CASE_NAME, "wind tutorial should place the chase-pressure zone around the front threat rather than near the late fallback area"):
@@ -143,6 +156,9 @@ func _run_test() -> void:
         await _finish(false)
         return
     if not TestAssert.expect_true(not (wind_hint as Label).visible, CASE_NAME, "wind tutorial should hide the chase-plan hint until the player reaches the mid-route reveal zone"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true((launch_zone as ColorRect).visible, CASE_NAME, "wind tutorial should keep the wind-launch zone visible from the start so the entry route reads immediately"):
         await _finish(false)
         return
     if not TestAssert.expect_true(not (route_beam as ColorRect).visible, CASE_NAME, "wind tutorial should hide the route beam until the player reaches the mid-route reveal zone"):
