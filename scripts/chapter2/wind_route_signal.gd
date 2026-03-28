@@ -5,6 +5,9 @@ extends Area2D
 @export var start_hidden_targets: bool = true
 @export var turret_path: NodePath
 @export var turret_fire_interval_override: float = -1.0
+@export var front_hound_path: NodePath
+@export var front_hound_chase_scale_override: float = -1.0
+@export var front_hound_cooldown_scale_override: float = -1.0
 
 var is_triggered: bool = false
 
@@ -36,3 +39,10 @@ func _on_body_entered(body: Node) -> void:
         var turret := get_node_or_null(turret_path)
         if turret and turret.has_method("set_fire_interval"):
             turret.set_fire_interval(turret_fire_interval_override)
+
+    if front_hound_chase_scale_override > 0.0 or front_hound_cooldown_scale_override > 0.0:
+        var hound := get_node_or_null(front_hound_path)
+        if hound and hound.has_method("set_runtime_pressure"):
+            var chase_scale: float = front_hound_chase_scale_override if front_hound_chase_scale_override > 0.0 else 1.0
+            var cooldown_scale: float = front_hound_cooldown_scale_override if front_hound_cooldown_scale_override > 0.0 else 1.0
+            hound.set_runtime_pressure(chase_scale, cooldown_scale)

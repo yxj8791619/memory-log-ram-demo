@@ -85,6 +85,8 @@ shape = SubResource("RectangleShape2D_platform")
 
 [node name="Spawn_A_FrontHound_Chase_01" parent="Encounters" instance=ExtResource("2_l51rj")]
 position = Vector2(666, 418)
+chase_speed_scale = 0.82
+pounce_cooldown_scale = 1.25
 
 [node name="Spawn_B_BackgroundTurret_01" parent="Encounters" instance=ExtResource("3_23utp")]
 position = Vector2(1228, 282)
@@ -109,6 +111,9 @@ collision_layer = 0
 collision_mask = 1
 script = ExtResource("4_ty4qt")
 target_node_paths = Array[NodePath]([NodePath("../../Hints/Hint_WindPath")])
+front_hound_path = NodePath("../../Encounters/Spawn_A_FrontHound_Chase_01")
+front_hound_chase_scale_override = 1.0
+front_hound_cooldown_scale_override = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/Trigger_RevealChasePlan"]
 shape = SubResource("RectangleShape2D_chase_signal")

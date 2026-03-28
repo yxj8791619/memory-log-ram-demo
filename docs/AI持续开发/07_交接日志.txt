@@ -2,6 +2,62 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-02-K]，把 `ch2_04_wind_tutorial` 的中段触发和 `Front Hound` 的追击升压绑在一起。
+
+完成内容：
+1. 扩展 `front_hound.gd`，支持运行时调整追击速度与扑跃冷却倍率
+2. 让 `Trigger_RevealChasePlan` 不只显现主路线提示，还会把 `Front Hound` 从较软追击状态切回正常强度
+3. 更新 `test_front_hound.gd`，回归检查运行时压力配置确实能改写追击速度和扑跃冷却
+4. 更新 `test_wind_tutorial_signal_flow.gd`，回归检查中段触发前后 `Front Hound` 的追击配置发生变化
+
+修改文件：
+1. scripts/chapter2/front_hound.gd
+2. scripts/chapter2/wind_route_signal.gd
+3. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+4. scripts/tests/test_front_hound.gd
+5. scripts/tests/test_wind_tutorial_signal_flow.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_front_hound.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_signal_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是把中段追击和后段炮台都做成了真正的节奏拐点，正式演出与节奏仍未收束
+2. 章节提示链里可能仍有局部重复表达
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-02]，收束 `ch2_04_wind_tutorial` 的正式节奏与演出
+2. 再继续校验章节提示链里的重复文案
+
+[本轮测试]
+必须测试：
+1. `Front Hound` 运行时追击配置回归
+2. 风道动态提示与中段追击升压回归
+3. 风道教学段布局回归
+4. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_front_hound.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_signal_flow.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `front_hound_profile`
+2. PASS: `wind_tutorial_signal_flow`
+3. PASS: `wind_tutorial_pressure_layout`
+4. PASS: `chapter2_first10_smoke`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 玩家是否会因为中段追击在进入后才真正升压，而更自然地把这一段读成“先起手造路，再进入追击判断”，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-02-J]，把 `ch2_04_wind_tutorial` 的末段触发和真实压力变化绑在一起。
 
 完成内容：

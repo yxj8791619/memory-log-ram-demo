@@ -26,6 +26,8 @@ enum AIState {
 @export var pounce_speed_y_b: float = -320.0
 @export var layer_shift_upward_force: float = 220.0
 @export var layer_shift_horizontal_force: float = 200.0
+@export var chase_speed_scale: float = 1.0
+@export var pounce_cooldown_scale: float = 1.0
 
 var health: int = 90
 var facing_direction: int = -1
@@ -120,11 +122,13 @@ func _get_patrol_speed() -> float:
 
 
 func _get_chase_speed() -> float:
-    return b_chase_speed if is_in_layer_b else a_chase_speed
+    var base_speed: float = b_chase_speed if is_in_layer_b else a_chase_speed
+    return base_speed * chase_speed_scale
 
 
 func _get_pounce_cooldown() -> float:
-    return pounce_cooldown_b if is_in_layer_b else pounce_cooldown_a
+    var base_cooldown: float = pounce_cooldown_b if is_in_layer_b else pounce_cooldown_a
+    return base_cooldown * pounce_cooldown_scale
 
 
 func _get_pounce_velocity() -> Vector2:
@@ -260,6 +264,11 @@ func set_enemy_layer_state(in_b_layer: bool) -> void:
     is_in_layer_b = in_b_layer
     _apply_layer_visual_state()
     _refresh_layer_interaction_state()
+
+
+func set_runtime_pressure(chase_scale: float = 1.0, cooldown_scale: float = 1.0) -> void:
+    chase_speed_scale = chase_scale
+    pounce_cooldown_scale = cooldown_scale
 
 
 func force_shift_to_layer_b(direction: int = 1) -> void:
