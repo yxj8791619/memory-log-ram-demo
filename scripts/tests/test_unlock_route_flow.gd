@@ -49,10 +49,10 @@ func _run_test() -> void:
     if not TestAssert.expect_true(trigger.hint_label.text.contains("下一段"), CASE_NAME, "unlock trigger should tell the player what the next route objective is"):
         await _finish(false)
         return
-    if not TestAssert.expect_true(trigger.hint_label.text.contains("控制技护盾"), CASE_NAME, "unlock trigger should mention control shield in the unlocked ability summary"):
+    if not TestAssert.expect_true(trigger.hint_label.text.contains("枪转风道"), CASE_NAME, "unlock trigger should keep the immediate next mechanic focused on gun-to-wind"):
         await _finish(false)
         return
-    if not TestAssert.expect_true(trigger.hint_label.text.contains("炸弹异化"), CASE_NAME, "unlock trigger should mention bomb mutation in the unlocked ability summary"):
+    if not TestAssert.expect_true(trigger.hint_label.text.contains("后续段落"), CASE_NAME, "unlock trigger should say that later layer-derived abilities are explained in later sections"):
         await _finish(false)
         return
     if not TestAssert.expect_true((route_hint as Label).text.contains("向右"), CASE_NAME, "post-unlock route hint should point the player toward the next section"):

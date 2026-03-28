@@ -86,8 +86,8 @@ position = Vector2(712, 382)
 [node name="Trigger_UnlockLayer" parent="Triggers" instance=ExtResource("5_a7tib")]
 position = Vector2(274, 432)
 hint_text = "阶段 03: 权限解锁\n进入节点后开放切层、踢怪，以及 A/B 层动作的切层派生。"
-unlocked_text = "已解锁：切层 / 踢怪 / 枪转风道 / 控制技护盾 / 炸弹异化 / B 层重锤"
-next_step_text = "下一段：清掉眼前封闭战斗房后继续向右，进入高差区先学枪 -> 风道，再逐步理解护盾和异化的切层价值。"
+unlocked_text = "已解锁：切层 / 踢怪 / 枪转风道\n其余切层派生会在后续段落逐步开放阅读。"
+next_step_text = "下一段：清掉眼前封闭战斗房后继续向右，先只练枪 -> 风道。"
 
 [node name="Hints" type="Node2D" parent="."]
 
@@ -103,7 +103,7 @@ offset_left = 720.0
 offset_top = 104.0
 offset_right = 1108.0
 offset_bottom = 180.0
-text = "先拿权限，再进竞技场。\n清房后直接向右接高差风道段，让“刚解锁 -> 先学枪转风道 -> 再逐步接护盾和异化”更明确。"
+text = "先拿权限，再进竞技场。\n清房后直接向右接高差风道段；这里先只讲枪 -> 风道，其余派生放到后续章节提示里逐步展开。"
 
 [node name="Hint_PostUnlockRoute" type="Label" parent="Hints"]
 offset_left = 846.0

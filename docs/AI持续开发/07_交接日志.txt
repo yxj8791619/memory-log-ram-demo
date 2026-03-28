@@ -2,6 +2,55 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-07-A]，压缩 `ch2_03_unlock_arena` 的解锁说明密度，让权限段只强调眼前要做的事。
+
+完成内容：
+1. 更新 `ch2_03_unlock_arena.tscn`，把解锁说明改成“先只练枪 -> 风道，后续切层派生稍后再讲”
+2. 调整 `Hint_AbilityFlow`，避免在权限段一次性重复堆叠护盾、异化等后续能力名词
+3. 更新 `test_unlock_route_flow.gd` 与 `test_chapter2_ability_arc_hints.gd`，把回归标准改为“当前目标清晰、后续能力延后展开”
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_03_unlock_arena.tscn
+2. scripts/tests/test_unlock_route_flow.gd
+3. scripts/tests/test_chapter2_ability_arc_hints.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_chapter2_ability_arc_hints.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是压缩了权限段文案，风道教学段的正式演出和空间节奏仍未收束
+2. 其它章节提示之间是否还存在重复表达，后续仍需继续校验
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-02]，收束 `ch2_04_wind_tutorial` 的正式节奏与演出
+2. 之后继续检查章节提示链里的重复文案是否还能再减
+
+[本轮测试]
+必须测试：
+1. 解锁导流回归
+2. 章节能力提示链回归
+3. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_chapter2_ability_arc_hints.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `unlock_route_flow`
+2. PASS: `chapter2_ability_arc_hints`
+3. PASS: `chapter2_first10_smoke`
+4. FAIL: 无
+5. BLOCKED: 无
+6. MANUAL: 玩家是否会因为权限段更短而更自然地把注意力放到下一段的枪 -> 风道练习，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-02-B]，把 `ch2_04_wind_tutorial` 从大段说明收束成更直接的三步路线提示。
 
 完成内容：

@@ -35,10 +35,10 @@ func _run_test() -> void:
         await _finish(false)
         return
 
-    if not TestAssert.expect_true((unlock_trigger as Area2D).get("unlocked_text").contains("控制技护盾"), CASE_NAME, "unlock section should mention control shield in the unlocked ability summary"):
+    if not TestAssert.expect_true((unlock_trigger as Area2D).get("unlocked_text").contains("枪转风道"), CASE_NAME, "unlock section should keep the immediate next lesson focused on gun-to-wind"):
         await _finish(false)
         return
-    if not TestAssert.expect_true((unlock_trigger as Area2D).get("unlocked_text").contains("炸弹异化"), CASE_NAME, "unlock section should mention bomb mutation in the unlocked ability summary"):
+    if not TestAssert.expect_true((unlock_trigger as Area2D).get("unlocked_text").contains("后续段落"), CASE_NAME, "unlock section should defer later layer-derived skills to later sections explicitly"):
         await _finish(false)
         return
     if not TestAssert.expect_true((wind_hint as Label).text.contains("控制技 + 切层键"), CASE_NAME, "wind tutorial should mention the shield input explicitly"):
