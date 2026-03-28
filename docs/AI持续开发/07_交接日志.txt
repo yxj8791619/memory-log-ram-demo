@@ -2,6 +2,58 @@
 
 [2026-03-28]
 本次主目标：
+完成 [P1-CONTENT-07-F]，把 `ch2_04_wind_tutorial` 后段两块提示拆成不同职责，减少同一区域的重复决策。
+
+完成内容：
+1. 收短 `Hint_ControlShield`，让它只保留“控制技 + 切层键 = 带护盾切入 B 层”的输入与结果
+2. 保留 `Hint_ShieldFallbackZone` 承担“什么时候才该把这里当退路”的时机说明
+3. 更新 `test_control_shield_route_hint.gd`，回归检查控制技提示不再重复主路线失手这类时机说明
+
+修改文件：
+1. scenes/levels/chapter2/sections/ch2_04_wind_tutorial.tscn
+2. scripts/tests/test_control_shield_route_hint.gd
+
+验证情况：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+未完成 / 遗留：
+1. 当前只是继续压缩了后段同区域提示的职责重叠，正式节奏与演出仍未收束
+2. 章节提示链里可能仍有局部重复表达
+
+下一步建议：
+1. 继续推进 [P1-CONTENT-02]，收束 `ch2_04_wind_tutorial` 的正式节奏与演出
+2. 再继续校验章节提示链里的重复文案
+
+[本轮测试]
+必须测试：
+1. 风道教学段布局与后段提示职责回归
+2. 控制技护盾提示回归
+3. 解锁导流回归
+4. chapter2 前 10 分钟主线路冒烟
+
+实际执行：
+1. `godot --headless --path . --scene res://scenes/tests/test_wind_tutorial_pressure_layout.tscn`
+2. `godot --headless --path . --scene res://scenes/tests/test_control_shield_route_hint.tscn`
+3. `godot --headless --path . --scene res://scenes/tests/test_unlock_route_flow.tscn`
+4. `godot --headless --path . --scene res://scenes/tests/test_chapter2_first10_smoke.tscn`
+
+结果：
+1. PASS: `wind_tutorial_pressure_layout`
+2. PASS: `control_shield_route_hint`
+3. PASS: `unlock_route_flow`
+4. PASS: `chapter2_first10_smoke`
+5. FAIL: 无
+6. BLOCKED: 无
+7. MANUAL: 玩家是否会因为后段一块提示讲时机、一块提示讲输入而更快做出正确判断，仍需人工试玩确认
+
+测试结论：
+1. 可继续下一任务
+
+[2026-03-28]
+本次主目标：
 完成 [P1-CONTENT-07-E]，把 `ch2_04_wind_tutorial` 末段的单独步骤标签吸收到兜底区标签里。
 
 完成内容：

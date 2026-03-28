@@ -29,6 +29,9 @@ func _run_test() -> void:
     if not TestAssert.expect_true(shield_text.contains("切入 B 层"), CASE_NAME, "control shield route hint should explain the route usage in B layer"):
         await _finish(false)
         return
+    if not TestAssert.expect_true(not shield_text.contains("主路线失手"), CASE_NAME, "control shield route hint should focus on input/result, leaving timing to the fallback-zone label"):
+        await _finish(false)
+        return
 
     TestAssert.pass_case(CASE_NAME)
     await _finish(true)
