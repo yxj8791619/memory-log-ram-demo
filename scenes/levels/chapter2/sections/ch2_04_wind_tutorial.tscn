@@ -99,10 +99,10 @@ position = Vector2(1182, 250)
 [node name="WhiteboxSignals" type="Node2D" parent="."]
 
 [node name="ShieldFallbackZone" type="ColorRect" parent="WhiteboxSignals"]
-offset_left = 1028.0
-offset_top = 246.0
-offset_right = 1244.0
-offset_bottom = 478.0
+offset_left = 1208.0
+offset_top = 258.0
+offset_right = 1388.0
+offset_bottom = 490.0
 color = Color(0.52, 0.9, 1, 0.14)
 
 [node name="Hints" type="Node2D" parent="."]
@@ -157,11 +157,11 @@ offset_bottom = 292.0
 text = "Step 3\n炮台线太狠再带护盾切进 B 层。"
 
 [node name="Hint_ShieldFallbackZone" type="Label" parent="Hints"]
-offset_left = 1036.0
-offset_top = 454.0
-offset_right = 1268.0
-offset_bottom = 508.0
-text = "护盾兜底区\n到这里再考虑切进 B 层。"
+offset_left = 1216.0
+offset_top = 466.0
+offset_right = 1462.0
+offset_bottom = 520.0
+text = "护盾兜底区\n错过主路线再把这里当退路。"
 
 [node name="Hint_ControlShield" type="Label" parent="Hints"]
 offset_left = 760.0
