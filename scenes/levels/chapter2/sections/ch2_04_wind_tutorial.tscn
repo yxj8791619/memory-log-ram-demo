@@ -110,7 +110,7 @@ position = Vector2(718, 344)
 collision_layer = 0
 collision_mask = 1
 script = ExtResource("4_ty4qt")
-target_node_paths = Array[NodePath]([NodePath("../../Hints/Hint_WindPath")])
+target_node_paths = Array[NodePath]([NodePath("../../WhiteboxSignals/WindRouteBeam"), NodePath("../../WhiteboxSignals/ChasePressureZone"), NodePath("../../Hints/Hint_WindPath")])
 front_hound_path = NodePath("../../Encounters/Spawn_A_FrontHound_Chase_01")
 front_hound_chase_scale_override = 1.0
 front_hound_cooldown_scale_override = 1.0
@@ -131,6 +131,22 @@ turret_fire_interval_override = 1.05
 shape = SubResource("RectangleShape2D_fallback_signal")
 
 [node name="WhiteboxSignals" type="Node2D" parent="."]
+
+[node name="WindRouteBeam" type="ColorRect" parent="WhiteboxSignals"]
+offset_left = 732.0
+offset_top = 302.0
+offset_right = 1256.0
+offset_bottom = 326.0
+color = Color(0.44, 0.86, 1, 0.22)
+visible = false
+
+[node name="ChasePressureZone" type="ColorRect" parent="WhiteboxSignals"]
+offset_left = 618.0
+offset_top = 284.0
+offset_right = 914.0
+offset_bottom = 514.0
+color = Color(1, 0.53, 0.31, 0.16)
+visible = false
 
 [node name="ShieldFallbackZone" type="ColorRect" parent="WhiteboxSignals"]
 offset_left = 1208.0
