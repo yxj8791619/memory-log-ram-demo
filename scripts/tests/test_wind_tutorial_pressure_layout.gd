@@ -219,10 +219,13 @@ func _run_test() -> void:
     if not TestAssert.expect_true((wind_hint as Label).text.contains("护盾只留给后段兜底"), CASE_NAME, "wind tutorial path hint should describe shield as a late fallback instead of the default route"):
         await _finish(false)
         return
-    if not TestAssert.expect_true((input_hint as Label).text.contains("高台压力"), CASE_NAME, "wind tutorial input hint should explain the local chase pressure explicitly"):
+    if not TestAssert.expect_true((input_hint as Label).text.contains("预备台"), CASE_NAME, "wind tutorial input hint should hand the player off to the prep ledge explicitly"):
         await _finish(false)
         return
     if not TestAssert.expect_true((input_hint as Label).text.contains("先开枪做风道"), CASE_NAME, "wind tutorial input hint should stay focused on the short entry decision"):
+        await _finish(false)
+        return
+    if not TestAssert.expect_true(not (input_hint as Label).text.contains("先别急着切人"), CASE_NAME, "wind tutorial input hint should drop redundant warnings now that the entry route has scene signals"):
         await _finish(false)
         return
     if not TestAssert.expect_true((route_step_01 as Label).text.contains("先开枪做 B 层风道"), CASE_NAME, "wind tutorial should mark the first route step explicitly"):
